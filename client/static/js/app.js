@@ -37,23 +37,26 @@ $(() => {
   function addConsoleEntry(text, className) {
     const newDiv = $(document.createElement("div"));
     newDiv.text(text).addClass(className).appendTo(consoleLog);
+
+    consoleLog.prop("scrollTop", consoleLog.height());
   }
 
-  consoleInput.keydown((e) => {
+  consoleInput.keydown(e => {
     if(e.which == 13) {
       const command = e.target.value;
       postJSON("/console/send", JSON.stringify({command}))
         .then(response => response.json())
         .then(json => {
           addConsoleEntry(command, "command");
-          addConsoleEntry(json.result, "response");
+          if(json.result !== null)
+            addConsoleEntry(json.result, "response");
         })
         .catch(error => addConsoleEntry(error, "error"));
 
       e.target.value = "";
-    } else {
-      e.target.value = e.target.value.toUpperCase();
     }
+  }).on("input", e => {
+    e.target.value = e.target.value.toUpperCase();
   });
 
 });

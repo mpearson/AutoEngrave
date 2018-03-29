@@ -17,10 +17,9 @@ body {
 }
 
 #console-log .command {
-
+  color: #88e065;
 }
 #console-log .response {
-  color: #88e065;
   padding-left: 10px;
 }
 #console-log .error {

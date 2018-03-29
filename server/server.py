@@ -1,6 +1,7 @@
 from flask import Flask, send_from_directory, request
 import os
 import json
+from random import random
 
 staticDir = os.path.join("..", "client", "static")
 
@@ -17,10 +18,15 @@ def send_static(path):
 
 @app.route("/console/send", methods=["POST"])
 def console_send():
-    if request.json is not None and "command" in request.json:
+    command = request.json["command"]
+    if command == "M114":
         return json.dumps({
-            "result": 'Sent command: "' + request.json["command"] + '"'
-        }), 200
+            "result": "5.000X, 5.000Y, 9.000Z"
+        })
+    elif random() > 0.3:
+        return json.dumps({
+            "result": None
+        })
     else:
         return json.dumps({
             "error": "your request is bad, and you should feel bad"
