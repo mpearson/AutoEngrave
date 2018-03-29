@@ -5,3 +5,35 @@ body {
   font-size: 14px;
   padding: 20px;
 }
+
+#console-log {
+  margin: 20px 0;
+  padding:10px;
+  height: 400px;
+  width: 800px;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid #414b63;
+}
+
+#console-log .command {
+
+}
+#console-log .response {
+  color: #88e065;
+  padding-left: 10px;
+}
+#console-log .error {
+  color: #c5124a;
+  padding-left: 10px;
+}
+
+
+#console-input {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #414b63;;
+  height: 30px;
+  padding: 0 10px;
+  width: 800px;
+}
