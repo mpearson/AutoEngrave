@@ -27,6 +27,7 @@ $(() => {
   const consoleLog = $("#console-log");
   const portList = $("#port-list");
   const portScanButton = $("#port-scan-button");
+  const consoleSendButton = $("#console-send-button");
 
   const loadingSpinner = $(
     `<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" preserveAspectRatio="xMidYMid" class="lds-dual-ring">
@@ -36,9 +37,21 @@ $(() => {
     </svg>`
   );
 
+  function consoleSend(command) {
+    if (command) {
+      callAPI("/console/send", "post", {command})
+        .then(results => {
+          addConsoleEntry(command, "command");
+          if(results !== null)
+            addConsoleEntry(results, "response");
+        })
+        .catch(error => addConsoleEntry(error, "error"));
+    }
+  }
+
   function addConsoleEntry(text, className) {
     const newDiv = $(document.createElement("div"));
-    newDiv.text(text).addClass(className).appendTo(consoleLog);
+    newDiv.text(text).addClass(className).prependTo(consoleLog);
 
     consoleLog.prop("scrollTop", consoleLog.height());
   }
@@ -68,21 +81,20 @@ $(() => {
       });
   }
 
+  portScan();
+
   portList.on("change", e => selectPort(e.target.value));
   portScanButton.click(portScan);
 
+  consoleSendButton.click(() => {
+    consoleSend(consoleInput.val());
+    consoleInput.select();
+  });
+
   consoleInput.keydown(e => {
     if(e.which == 13) {
-      const command = e.target.value;
-      callAPI("/console/send", "post", {command})
-        .then(results => {
-          addConsoleEntry(command, "command");
-          if(results !== null)
-            addConsoleEntry(results, "response");
-        })
-        .catch(error => addConsoleEntry(error, "error"));
-
-      e.target.value = "";
+      consoleSend(e.target.value);
+      e.target.select();
     }
   }).on("input", e => {
     e.target.value = e.target.value.toUpperCase();
