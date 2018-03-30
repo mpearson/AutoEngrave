@@ -4,6 +4,7 @@ import json
 import math
 import random
 from serial_comms import getCOMPorts
+import time
 
 staticDir = os.path.join("..", "client", "static")
 
@@ -57,7 +58,7 @@ def console_resume():
 @app.route("/comms/scan", methods=["GET"])
 def comms_scan():
     return json.dumps({
-        "results": [*getCOMPorts(), "COM%d" % random.choice((69, 420, 729))]
+        "results": getCOMPorts()
     })
 
 
