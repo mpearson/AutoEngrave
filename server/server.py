@@ -1,7 +1,9 @@
 from flask import Flask, send_from_directory, request
 import os
 import json
-from random import random
+import math
+import random
+from serial_comms import getCOMPorts
 
 staticDir = os.path.join("..", "client", "static")
 
@@ -21,11 +23,11 @@ def console_send():
     command = request.json["command"]
     if command == "M114":
         return json.dumps({
-            "result": "5.000X, 5.000Y, 9.000Z"
+            "results": "5.000X, 5.000Y, 9.000Z"
         })
-    elif random() > 0.3:
+    elif random.random() > 0.3:
         return json.dumps({
-            "result": None
+            "results": None
         })
     else:
         return json.dumps({
@@ -49,6 +51,17 @@ def console_resume():
 # G28 - home
 # M3 - enable laser
 # M5 - disable laser
+
+
+
+@app.route("/comms/scan", methods=["GET"])
+def comms_scan():
+    return json.dumps({
+        "results": [*getCOMPorts(), "COM%d" % random.choice((69, 420, 729))]
+    })
+
+
+
 
 
 

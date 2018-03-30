@@ -88,7 +88,7 @@ while cv2.getWindowProperty('MyLittleImage', 0) != -1:
         cv2.destroyAllWindows()
         break
     elif key == ord(' '):
-        for n in range(1):
+        for n in range(20):
             try:
                 next(preview)
             except StopIteration:
