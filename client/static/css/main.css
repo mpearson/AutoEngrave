@@ -1,10 +1,10 @@
 body {
   position: relative;
   background-color: #181818;
-  color: #c4c5ff;
-  font-family: Consolas, Arial, sans-serif;
+  color: #cfcfd6;
+  font-family: 'Open Sans', Arial, sans-serif;
   font-size: 14px;
-  padding: 40px 20px;
+  padding: 80px 80px 20px;
 }
 
 body::after {
@@ -48,7 +48,9 @@ header {
   position: fixed;
   top: 0;
   left: 0;
-  height: 40px;
+  height: 60px;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.5);
   padding: 0 20px;
   display: flex;
   flex-direction: row;
@@ -56,7 +58,8 @@ header {
 }
 
 header h1 {
-  font-size: 20px;
+  font-size: 24px;
+  font-weight: normal;
   margin: 0;
 }
 
