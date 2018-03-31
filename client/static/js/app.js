@@ -63,7 +63,9 @@ $(() => {
   }
 
   function updatePorts(ports) {
+    const label = portList.children().first().detach();
     portList.empty();
+    portList.append(label);
     for (const port of ports) {
       const item = $(document.createElement("option"));
       item.value = port;
@@ -72,7 +74,7 @@ $(() => {
     }
   }
 
-  function portScan() {
+  function scanComPorts() {
     portScanButton.html(loadingSpinner.clone());
     callAPI("/comms/scan", "get")
       .then(results => {
@@ -81,10 +83,10 @@ $(() => {
       });
   }
 
-  portScan();
+  scanComPorts();
 
   portList.on("change", e => selectPort(e.target.value));
-  portScanButton.click(portScan);
+  portScanButton.click(scanComPorts);
 
   consoleSendButton.click(() => {
     consoleSend(consoleInput.val());

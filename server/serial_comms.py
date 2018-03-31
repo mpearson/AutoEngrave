@@ -13,6 +13,7 @@ class SerialConnection(object):
         if self.connection is None:
             raise Exception("Already connected to %s!" % self.connection)
         self.connection = serial.Serial(port, baud)
+        self.connection.open()
 
     def close(self):
         if self.connection is not None:
