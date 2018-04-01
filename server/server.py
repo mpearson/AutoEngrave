@@ -6,17 +6,25 @@ import random
 from serial_comms import getCOMPorts
 import time
 
-staticDir = os.path.join("..", "client", "static")
+staticDir = os.path.join("..", "client", "build")
 
 app = Flask(__name__, static_folder=staticDir)
 
-@app.route("/")
-def root():
-    return app.send_static_file("index.html")
+# @app.route("/")
+# def root():
+#     return app.send_static_file("index.html")
 
-@app.route("/static/<path:path>")
-def send_static(path):
-    return send_from_directory(os.path.join(staticDir, path))
+# @app.route("/<path:filename>")
+# def send_static1(filename):
+#     return send_from_directory(staticDir, filename)
+
+# @app.route("/static/<path:filename>")
+# def send_static2(filename):
+#     return send_from_directory(os.path.join(staticDir, "static"), filename)
+
+# @app.route("/images/<path:filename>")
+# def send_static3(filename):
+#     return send_from_directory(os.path.join(staticDir, "images"), filename)
 
 
 @app.route("/console/send", methods=["POST"])
