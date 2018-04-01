@@ -1,4 +1,3 @@
-// import { combineReducers } from "redux";
 import * as actions from "./actions";
 import { ComPort, ConsoleEntry, ConsoleEntryType } from "./types";
 
@@ -7,7 +6,6 @@ export type ConsoleState = {
   readonly portScanFetching: boolean;
   readonly entries: ConsoleEntry[];
   readonly sendFetching: boolean;
-  // readonly isFetching: boolean;
 };
 
 const defaultState: ConsoleState = {

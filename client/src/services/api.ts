@@ -1,5 +1,5 @@
 import { Dispatch } from "react-redux";
-import { RootState } from "../store";
+import { RootState } from "../redux/types";
 import { Dictionary } from "lodash";
 
 export interface APICallConfig {

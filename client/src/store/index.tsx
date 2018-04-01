@@ -2,10 +2,8 @@ declare var window: Window & { devToolsExtension: any, __REDUX_DEVTOOLS_EXTENSIO
 import { combineReducers, createStore, compose, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { ConsoleState, consoleReducer } from "../redux/console/reducer";
+import { RootState } from "../redux/types";
 
-export type RootState = {
-  console: ConsoleState;
-};
 
 const rootReducer = combineReducers<RootState>({
   console: consoleReducer,
