@@ -5,14 +5,14 @@ import { Route, Switch } from "react-router";
 import { ConnectedRouter } from "react-router-redux";
 
 import { store } from "./store/index";
-import { MainPanel } from "./components/MainPanel";
+import { MainPanelConnected } from "./components/MainPanel";
 
 import "./index.less";
 import "./normalize.css";
 
 export const app = ReactDOM.render(
   <Provider store={store}>
-    <MainPanel />
+    <MainPanelConnected />
   </Provider>,
   document.getElementById("root"),
 );

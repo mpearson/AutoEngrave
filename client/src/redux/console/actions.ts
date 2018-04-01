@@ -25,12 +25,23 @@ export interface ConsoleAction extends Action {
   results?: any;
 }
 
-export const scanComPorts = (): AsyncPromiseAction => {
+export const scanComPorts = (): AsyncPromiseAction<ConsoleAction> => {
   return (dispatch, getState) => {
     return callAPI(dispatch, {
       endpoint: "comms/scan",
       method: "post",
       actions: [PORT_SCAN_REQUEST, PORT_SCAN_RECEIVE, PORT_SCAN_ERROR],
+    });
+  };
+};
+
+export const sendCommand = (command: string): AsyncPromiseAction<ConsoleAction> => {
+  return (dispatch, getState) => {
+    return callAPI(dispatch, {
+      endpoint: "console/send",
+      method: "post",
+      data: { command },
+      actions: [SEND_REQUEST, SEND_SUCCESS, SEND_ERROR],
     });
   };
 };

@@ -1,9 +1,5 @@
 export type ComPort = string;
-export enum ConsoleEntryType {
-  Command,
-  Error,
-  Response,
-}
+export type ConsoleEntryType = "command" | "error" | "response";
 
 export interface ConsoleEntry {
   text: string;

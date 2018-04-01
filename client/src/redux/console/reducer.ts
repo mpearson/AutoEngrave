@@ -35,16 +35,16 @@ export const consoleReducer = (state = defaultState, action: actions.ConsoleActi
     case actions.PORT_SCAN_ERROR: {
       return {
         ...state,
-        ports: action.ports,
+        ports: [],
         portScanFetching: false,
-        entries: [...state.entries, { text: action.error, type: ConsoleEntryType.Error }],
+        entries: [...state.entries, { text: action.error, type: "error" }],
       };
     }
     case actions.SEND_REQUEST: {
       return {
         ...state,
         sendFetching: true,
-        entries: [...state.entries, { text: action.command, type: ConsoleEntryType.Command }],
+        entries: [...state.entries, { text: action.command, type: "command" }],
       };
     }
     case actions.SEND_SUCCESS: {
@@ -57,7 +57,7 @@ export const consoleReducer = (state = defaultState, action: actions.ConsoleActi
       return {
         ...state,
         sendFetching: false,
-        entries: [...state.entries, { text: action.error, type: ConsoleEntryType.Error }],
+        entries: [...state.entries, { text: action.error, type: "error" }],
       };
     }
     default:
