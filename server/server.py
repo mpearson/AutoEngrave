@@ -3,7 +3,7 @@ import os
 import json
 import math
 import random
-from serial_comms import getCOMPorts
+from serial_comms import getCOMPorts, SerialConnection
 import time
 
 staticDir = os.path.join("..", "client", "build")
@@ -62,11 +62,38 @@ def console_resume():
 # M5 - disable laser
 
 
+connection = SerialConnection()
+
 
 @app.route("/api/connection/scan", methods=["GET"])
-def comms_scan():
+def connection_scan():
     return json.dumps({
         "results": getCOMPorts()
+    })
+
+@app.route("/api/connection/open", methods=["POST"])
+def connection_open():
+    try:
+        connection.open()
+        return json.dumps({
+            "results": connection.getStatus()
+        })
+    except Exception as e:
+        return json.dumps({
+            "error": str(e)
+        }), 400
+
+@app.route("/api/connection/close", methods=["POST"])
+def connection_close():
+    connection.close()
+    return json.dumps({
+        "results": connection.getStatus()
+    })
+
+@app.route("/api/connection/status", methods=["GET"])
+def connection_status():
+    return json.dumps({
+        "results": connection.getStatus()
     })
 
 

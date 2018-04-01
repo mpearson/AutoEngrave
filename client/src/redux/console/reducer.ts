@@ -46,9 +46,13 @@ export const consoleReducer = (state = defaultState, action: actions.ConsoleActi
       };
     }
     case actions.SEND_SUCCESS: {
+      let entries = state.entries;
+      if (action.results)
+        entries = [...state.entries, { text: action.results, type: "response" }];
       return {
         ...state,
         sendFetching: false,
+        entries,
       };
     }
     case actions.SEND_ERROR: {

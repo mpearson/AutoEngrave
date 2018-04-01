@@ -39,11 +39,8 @@ export const Console: React.SFC<ConsoleProps> = props => {
         <select id="port-list">{portList}</select>
         <select id="baudrate-list" defaultValue={baudRates[0]}>{baudrateList}</select>
       </div>
-      <div id="console-log">{logEntries}</div>
-      <div id="console-input-box">
-        <input type="text" id="console-input" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
-        <button id="console-send-button" onClick={() => sendCommand("DING!")}>Send</button>
-      </div>
+      <div id="console-log">{logEntries.reverse()}</div>
+      <ConsoleInput sendCommand={sendCommand} />
     </div>
   );
 };
@@ -63,3 +60,57 @@ export const PortScanButton: React.SFC<{onClick: () => void, loading: boolean}> 
     {props.loading ? <LoadingSpinner /> : "Scan"}
   </button>
 );
+
+interface ConsoleInputProps {
+  sendCommand: (command: string) => void;
+}
+
+interface ConsoleInputState {
+  input: string;
+}
+
+export class ConsoleInput extends React.Component<ConsoleInputProps, ConsoleInputState> {
+  constructor(props: ConsoleInputProps) {
+    super(props);
+    this.state = { input: "" };
+    this.onChange = this.onChange.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
+    this.onSend = this.onSend.bind(this);
+  }
+
+  private inputElem: HTMLInputElement;
+
+  private onChange(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ input: e.target.value.toUpperCase() });
+  }
+
+  private onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter")
+      this.onSend();
+  }
+
+  private onSend() {
+    this.props.sendCommand(this.state.input);
+    if (this.inputElem)
+      this.inputElem.select();
+  }
+
+  public render() {
+    return (
+      <div id="console-input-box">
+        <input
+          id="console-input"
+          type="text"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
+          value={this.state.input}
+          onKeyDown={this.onKeyPress}
+          onChange={this.onChange}
+          ref={elem => this.inputElem = elem}
+        />
+        <button id="console-send-button" onClick={this.onSend}>Send</button>
+      </div>
+    );
+  }
+}

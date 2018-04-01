@@ -40,6 +40,7 @@ export const sendCommand = (command: string): AsyncPromiseAction<ConsoleAction> 
       endpoint: "console/send",
       method: "post",
       data: { command },
+      actionParams: { command },
       actions: [SEND_REQUEST, SEND_SUCCESS, SEND_ERROR],
     });
   };

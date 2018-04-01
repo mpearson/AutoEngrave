@@ -1,74 +1,74 @@
 #console-panel {
   width: 300px;
-}
-#console-log {
-  margin-bottom: 10px;
-  padding: 10px;
-  height: 250px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column-reverse;
-  background-color: rgba(0, 0, 0, 0.5);
-  border: 1px solid #8a8bb3;
-  border-radius: 2px;
-  font-family: 'Consolas', monospace;
-}
 
-#console-log .command {
-  color: #88e065;
-}
-#console-log .response {
-  padding-left: 10px;
-}
-#console-log .error {
-  color: #c5124a;
-  padding-left: 10px;
-}
+  #console-log {
+    margin-bottom: 10px;
+    padding: 10px;
+    height: 250px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #8a8bb3;
+    border-radius: 2px;
+    font-family: 'Consolas', monospace;
 
-#console-input-box {
-  display: flex;
-  flex-direction: row;
-}
+    .command {
+      color: #88e065;
+    }
+    .response {
+      // padding-left: 10px;
+    }
+    .error {
+      color: #c5124a;
+      // padding-left: 10px;
+    }
+  }
 
-#console-input {
-  display: block;
-  flex: 1 1 auto;
-  box-sizing: border-box;
-  color: white;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid #8a8bb3;;
-  height: 30px;
-  padding: 0 10px;
-  margin-right: 5px;
-  font-family: 'Consolas', monospace;
-}
+  #console-input-box {
+    display: flex;
+    flex-direction: row;
+  }
 
-#console-send-button {
-  flex: 0 0 auto;
-  width: 60px;
-}
+  #console-input {
+    display: block;
+    flex: 1 1 auto;
+    box-sizing: border-box;
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #8a8bb3;;
+    height: 30px;
+    padding: 0 10px;
+    margin-right: 5px;
+    font-family: 'Consolas', monospace;
+  }
 
-#comms-panel {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 40px;
-}
+  #console-send-button {
+    flex: 0 0 auto;
+    width: 60px;
+  }
 
-#comms-panel * {
-  margin-right: 5px;
-}
+  #comms-panel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 40px;
+  }
 
-#comms-panel select {
-  width: 120px;
-}
+  #comms-panel * {
+    margin-right: 5px;
+  }
 
-#comms-panel button {
-  width: 50px;
-}
+  #comms-panel select {
+    width: 120px;
+  }
 
-#port-scan-button {
-  width: 60px;
-  flex: 0 0 auto;
-}
+  #comms-panel button {
+    width: 50px;
+  }
 
+  #port-scan-button {
+    width: 60px;
+    flex: 0 0 auto;
+  }
+}
