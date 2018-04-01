@@ -33,7 +33,7 @@ export const callAPI = (dispatch: Dispatch<RootState>, config: APICallConfig) =>
   if (config.data)
     options.body = JSON.stringify(config.data);
 
-  return fetch(`http://127.0.0.1:5000/${config.endpoint}`, options).then(
+  return fetch(`/api/${config.endpoint}`, options).then(
     response => response.json().then(
       json => {
         if (response.ok) {

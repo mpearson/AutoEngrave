@@ -18,7 +18,6 @@ export const SEND_SUCCESS = "console/SEND_SUCCESS";
 export const SEND_ERROR = "console/SEND_ERROR";
 
 export interface ConsoleAction extends Action {
-  ports?: ComPort[];
   error?: string;
   command?: string;
   response?: Response;
@@ -28,8 +27,8 @@ export interface ConsoleAction extends Action {
 export const scanComPorts = (): AsyncPromiseAction<ConsoleAction> => {
   return (dispatch, getState) => {
     return callAPI(dispatch, {
-      endpoint: "comms/scan",
-      method: "post",
+      endpoint: "connection/scan",
+      method: "get",
       actions: [PORT_SCAN_REQUEST, PORT_SCAN_RECEIVE, PORT_SCAN_ERROR],
     });
   };

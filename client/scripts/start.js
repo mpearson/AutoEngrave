@@ -259,7 +259,12 @@ function runDevServer(host, port, protocol) {
     },
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
     https: protocol === "https",
-    host: host
+    host: host,
+    proxy: {
+      '/api/**': {
+        target: "http://127.0.0.1:5000/"
+      }
+    }
   });
 
   // Our custom middleware proxies requests to /index.html or a remote API.

@@ -27,7 +27,7 @@ app = Flask(__name__, static_folder=staticDir)
 #     return send_from_directory(os.path.join(staticDir, "images"), filename)
 
 
-@app.route("/console/send", methods=["POST"])
+@app.route("/api/console/send", methods=["POST"])
 def console_send():
     command = request.json["command"]
     if command == "M114":
@@ -44,12 +44,12 @@ def console_send():
         }), 400
 
 
-@app.route("/console/pause", methods=["POST"])
+@app.route("/api/console/pause", methods=["POST"])
 def console_pause():
     # stop sending G-code
     pass
 
-@app.route("/console/resume", methods=["POST"])
+@app.route("/api/console/resume", methods=["POST"])
 def console_resume():
     # resume sending G-code
     pass
@@ -63,7 +63,7 @@ def console_resume():
 
 
 
-@app.route("/comms/scan", methods=["GET"])
+@app.route("/api/connection/scan", methods=["GET"])
 def comms_scan():
     return json.dumps({
         "results": getCOMPorts()

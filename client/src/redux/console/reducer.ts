@@ -26,7 +26,7 @@ export const consoleReducer = (state = defaultState, action: actions.ConsoleActi
     case actions.PORT_SCAN_RECEIVE: {
       return {
         ...state,
-        ports: action.ports,
+        ports: action.results,
         portScanFetching: false,
       };
     }
