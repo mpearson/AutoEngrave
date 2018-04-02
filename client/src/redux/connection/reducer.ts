@@ -1,6 +1,6 @@
 import * as actions from "./actions";
 import { ConnectionAction }  from "./actions";
-import { ComPort } from "./types";
+import { ComPort, baudrates, PortState } from "./types";
 import * as moment from "moment";
 
 export type ConnectionState = {
@@ -8,7 +8,7 @@ export type ConnectionState = {
   readonly port: ComPort;
   readonly baudrate: string;
   readonly isFetchingPorts: boolean;
-  readonly connected: boolean;
+  readonly state: PortState;
   readonly connectedTime: moment.Moment;
   readonly isConnecting: boolean;
   readonly isDisconnecting: boolean;
@@ -17,10 +17,10 @@ export type ConnectionState = {
 
 const defaultState: ConnectionState = {
   ports: [],
-  port: null,
-  baudrate: null,
+  port: "",
+  baudrate: baudrates[0],
   isFetchingPorts: false,
-  connected: false,
+  state: PortState.Closed,
   connectedTime: null,
   isConnecting: false,
   isDisconnecting: false,
@@ -45,19 +45,19 @@ export const connectionReducer = (state = defaultState, action: ConnectionAction
       return { ...state, baudrate: action.baudrate };
     }
     case actions.CONNECT_REQUEST: {
-      return { ...state, isConnecting: true };
+      return { ...state, state: PortState.Opening };
     }
     case actions.CONNECT_SUCCESS: {
-      return { ...state, isConnecting: false, connected: true };
+      return { ...state, state: PortState.Open };
     }
     case actions.CONNECT_ERROR: {
-      return { ...state, isConnecting: false, connected: false };
+      return { ...state, state: PortState.Closed };
     }
     case actions.DISCONNECT_REQUEST: {
-      return { ...state, isDisconnecting: true };
+      return { ...state, state: PortState.Closing };
     }
     case actions.DISCONNECT_SUCCESS: {
-      return { ...state, connected: false, isDisconnecting: false };
+      return { ...state, state: PortState.Closed };
     }
     case actions.DISCONNECT_ERROR: {
       // TODO: something
@@ -67,7 +67,7 @@ export const connectionReducer = (state = defaultState, action: ConnectionAction
       return { ...state, isFetchingStatus: true };
     }
     case actions.GET_STATUS_SUCCESS: {
-      const { port, baudrate, connected } = action.status;
+      const { port, baudrate } = action.status;
       const connectedTime = moment(action.status.connectedTime);
       return { ...state, isFetchingStatus: false, port, baudrate, connectedTime };
     }

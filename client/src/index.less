@@ -1,25 +1,9 @@
 body {
-  position: relative;
+  height: 100vh;
   background-color: #181818;
   color: #cfcfd6;
   font-family: 'Open Sans', Arial, sans-serif;
   font-size: 14px;
-  padding: 80px 80px 20px;
-}
-
-body::after {
-  content: "";
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  position:absolute;
-  z-index: -1;
-  // background: url(../images/frikkin_laser_beams.jpg) top center no-repeat;
-  background-size: 100%;
-  opacity: 0.2;
-  box-sizing: border-box;
-  height: 100vh;
 }
 
 button, input, select {
@@ -45,11 +29,7 @@ select {
 }
 
 header {
-  position: fixed;
-  top: 0;
-  left: 0;
   height: 60px;
-  width: 100vw;
   background: rgba(0, 0, 0, 0.5);
   padding: 0 20px;
   display: flex;
@@ -88,7 +68,18 @@ header h1 {
   }
 }
 
+#root { height: 100%; }
+
+#main-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 #main-content {
   display: flex;
   flex-direction: row;
+  flex: 1 0 auto;
+  padding: 10px 5px;
+  & > * { margin: 0 5px; }
 }

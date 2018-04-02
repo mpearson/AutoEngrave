@@ -1,5 +1,5 @@
 import * as actions from "./actions";
-import { ComPort, ConsoleEntry, ConsoleEntryType } from "./types";
+import { ConsoleEntry } from "./types";
 
 export type ConsoleState = {
   readonly entries: ConsoleEntry[];

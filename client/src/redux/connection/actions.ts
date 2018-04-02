@@ -1,5 +1,4 @@
 import { AsyncPromiseAction, APIAction } from "./../types";
-import { Action } from "redux";
 import { ComPort, ConnectionStatus } from "./types";
 import { callAPI } from "../../services/api";
 
@@ -40,15 +39,12 @@ export const getPorts = (): AsyncPromiseAction<ConnectionAction> => {
 
 export const openConnection = (): AsyncPromiseAction<ConnectionAction> => {
   return (dispatch, getState) => {
-    const { selectedPort, selectedBaudrate } = getState().connection;
+    const { port, baudrate } = getState().connection;
 
     return callAPI(dispatch, {
       endpoint: "connection/open",
       method: "post",
-      data: {
-        port: selectedPort,
-        baudrate: selectedBaudrate,
-      },
+      data: { port, baudrate },
       actions: [CONNECT_REQUEST, CONNECT_SUCCESS, CONNECT_ERROR],
     });
   };

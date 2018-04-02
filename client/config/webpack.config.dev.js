@@ -66,21 +66,6 @@ module.exports = {
 
   module: {
     rules: [
-      // {
-      //   exclude: [
-      //     /\.html$/,
-      //     /\.(js|jsx)$/,
-      //     /\.(ts|tsx)$/,
-      //     /\.css$/,
-      //     /\.json$/,
-      //     /\.svg$/
-      //   ],
-      //   loader: "url",
-      //   query: {
-      //     limit: 10000,
-      //     name: "static/media/[name].[hash:8].[ext]"
-      //   }
-      // },
       // Compile .tsx?
       {
         test: /\.(ts|tsx)$/,
@@ -126,7 +111,23 @@ module.exports = {
             // }
           }
         ]
-      }
+      },
+      {
+        exclude: [
+          /\.html$/,
+          /\.(js|jsx)$/,
+          /\.(ts|tsx)$/,
+          /\.css$/,
+          /\.less$/,
+          /\.json$/,
+          /\.svg$/
+        ],
+        loader: ["file-loader"],
+        // query: {
+        //   limit: 10000,
+        //   name: "static/media/[name].[hash:8].[ext]"
+        // }
+      },
     ]
   },
   plugins: [

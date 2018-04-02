@@ -1,6 +1,4 @@
 import { AsyncPromiseAction, APIAction } from "./../types";
-import { Action } from "redux";
-import { ComPort } from "./types";
 import { callAPI } from "../../services/api";
 
 export const ADD_CONSOLE_ENTRY = "console/ADD_CONSOLE_ENTRY";

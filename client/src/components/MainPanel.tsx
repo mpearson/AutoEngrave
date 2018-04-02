@@ -1,32 +1,19 @@
 import * as React from "react";
-import { Dispatch, connect } from "react-redux";
-import { RootState } from "../redux/types";
-import { ConsoleConnected } from "./Console";
+import { ConsoleConnected } from "./console";
 import { WorkspaceConnected } from "./Workspace";
+import { ConnectionPanelConnected } from "./connection";
 
-
-export interface MainPanelProps {
-
-}
-
-export const MainPanel: React.SFC<MainPanelProps> = props => {
+export const MainPanel: React.SFC = props => {
   return (
-    <div>
+    <div id="main-wrapper">
       <header>
       <h1>AutoEngrave 1.0</h1>
+      <ConnectionPanelConnected />
       </header>
       <div id="main-content">
-        <ConsoleConnected />
         <WorkspaceConnected />
+        <ConsoleConnected />
       </div>
     </div>
   );
 };
-
-const mapStateToProps = (state: RootState) => state.console;
-
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => ({
-
-});
-
-export const MainPanelConnected = connect(mapStateToProps, mapDispatchToProps)(MainPanel);
