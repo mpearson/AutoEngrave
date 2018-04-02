@@ -11,7 +11,7 @@ class SerialConnection(object):
         self.port = None
         self.baudrate = None
         self.connection = None
-        self.connectTime = None
+        self.connectedTime = None
 
     def open(self, port, baudrate):
         if self.connection is not None:
@@ -19,7 +19,7 @@ class SerialConnection(object):
         # try:
         self.connection = serial.Serial(port, baud)
         self.connection.open()
-        self.connectTime = datetime.datetime.now()
+        self.connectedTime = datetime.datetime.now()
         # except Exception as e:
 
 
@@ -29,12 +29,12 @@ class SerialConnection(object):
             self.connection = None
             self.port = None
             self.baudrate = None
-            self.connectTime = None
+            self.connectedTime = None
 
     def getStatus(self):
         return {
             "connected": self.connection is not None,
             "port": self.port,
             "baudrate": self.baudrate,
-            "connectTime": self.connectTime.isoformat(),
+            "connectedTime": self.connectedTime.isoformat(),
         }
