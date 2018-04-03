@@ -73,15 +73,17 @@ def connection_scan():
 
 @app.route("/api/connection/open", methods=["POST"])
 def connection_open():
-    try:
-        connection.open()
-        return json.dumps({
-            "results": connection.getStatus()
-        })
-    except Exception as e:
-        return json.dumps({
-            "error": str(e)
-        }), 400
+    # try:
+    port = request.json["port"]
+    baudrate = request.json["baudrate"]
+    connection.open(port, baudrate)
+    return json.dumps({
+        "results": connection.getStatus()
+    })
+    # except Exception as e:
+    #     return json.dumps({
+    #         "error": str(e)
+    #     }), 400
 
 @app.route("/api/connection/close", methods=["POST"])
 def connection_close():

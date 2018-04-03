@@ -19,9 +19,12 @@ button {
   background-color: #a8a8b5;
   color: black;
   outline: none;
-}
-button:hover {
-  background-color: #c4c4da;;
+  &:hover { background-color: #c4c4da; }
+  &:disabled {
+    color: rgba(0, 0, 0, 0.5);
+    cursor: default;
+    &:hover { background-color: #a8a8b5; }
+  }
 }
 
 select {

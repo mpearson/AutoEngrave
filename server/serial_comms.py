@@ -1,3 +1,4 @@
+import serial
 from serial.tools import list_ports
 import datetime
 
@@ -17,7 +18,7 @@ class SerialConnection(object):
         if self.connection is not None:
             raise Exception("Already connected to %s!" % self.connection)
         # try:
-        self.connection = serial.Serial(port, baud)
+        self.connection = serial.Serial(port, baudrate)
         self.connection.open()
         self.connectedTime = datetime.datetime.now()
         # except Exception as e:
@@ -32,9 +33,10 @@ class SerialConnection(object):
             self.connectedTime = None
 
     def getStatus(self):
+        connectedTime = None if self.connectedTime is None else self.connectedTime.isoformat()
         return {
             "connected": self.connection is not None,
             "port": self.port,
             "baudrate": self.baudrate,
-            "connectedTime": self.connectedTime.isoformat(),
+            "connectedTime": connectedTime,
         }
