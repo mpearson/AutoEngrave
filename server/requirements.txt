@@ -3,3 +3,5 @@ numpy
 opencv-python
 cairosvg
 pyserial
+sqlite3
+peewee
