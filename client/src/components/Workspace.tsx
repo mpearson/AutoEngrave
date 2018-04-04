@@ -1,5 +1,4 @@
 import * as React from "react";
-import { LoadingSpinner } from "./LoadingSpinner";
 import { RootState } from "../redux/types";
 import { Dispatch, connect } from "react-redux";
 
