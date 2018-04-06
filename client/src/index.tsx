@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 
 import { store } from "./store/index";
 import { MainPanel } from "./components/MainPanel";
+import { getConnectionStatus, getPorts } from "./redux/connection/actions";
 
 import "./index.less";
 import "./normalize.css";
@@ -14,3 +15,5 @@ export const app = ReactDOM.render(
   </Provider>,
   document.getElementById("root"),
 );
+
+store.dispatch(getPorts()).then(() => store.dispatch(getConnectionStatus()));

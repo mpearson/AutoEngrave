@@ -2,6 +2,7 @@ import * as React from "react";
 
 export interface ConsoleInputProps {
   sendCommand: (command: string) => void;
+  disabled?: boolean;
 }
 
 export interface ConsoleInputState {
@@ -35,6 +36,7 @@ export class ConsoleInput extends React.Component<ConsoleInputProps, ConsoleInpu
   }
 
   public render() {
+    const disableSend = this.props.disabled || this.state.input.length === 0;
     return (
       <div id="console-input-box">
         <input
@@ -48,7 +50,7 @@ export class ConsoleInput extends React.Component<ConsoleInputProps, ConsoleInpu
           onChange={this.onChange}
           ref={elem => this.inputElem = elem}
         />
-        <button id="console-send-button" onClick={this.onSend}>Send</button>
+        <button id="console-send-button" onClick={this.onSend} disabled={disableSend}>Send</button>
       </div>
     );
   }

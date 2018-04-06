@@ -29,14 +29,14 @@ export const ConnectionPanel: React.SFC<ConnectionPanelProps> = props => {
   if (portList.length === 0)
     portList.push(<option value="" key="">No results</option>);
 
-  const disableConfig = state === PortState.Opening || state === PortState.Closing;
+  const disableConfig = state !== PortState.Closed;
 
   return (
     <div id="connection-panel">
       <PortScanButton onClick={scanComPorts} loading={isFetchingPorts} />
       <select
         id="port-list"
-        value={port}
+        value={port || ""}
         onChange={e => onSelectPort(e.target.value)}
         disabled={disableConfig}
       >
@@ -44,7 +44,7 @@ export const ConnectionPanel: React.SFC<ConnectionPanelProps> = props => {
       </select>
       <select
         id="baudrate-list"
-        value={baudrate}
+        value={baudrate || ""}
         onChange={e => onSelectBaudrate(e.target.value)}
         disabled={disableConfig}
       >

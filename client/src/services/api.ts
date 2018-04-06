@@ -1,13 +1,18 @@
 import { Dispatch } from "react-redux";
-import { RootState } from "../redux/types";
-import { Dictionary } from "lodash";
+import { RootState, AsyncAction } from "../redux/types";
+
+export type RequestAction = (actionParams?: any) => AsyncAction;
+export type SuccessAction = (results: any, response?: Response, actionParams?: any) => AsyncAction;
+export type ErrorAction = (error: any, response?: Response, actionParams?: any) => AsyncAction;
 
 export interface APICallConfig {
   endpoint: string;
   method?: string;
   data?: any;
-  actions: string[];
-  actionParams?: Dictionary<any>;
+  onRequest?: string | RequestAction;
+  onSuccess?: string | SuccessAction;
+  onError?: string | ErrorAction;
+  actionParams?: any;
 }
 
 const jsonHeaders = {
@@ -21,10 +26,14 @@ const jsonHeaders = {
  */
 export const callAPI = (dispatch: Dispatch<RootState>, config: APICallConfig) => {
   const actionParams = config.actionParams || {};
-  const [requestAction, successAction, errorAction] = config.actions;
+  const { onRequest, onSuccess, onError } = config;
 
-  if (requestAction)
-    dispatch({ type: requestAction, ...actionParams });
+  if (onRequest) {
+    if (typeof onRequest === "function")
+      dispatch(onRequest(actionParams));
+    else
+      dispatch({ type: onRequest, ...actionParams });
+  }
 
   const options: RequestInit = {
     method: config.method || "get",
@@ -38,46 +47,59 @@ export const callAPI = (dispatch: Dispatch<RootState>, config: APICallConfig) =>
       json => {
         if (response.ok) {
           // good response, valid JSON, so extract the results
-          return Promise.resolve(
-            dispatch({
-              type: successAction,
+          if (typeof onSuccess === "function") {
+            return Promise.resolve(dispatch(onSuccess(json.results, response, actionParams)));
+          } else {
+            return Promise.resolve(dispatch({
+              type: onSuccess,
               results: json.results,
               response,
               ...actionParams,
-            })
-          );
+            }));
+          }
         } else {
           // bad response, but valid JSON so extract the error message
-          return Promise.reject(
-            dispatch({
-              type: errorAction,
-              error: String(json.error),
-              response,
-              ...actionParams,
-            })
-          );
+          if (typeof onError === "function") {
+            return Promise.resolve(dispatch(onError(json.error, response, actionParams)));
+          } else {
+            return Promise.reject(
+              dispatch({
+                type: onError,
+                error: json.error,
+                response,
+                ...actionParams,
+              })
+            );
+          }
         }
       },
       error => response.text().then(
         // response was not valid JSON, so assume the body is an error message
-        text => Promise.reject(
-          dispatch({
-            type: errorAction,
-            error: text,
-            response,
-            ...actionParams,
-          })
-        )
+        text => {
+          if (typeof onError === "function") {
+            return Promise.resolve(dispatch(onError(text, response, actionParams)));
+          } else {
+            return Promise.reject(dispatch({
+              type: onError,
+              error: text,
+              response,
+              ...actionParams,
+            }));
+          }
+        }
       )
     ),
-    error => Promise.reject(
+    error => {
       // request failed so hard we didn't even get a response
-      dispatch({
-        type: errorAction,
-        error: String(error),
-        response: null,
-        ...actionParams,
-      })
-    )
+      if (typeof onError === "function") {
+        return Promise.resolve(dispatch(onError(error, actionParams)));
+      } else {
+        return Promise.reject(dispatch({
+          type: onError,
+          error,
+          ...actionParams,
+        }));
+      }
+    }
   );
 };

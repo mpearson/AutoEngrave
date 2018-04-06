@@ -27,12 +27,26 @@ export interface ConnectionAction extends APIAction {
   status?: ConnectionStatus;
 }
 
+export const getConnectionStatus = (): AsyncPromiseAction<ConnectionAction> => {
+  return (dispatch, getState) => {
+    return callAPI(dispatch, {
+      endpoint: "connection/status",
+      method: "get",
+      onRequest: GET_STATUS_REQUEST,
+      onSuccess: GET_STATUS_SUCCESS,
+      onError: GET_STATUS_ERROR,
+    });
+  };
+};
+
 export const getPorts = (): AsyncPromiseAction<ConnectionAction> => {
   return (dispatch, getState) => {
     return callAPI(dispatch, {
       endpoint: "connection/scan",
       method: "get",
-      actions: [GET_PORTS_REQUEST, GET_PORTS_RECEIVE, GET_PORTS_ERROR],
+      onRequest: GET_PORTS_REQUEST,
+      onSuccess: GET_PORTS_RECEIVE,
+      onError: GET_PORTS_ERROR,
     });
   };
 };
@@ -45,7 +59,9 @@ export const openConnection = (): AsyncPromiseAction<ConnectionAction> => {
       endpoint: "connection/open",
       method: "post",
       data: { port, baudrate },
-      actions: [CONNECT_REQUEST, CONNECT_SUCCESS, CONNECT_ERROR],
+      onRequest: CONNECT_REQUEST,
+      onSuccess: CONNECT_SUCCESS,
+      onError: CONNECT_ERROR,
     });
   };
 };
@@ -55,7 +71,9 @@ export const closeConnection = (): AsyncPromiseAction<ConnectionAction> => {
     return callAPI(dispatch, {
       endpoint: "connection/close",
       method: "post",
-      actions: [DISCONNECT_REQUEST, DISCONNECT_SUCCESS, DISCONNECT_ERROR],
+      onRequest: DISCONNECT_REQUEST,
+      onSuccess: DISCONNECT_SUCCESS,
+      onError: DISCONNECT_ERROR,
     });
   };
 };

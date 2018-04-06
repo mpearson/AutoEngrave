@@ -17,7 +17,7 @@ export type ConnectionState = {
 
 const defaultState: ConnectionState = {
   ports: [],
-  port: "",
+  port: null,
   baudrate: baudrates[0],
   isFetchingPorts: false,
   state: PortState.Closed,
@@ -33,7 +33,15 @@ export const connectionReducer = (state = defaultState, action: ConnectionAction
       return { ...state, isFetchingPorts: true };
     }
     case actions.GET_PORTS_RECEIVE: {
-      return { ...state, ports: action.results, isFetchingPorts: false };
+      const { results } = action;
+      const connected = state.state !== PortState.Closed;
+      return {
+        ...state,
+        ports: results,
+        // don't change the selected port if we're connected already
+        port: connected ? state.port : (results[0] || null),
+        isFetchingPorts: false,
+      };
     }
     case actions.GET_PORTS_ERROR: {
       return { ...state, ports: [], isFetchingPorts: false };
@@ -67,9 +75,16 @@ export const connectionReducer = (state = defaultState, action: ConnectionAction
       return { ...state, isFetchingStatus: true };
     }
     case actions.GET_STATUS_SUCCESS: {
-      const { port, baudrate } = action.status;
-      const connectedTime = moment(action.status.connectedTime);
-      return { ...state, isFetchingStatus: false, port, baudrate, connectedTime };
+      const { port, baudrate, connected, connectedTime } = action.results;
+      return {
+        ...state,
+        isFetchingStatus: false,
+        state: connected ? PortState.Open : PortState.Closed,
+        // only update the port/baudrate selection if the server is actually connected
+        port: connected ? port : state.port,
+        baudrate: connected ? baudrate : state.baudrate,
+        connectedTime: connectedTime ? moment(connectedTime) : null,
+      };
     }
     case actions.GET_STATUS_ERROR: {
       return { ...state, isFetchingStatus: false };

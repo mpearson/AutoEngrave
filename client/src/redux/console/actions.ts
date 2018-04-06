@@ -18,7 +18,9 @@ export const sendCommand = (command: string): AsyncPromiseAction<ConsoleAction> 
       method: "post",
       data: { command },
       actionParams: { command },
-      actions: [SEND_REQUEST, SEND_SUCCESS, SEND_ERROR],
+      onRequest: SEND_REQUEST,
+      onSuccess: SEND_SUCCESS,
+      onError: SEND_ERROR,
     });
   };
 };
