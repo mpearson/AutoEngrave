@@ -16,10 +16,9 @@ class SerialConnection(object):
 
     def open(self, port, baudrate):
         if self.connection is not None:
-            raise Exception("Already connected to %s!" % self.connection)
+            print("Warning: Already connected to %s!" % self.connection)
         # try:
         self.connection = serial.Serial(port, baudrate)
-        self.connection.open()
         self.connectedTime = datetime.datetime.now()
         # except Exception as e:
 

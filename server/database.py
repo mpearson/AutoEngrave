@@ -42,3 +42,15 @@ class MachineProfile(SQLiteModel):
     accelerationX = peewee.FloatField()
     accelerationY = peewee.FloatField()
     accelerationZ = peewee.FloatField()
+
+
+class Template(SQLiteModel):
+    name = peewee.CharField()
+    description = peewee.CharField()
+    created = peewee.DateTimeField()
+    updated = peewee.DateTimeField()
+
+
+class TemplateSlot(SQLiteModel):
+    created = peewee.DateTimeField()
+    updated = peewee.DateTimeField()
