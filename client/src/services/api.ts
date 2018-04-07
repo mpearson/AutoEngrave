@@ -60,7 +60,7 @@ export const callAPI = (dispatch: Dispatch<RootState>, config: APICallConfig) =>
         } else {
           // bad response, but valid JSON so extract the error message
           if (typeof onError === "function") {
-            return Promise.resolve(dispatch(onError(json.error, response, actionParams)));
+            return Promise.reject(dispatch(onError(json.error, response, actionParams)));
           } else {
             return Promise.reject(
               dispatch({
@@ -76,7 +76,7 @@ export const callAPI = (dispatch: Dispatch<RootState>, config: APICallConfig) =>
       error => {
         // response was not valid JSON
         if (typeof onError === "function") {
-          return Promise.resolve(dispatch(onError(error, response, actionParams)));
+          return Promise.reject(dispatch(onError(error, response, actionParams)));
         } else {
           return Promise.reject(dispatch({
             type: onError,
@@ -90,7 +90,7 @@ export const callAPI = (dispatch: Dispatch<RootState>, config: APICallConfig) =>
     error => {
       // request failed so hard we didn't even get a response
       if (typeof onError === "function") {
-        return Promise.resolve(dispatch(onError(error, actionParams)));
+        return Promise.reject(dispatch(onError(error, actionParams)));
       } else {
         return Promise.reject(dispatch({
           type: onError,

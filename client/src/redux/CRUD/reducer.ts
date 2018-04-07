@@ -15,7 +15,7 @@ const createItemMap = <T extends CrudItem>(items: T[]): OrderedMap<number, T> =>
   return OrderedMap(Seq(items).map(item => [item.id, item]));
 };
 
-export const createCrudReducer = <T extends CrudItem>(name: string): Reducer<CrudState<T>> => {
+export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState<T>> => {
   return (state = getDefaultState<T>(), action: CrudAction<T>) => {
     if (action.type.substr(0, name.length) !== name)
       return state;

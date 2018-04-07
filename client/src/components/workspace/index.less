@@ -1,7 +1,9 @@
+@import "../../variables.less";
+
 #workspace-panel {
   position: relative;
   flex: 1 1 auto;
-  border: 1px solid #8a8bb3;
+  border: @panel-border;
   margin-left: 10px;
   border-radius: 2px;
 
@@ -13,7 +15,7 @@
     bottom: 0;
     position:absolute;
     z-index: -1;
-    background: url(../../public/images/frikkin_laser_beams.jpg) top left no-repeat;
+    background: url(../../../public/images/frikkin_laser_beams.jpg) top left no-repeat;
     opacity: 0.2;
     box-sizing: border-box;
   }

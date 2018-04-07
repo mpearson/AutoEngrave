@@ -17,7 +17,8 @@ export const DELETE_REQUEST = "DELETE_REQUEST";
 export const DELETE_SUCCESS = "DELETE_SUCCESS";
 export const DELETE_ERROR   = "DELETE_ERROR";
 
-export const makeCreate = <T extends CrudItem>(prefix: string, endpoint: string): CreateActionCreator<T> => {
+export const makeCreate = <T extends CrudItem>(prefix: string, endpoint?: string): CreateActionCreator<T> => {
+  endpoint = endpoint || prefix;
   prefix += "/";
   return (item: T) => (dispatch, getState) => callAPI(dispatch, {
     endpoint,
@@ -29,7 +30,8 @@ export const makeCreate = <T extends CrudItem>(prefix: string, endpoint: string)
   });
 };
 
-export const makeList = <T extends CrudItem>(prefix: string, endpoint: string): ReadActionCreator<T> => {
+export const makeList = <T extends CrudItem>(prefix: string, endpoint?: string): ReadActionCreator<T> => {
+  endpoint = endpoint || prefix;
   prefix += "/";
   return () => (dispatch, getState) => callAPI(dispatch, {
     endpoint,
@@ -40,7 +42,8 @@ export const makeList = <T extends CrudItem>(prefix: string, endpoint: string): 
   });
 };
 
-export const makeUpdate = <T extends CrudItem>(prefix: string, endpoint: string): UpdateActionCreator<T> => {
+export const makeUpdate = <T extends CrudItem>(prefix: string, endpoint?: string): UpdateActionCreator<T> => {
+  endpoint = endpoint || prefix;
   prefix += "/";
   return (item: T) => (dispatch, getState) => callAPI(dispatch, {
     endpoint: `${endpoint}/${item.id}`,
@@ -52,7 +55,8 @@ export const makeUpdate = <T extends CrudItem>(prefix: string, endpoint: string)
   });
 };
 
-export const makeDelete = <T extends CrudItem>(prefix: string, endpoint: string): DeleteActionCreator<T> => {
+export const makeDelete = <T extends CrudItem>(prefix: string, endpoint?: string): DeleteActionCreator<T> => {
+  endpoint = endpoint || prefix;
   prefix += "/";
   return (item: T) => (dispatch, getState) => callAPI(dispatch, {
     endpoint: `${endpoint}/${item.id}`,

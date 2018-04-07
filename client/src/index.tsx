@@ -18,6 +18,5 @@ export const app = ReactDOM.render(
 );
 
 store.dispatch(getPorts()).then(() => store.dispatch(getConnectionStatus()));
-
 store.dispatch(listMachineProfiles());
 store.dispatch(listMaterialProfiles());
