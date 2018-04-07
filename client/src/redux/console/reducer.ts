@@ -17,13 +17,17 @@ export const consoleReducer = (state = defaultState, action: actions.ConsoleActi
       return {
         ...state,
         sendFetching: true,
-        entries: [...state.entries, { text: action.command, type: "command" }],
+        // entries: [...state.entries, ],
       };
     }
     case actions.SEND_SUCCESS: {
       let entries = state.entries;
       if (action.results)
-        entries = [...state.entries, { text: action.results, type: "response" }];
+        entries = [
+          ...state.entries,
+          { text: action.command, type: "command" },
+          { text: action.results, type: "response" },
+        ];
       return {
         ...state,
         sendFetching: false,

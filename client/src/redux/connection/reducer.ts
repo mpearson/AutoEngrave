@@ -39,7 +39,7 @@ export const connectionReducer = (state = defaultState, action: ConnectionAction
         ...state,
         ports: results,
         // don't change the selected port if we're connected already
-        port: connected ? state.port : (results[0] || null),
+        port: connected ? state.port : (results[results.length - 1] || null),
         isFetchingPorts: false,
       };
     }

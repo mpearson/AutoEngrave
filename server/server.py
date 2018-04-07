@@ -10,6 +10,9 @@ staticDir = os.path.join("..", "client", "build")
 
 app = Flask(__name__, static_folder=staticDir)
 
+
+connection = SerialConnection()
+
 # @app.route("/")
 # def root():
 #     return app.send_static_file("index.html")
@@ -27,21 +30,35 @@ app = Flask(__name__, static_folder=staticDir)
 #     return send_from_directory(os.path.join(staticDir, "images"), filename)
 
 
+
 @app.route("/api/console/send", methods=["POST"])
 def console_send():
-    command = request.json["command"]
-    if command == "M114":
+    if not connection.connected:
         return json.dumps({
-            "results": "5.000X, 5.000Y, 9.000Z"
-        })
-    elif random.random() > 0.3:
-        return json.dumps({
-            "results": None
-        })
-    else:
-        return json.dumps({
-            "error": "your request is bad, and you should feel bad"
+            "error": "Can't send command: machine is not connected!"
         }), 400
+
+    try:
+        command = request.json["command"]
+        response = connection.send(command, blocking=True)
+    except Exception as e:
+        return json.dumps({
+            "error": 'Error sending command %r: %s' % (command, str(e))
+        }), 400
+
+    return json.dumps({
+        "results": response
+    })
+    # if command == "M114":
+    #     return json.dumps({
+    #         "results": "5.000X, 5.000Y, 9.000Z"
+    #     })
+    # elif random.random() > 0.3:
+    #     return json.dumps({
+    #         "results": None
+    #     })
+    # else:
+
 
 
 @app.route("/api/console/pause", methods=["POST"])
@@ -62,7 +79,6 @@ def console_resume():
 # M5 - disable laser
 
 
-connection = SerialConnection()
 
 
 @app.route("/api/connection/scan", methods=["GET"])

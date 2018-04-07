@@ -73,21 +73,19 @@ export const callAPI = (dispatch: Dispatch<RootState>, config: APICallConfig) =>
           }
         }
       },
-      error => response.text().then(
-        // response was not valid JSON, so assume the body is an error message
-        text => {
-          if (typeof onError === "function") {
-            return Promise.resolve(dispatch(onError(text, response, actionParams)));
-          } else {
-            return Promise.reject(dispatch({
-              type: onError,
-              error: text,
-              response,
-              ...actionParams,
-            }));
-          }
+      error => {
+        // response was not valid JSON
+        if (typeof onError === "function") {
+          return Promise.resolve(dispatch(onError(error, response, actionParams)));
+        } else {
+          return Promise.reject(dispatch({
+            type: onError,
+            error,
+            response,
+            ...actionParams,
+          }));
         }
-      )
+      }
     ),
     error => {
       // request failed so hard we didn't even get a response

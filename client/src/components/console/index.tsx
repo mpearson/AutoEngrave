@@ -15,7 +15,14 @@ export interface ConsoleProps extends ConsoleState {
 
 export const Console: React.SFC<ConsoleProps> = props => {
   const { entries, connectionState, sendCommand } = props;
-  const logEntries = entries.map((entry, index) => <div className={entry.type} key={index}>{entry.text}</div>);
+  const logEntries = entries.map((entry, index) => {
+    const classList: string[] = [entry.type];
+    if (entry.text === "ok")
+      classList.push("ok");
+    return (
+      <div className={classList.join(" ")} key={index}>{entry.text}</div>
+    );
+  });
 
   const scrollToBottom = (elem: HTMLDivElement) => {
     if (elem !== null)
