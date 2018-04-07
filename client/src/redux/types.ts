@@ -2,10 +2,12 @@ import { ConsoleState } from "./console/reducer";
 import { ThunkAction } from "redux-thunk";
 import { Action } from "redux";
 import { ConnectionState } from "./connection/reducer";
+import { SettingsState } from "./settings/reducer";
 
 export type RootState = {
   connection: ConnectionState;
   console: ConsoleState;
+  settings: SettingsState;
 };
 
 export type AsyncAction<T = any> = ThunkAction<T, RootState, void>;

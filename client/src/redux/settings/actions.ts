@@ -1,38 +1,12 @@
-import { AsyncPromiseAction, APIAction } from "./../types";
-import { callAPI } from "../../services/api";
+import { makeCreate, makeList, makeUpdate, makeDelete } from "../CRUD/actions";
+import { Machine, Material } from "./types";
 
-export const GET_MACHINES_REQUEST = "settings/GET_MACHINES_REQUEST";
-export const GET_MACHINES_SUCCESS = "settings/GET_MACHINES_SUCCESS";
-export const GET_MACHINES_ERROR = "settings/GET_MACHISES_ERROR";
+export const createMachineProfile = makeCreate<Machine>("machines", "settings/machines");
+export const listMachineProfiles = makeList<Machine>("machines", "settings/machines");
+export const updateMachineProfile = makeUpdate<Machine>("machines", "settings/machines");
+export const deleteMachineProfile = makeDelete<Machine>("machines", "settings/machines");
 
-export const GET_MATERIALS_REQUEST = "settings/GET_MATERIALS_REQUEST";
-export const GET_MATERIALS_SUCCESS = "settings/GET_MATERIALS_SUCCESS";
-export const GET_MATERIALS_ERROR = "settings/GET_MATERIALS_ERROR";
-
-export interface SettingsAction extends APIAction {
-  // command?: string;
-}
-
-export const getMachineProfiles = (): AsyncPromiseAction<SettingsAction> => {
-  return (dispatch, getState) => {
-    return callAPI(dispatch, {
-      endpoint: "settings/machines",
-      method: "get",
-      onRequest: GET_MACHINES_REQUEST,
-      onSuccess: GET_MACHINES_SUCCESS,
-      onError: GET_MACHINES_ERROR,
-    });
-  };
-};
-
-export const getMaterialProfiles = (): AsyncPromiseAction<SettingsAction> => {
-  return (dispatch, getState) => {
-    return callAPI(dispatch, {
-      endpoint: "settings/materials",
-      method: "get",
-      onRequest: GET_MATERIALS_REQUEST,
-      onSuccess: GET_MATERIALS_SUCCESS,
-      onError: GET_MATERIALS_ERROR,
-    });
-  };
-};
+export const createMaterialProfile = makeCreate<Material>("materials", "settings/materials");
+export const listMaterialProfiles = makeList<Material>("materials", "settings/materials");
+export const updateMaterialProfile = makeUpdate<Material>("materials", "settings/materials");
+export const deleteMaterialProfile = makeDelete<Material>("materials", "settings/materials");

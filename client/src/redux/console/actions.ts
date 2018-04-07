@@ -14,15 +14,13 @@ export interface ConsoleAction extends APIAction {
 }
 
 export const sendCommand = (command: string): AsyncPromiseAction<ConsoleAction> => {
-  return (dispatch, getState) => {
-    return callAPI(dispatch, {
-      endpoint: "console/send",
-      method: "post",
-      data: { command },
-      actionParams: { command },
-      onRequest: SEND_REQUEST,
-      onSuccess: SEND_SUCCESS,
-      onError: SEND_ERROR,
-    });
-  };
+  return (dispatch, getState) => callAPI(dispatch, {
+    endpoint: "console/send",
+    method: "post",
+    data: { command },
+    actionParams: { command },
+    onRequest: SEND_REQUEST,
+    onSuccess: SEND_SUCCESS,
+    onError: SEND_ERROR,
+  });
 };

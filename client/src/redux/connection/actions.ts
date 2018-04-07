@@ -29,63 +29,57 @@ export interface ConnectionAction extends APIAction {
   status?: ConnectionStatus;
 }
 
-export const getConnectionStatus = (): AsyncPromiseAction<ConnectionAction> => {
-  return (dispatch, getState) => {
-    return callAPI(dispatch, {
-      endpoint: "connection/status",
-      method: "get",
-      onRequest: GET_STATUS_REQUEST,
-      onSuccess: GET_STATUS_SUCCESS,
-      onError: GET_STATUS_ERROR,
-    });
-  };
+export const getConnectionStatus = (): AsyncPromiseAction<ConnectionAction> => (dispatch, getState) => {
+  return callAPI(dispatch, {
+    endpoint: "connection/status",
+    method: "get",
+    onRequest: GET_STATUS_REQUEST,
+    onSuccess: GET_STATUS_SUCCESS,
+    onError: GET_STATUS_ERROR,
+  });
 };
 
-export const getPorts = (): AsyncPromiseAction<ConnectionAction> => {
-  return (dispatch, getState) => {
-    return callAPI(dispatch, {
-      endpoint: "connection/scan",
-      method: "get",
-      onRequest: GET_PORTS_REQUEST,
-      onSuccess: GET_PORTS_RECEIVE,
-      onError: GET_PORTS_ERROR,
-    });
-  };
+export const getPorts = (): AsyncPromiseAction<ConnectionAction> => (dispatch, getState) => {
+  return callAPI(dispatch, {
+    endpoint: "connection/scan",
+    method: "get",
+    onRequest: GET_PORTS_REQUEST,
+    onSuccess: GET_PORTS_RECEIVE,
+    onError: GET_PORTS_ERROR,
+  });
 };
 
-export const openConnection = (): AsyncPromiseAction<ConnectionAction> => {
-  return (dispatch, getState) => {
-    const { port, baudrate } = getState().connection;
+export const openConnection = (): AsyncPromiseAction<ConnectionAction> => (dispatch, getState) => {
+  const { port, baudrate } = getState().connection;
 
-    return callAPI(dispatch, {
-      endpoint: "connection/open",
-      method: "post",
-      data: { port, baudrate },
-      onRequest: CONNECT_REQUEST,
-      onSuccess: (actionParams: any) => {
-        return (dispatch, getState) => {
-          dispatch({ type: CONNECT_SUCCESS });
-          dispatch({ type: ADD_CONSOLE_ENTRY, command: `Connected to ${port}.`, entryClass: "response"});
-        };
-      },
-      onError: CONNECT_ERROR,
-    });
-  };
+  return callAPI(dispatch, {
+    endpoint: "connection/open",
+    method: "post",
+    data: { port, baudrate },
+    onRequest: CONNECT_REQUEST,
+    onSuccess: (actionParams: any) => {
+      return () => {
+        dispatch({ type: CONNECT_SUCCESS });
+        dispatch({ type: ADD_CONSOLE_ENTRY, command: `Connected to ${port}.`, entryClass: "response"});
+        return Promise.resolve();
+      };
+    },
+    onError: CONNECT_ERROR,
+  });
 };
 
-export const closeConnection = (): AsyncPromiseAction<ConnectionAction> => {
-  return (dispatch, getState) => {
+export const closeConnection = (): AsyncPromiseAction<ConnectionAction> => (dispatch, getState) => {
     return callAPI(dispatch, {
-      endpoint: "connection/close",
-      method: "post",
-      onRequest: DISCONNECT_REQUEST,
-      onSuccess: () => {
-        return (dispatch, getState) => {
-          dispatch({ type: DISCONNECT_SUCCESS });
-          dispatch({ type: ADD_CONSOLE_ENTRY, command: "Disconnected.", entryClass: "response"});
-        };
-      },
-      onError: DISCONNECT_ERROR,
-    });
-  };
+    endpoint: "connection/close",
+    method: "post",
+    onRequest: DISCONNECT_REQUEST,
+    onSuccess: () => {
+      return () => {
+        dispatch({ type: DISCONNECT_SUCCESS });
+        dispatch({ type: ADD_CONSOLE_ENTRY, command: "Disconnected.", entryClass: "response"});
+        return Promise.resolve();
+      };
+    },
+    onError: DISCONNECT_ERROR,
+  });
 };

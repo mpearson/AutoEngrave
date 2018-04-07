@@ -1,16 +1,9 @@
-declare var window: Window & { devToolsExtension: any, __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any };
-import { combineReducers, createStore, compose, applyMiddleware } from "redux";
+import { createStore, compose, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { connectionReducer } from "../redux/connection/reducer";
-import { consoleReducer } from "../redux/console/reducer";
 import { RootState } from "../redux/types";
+import { rootReducer } from "../redux/reducer";
 
-
-const rootReducer = combineReducers<RootState>({
-  connection: connectionReducer,
-  console: consoleReducer,
-});
-
+declare var window: Window & { devToolsExtension: any, __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any };
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export const store = createStore<RootState>(
