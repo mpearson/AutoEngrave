@@ -2,6 +2,8 @@ import { AsyncPromiseAction, APIAction } from "./../types";
 import { ComPort, ConnectionStatus } from "./types";
 import { callAPI } from "../../services/api";
 
+import { ADD_CONSOLE_ENTRY } from "../console/actions";
+
 export const GET_PORTS_REQUEST = "connection/GET_PORTS_REQUEST";
 export const GET_PORTS_RECEIVE = "connection/GET_PORTS_RECEIVE";
 export const GET_PORTS_ERROR = "connection/GET_PORTS_ERROR";
@@ -60,7 +62,12 @@ export const openConnection = (): AsyncPromiseAction<ConnectionAction> => {
       method: "post",
       data: { port, baudrate },
       onRequest: CONNECT_REQUEST,
-      onSuccess: CONNECT_SUCCESS,
+      onSuccess: (actionParams: any) => {
+        return (dispatch, getState) => {
+          dispatch({ type: CONNECT_SUCCESS });
+          dispatch({ type: ADD_CONSOLE_ENTRY, command: `Connected to ${port}.`, entryClass: "response"});
+        };
+      },
       onError: CONNECT_ERROR,
     });
   };
@@ -72,7 +79,12 @@ export const closeConnection = (): AsyncPromiseAction<ConnectionAction> => {
       endpoint: "connection/close",
       method: "post",
       onRequest: DISCONNECT_REQUEST,
-      onSuccess: DISCONNECT_SUCCESS,
+      onSuccess: () => {
+        return (dispatch, getState) => {
+          dispatch({ type: DISCONNECT_SUCCESS });
+          dispatch({ type: ADD_CONSOLE_ENTRY, command: "Disconnected.", entryClass: "response"});
+        };
+      },
       onError: DISCONNECT_ERROR,
     });
   };

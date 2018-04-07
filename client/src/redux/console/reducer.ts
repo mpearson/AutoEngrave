@@ -13,6 +13,14 @@ const defaultState: ConsoleState = {
 
 export const consoleReducer = (state = defaultState, action: actions.ConsoleAction) => {
   switch (action.type) {
+    case actions.ADD_CONSOLE_ENTRY: {
+      return {
+        ...state,
+        sendFetching: false,
+        entries: [...state.entries, { text: action.command, type: action.entryType }],
+      };
+
+    }
     case actions.SEND_REQUEST: {
       return {
         ...state,
@@ -28,11 +36,7 @@ export const consoleReducer = (state = defaultState, action: actions.ConsoleActi
           { text: action.command, type: "command" },
           { text: action.results, type: "response" },
         ];
-      return {
-        ...state,
-        sendFetching: false,
-        entries,
-      };
+      return { ...state, sendFetching: false, entries };
     }
     case actions.SEND_ERROR: {
       return {

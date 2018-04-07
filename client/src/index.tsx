@@ -8,6 +8,7 @@ import { getConnectionStatus, getPorts } from "./redux/connection/actions";
 
 import "./index.less";
 import "./normalize.css";
+import { getMachineProfiles, getMaterialProfiles } from './redux/settings/actions';
 
 export const app = ReactDOM.render(
   <Provider store={store}>
@@ -17,3 +18,6 @@ export const app = ReactDOM.render(
 );
 
 store.dispatch(getPorts()).then(() => store.dispatch(getConnectionStatus()));
+
+store.dispatch(getMachineProfiles());
+store.dispatch(getMaterialProfiles());

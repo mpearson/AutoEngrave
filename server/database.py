@@ -44,6 +44,10 @@ class MachineProfile(SQLiteModel):
     accelerationZ = peewee.FloatField()
 
 
+class MaterialProfile(SQLiteModel):
+    name = peewee.CharField()
+
+
 class Template(SQLiteModel):
     name = peewee.CharField()
     description = peewee.CharField()
@@ -52,5 +56,12 @@ class Template(SQLiteModel):
 
 
 class TemplateSlot(SQLiteModel):
-    created = peewee.DateTimeField()
-    updated = peewee.DateTimeField()
+    template = peewee.ForeignKeyField(Artist)
+
+
+def createTables():
+    for Model in (Design, MachineProfile, Template, TemplateSlot):
+        try:
+            Model.create_table()
+        except peewee.OperationalError:
+            print "%s table already exists!" % Model.__name__
