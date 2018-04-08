@@ -24,7 +24,9 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
 
   private onDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
+    this.setState({ dragHover: false });
     // e.dataTransfer
+    console.log(e.dataTransfer);
   }
 
   private onDragOver: React.DragEventHandler<HTMLDivElement> = (e) => {
