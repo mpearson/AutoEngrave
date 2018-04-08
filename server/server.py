@@ -5,6 +5,7 @@ import math
 import random
 from serial_comms import getCOMPorts, SerialConnection
 import time
+import database
 
 staticDir = os.path.join("..", "client", "build")
 
@@ -77,7 +78,8 @@ def console_resume():
 # G28 - home
 # M3 - enable laser
 # M5 - disable laser
-
+# M106 - fan on
+# M107 - fan  off
 
 
 
@@ -116,6 +118,73 @@ def connection_status():
 
 
 
+
+
+#-----------------------------------------------------------------------------#
+#                            Machine Profile API                              #
+#-----------------------------------------------------------------------------#
+
+@app.route("/api/settings/machines", methods=["GET"])
+def list_machines():
+    return json.dumps({"results": []})
+
+@app.route("/api/settings/machines", methods=["POST"])
+def create_machine():
+    machine = request.json
+
+@app.route("/api/settings/machines/<int:machineID>", methods=["PUT"])
+def update_machine(machineID):
+    machine = request.json
+
+@app.route("/api/settings/machines/<int:machineID>", methods=["DELETE"])
+def delete_machine(machineID):
+    pass
+
+
+#-----------------------------------------------------------------------------#
+#                            Material Profile API                             #
+#-----------------------------------------------------------------------------#
+
+@app.route("/api/settings/materials", methods=["GET"])
+def list_macterials():
+    return json.dumps({"results": []})
+
+@app.route("/api/settings/materials", methods=["POST"])
+def create_material():
+    material = request.json
+
+@app.route("/api/settings/materials/<int:materialID>", methods=["PUT"])
+def update_material(materialID):
+    material = request.json
+
+@app.route("/api/settings/materials/<int:materialID>", methods=["DELETE"])
+def delete_material(materialID):
+    pass
+
+
+#-----------------------------------------------------------------------------#
+#                             Design Catalog API                              #
+#-----------------------------------------------------------------------------#
+
+@app.route("/api/catalog", methods=["GET"])
+def list_designs():
+    return json.dumps({"results": []})
+
+@app.route("/api/catalog", methods=["POST"])
+def create_design():
+    if "files" not in request.files:
+        return json.dumps({"error": "File missing from request!"}), 400
+
+    file = request.files["files"]
+    design = request.json
+
+@app.route("/api/catalog/<int:designID>", methods=["PUT"])
+def update_design(designID):
+    design = request.json
+
+@app.route("/api/catalog/<int:designID>", methods=["DELETE"])
+def delete_design(designID):
+    pass
 
 
 

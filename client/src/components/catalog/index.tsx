@@ -22,22 +22,33 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
     };
   }
 
-  private onDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
-    e.preventDefault();
-    this.setState({ dragHover: false });
-    // e.dataTransfer
-    console.log(e.dataTransfer);
-  }
+  private fileInput: HTMLInputElement;
 
-  private onDragOver: React.DragEventHandler<HTMLDivElement> = (e) => {
+  private onDragOver: React.DragEventHandler<HTMLDivElement> = e => {
     e.preventDefault();
     this.setState({ dragHover: true });
   }
-  private onDragLeave: React.DragEventHandler<HTMLDivElement> = (e) => {
+
+  private onDragLeave: React.DragEventHandler<HTMLDivElement> = e => {
     e.preventDefault();
     this.setState({ dragHover: false });
   }
 
+  private onDrop: React.DragEventHandler<HTMLDivElement> = e => {
+    e.preventDefault();
+    this.setState({ dragHover: false });
+    // e.dataTransfer
+    const files = e.dataTransfer.files;
+    console.log(files);
+  }
+
+  private onSelectFile: React.ChangeEventHandler<HTMLInputElement> = e => {
+    const files = this.fileInput.files;
+    if (files.length > 0) {
+      console.log(files);
+
+    }
+  }
 
   public render() {
     const { dragHover } = this.state;
@@ -53,6 +64,13 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
         onDragOver={this.onDragOver}
         onDragLeave={this.onDragLeave}
       >
+        <input
+          type="file"
+          className="file-input"
+          ref={elem => this.fileInput = elem}
+          onChange={this.onSelectFile}
+        />
+        <button onClick={() => this.fileInput.click()}>Upload Design</button>
         <div className="drop-message">Drop filez here, yo</div>
       </div>
     );

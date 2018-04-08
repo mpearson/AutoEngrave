@@ -6,27 +6,28 @@ body {
   color: @text-color;
   font-family: @default-font-face;
   font-size: @default-font-size;
-}
 
-button, input, select {
-  display: inline-block;
-  border: none;
-  height: 30px;
-  padding: 0 10px;
-  border-radius: 2px;
-}
+  button, input, select {
+    display: inline-block;
+    border: none;
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 2px;
+  }
 
-button {
-  cursor: pointer;
-  background-color: #a8a8b5;
-  color: black;
-  outline: none;
-  &:hover { background-color: #c4c4da; }
-  &:disabled {
-    opacity: 0.5;
-    color: rgba(0, 0, 0, 0.5);
-    cursor: default;
-    &:hover { background-color: #a8a8b5; }
+  button {
+    cursor: pointer;
+    background-color: @button-color;
+    color: @button-text-color;
+    outline: none;
+    font-size: 13px;
+    &:hover { background-color: lighten(@button-color, 10%); }
+    &:disabled {
+      cursor: default;
+      color: fade(@button-text-color, 50%);
+      background-color: @button-disabled-color;
+      &:hover { background-color: @button-disabled-color; }
+    }
   }
 }
 

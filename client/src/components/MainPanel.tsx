@@ -15,7 +15,6 @@ export class MainPanel extends React.Component {
   }
 
   public componentDidMount() {
-    const body = document.querySelector("body");
     document.addEventListener("dragover", this.onDragStart);
     document.addEventListener("dragleave", this.onDragEnd);
     document.addEventListener("drop", this.onDragEnd);

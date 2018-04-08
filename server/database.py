@@ -1,6 +1,9 @@
 import peewee
+import os
 
-database = peewee.SqliteDatabase("auto-engrave.db")
+
+databaseName = "auto-engrave.db"
+database = peewee.SqliteDatabase(databaseName)
 
 
 class SQLiteModel(peewee.Model):
@@ -56,7 +59,7 @@ class Template(SQLiteModel):
 
 
 class TemplateSlot(SQLiteModel):
-    template = peewee.ForeignKeyField(Artist)
+    template = peewee.ForeignKeyField(Template)
 
 
 def createTables():
@@ -64,4 +67,8 @@ def createTables():
         try:
             Model.create_table()
         except peewee.OperationalError:
-            print "%s table already exists!" % Model.__name__
+            print("%s table already exists!" % Model.__name__)
+
+
+if not os.path.isfile(databaseName):
+    createTables()
