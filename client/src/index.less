@@ -21,12 +21,12 @@ body {
     color: @button-text-color;
     outline: none;
     font-size: 13px;
-    &:hover { background-color: lighten(@button-color, 10%); }
+    &:hover:not(:disabled) { background-color: lighten(@button-color, 7%); }
+    &:active:not(:disabled) { background-color: darken(@button-color, 7%); }
     &:disabled {
       cursor: default;
       color: fade(@button-text-color, 50%);
       background-color: @button-disabled-color;
-      &:hover { background-color: @button-disabled-color; }
     }
   }
 }

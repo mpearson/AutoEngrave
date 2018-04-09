@@ -3,8 +3,11 @@ import { ThunkAction } from "redux-thunk";
 import { Action } from "redux";
 import { ConnectionState } from "./connection/reducer";
 import { SettingsState } from "./settings/reducer";
+import { CrudState } from "./CRUD/types";
+import { Design } from "./catalog/types";
 
 export type RootState = {
+  catalog: CrudState<Design>;
   connection: ConnectionState;
   console: ConsoleState;
   settings: SettingsState;

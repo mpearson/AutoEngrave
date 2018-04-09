@@ -17,6 +17,9 @@ export const DELETE_REQUEST = "DELETE_REQUEST";
 export const DELETE_SUCCESS = "DELETE_SUCCESS";
 export const DELETE_ERROR   = "DELETE_ERROR";
 
+let tempID = -1;
+export const getTempID = () => tempID++;
+
 export const makeCreate = <T extends CrudItem>(prefix: string, endpoint?: string): CreateActionCreator<T> => {
   endpoint = endpoint || prefix;
   prefix += "/";
@@ -24,6 +27,7 @@ export const makeCreate = <T extends CrudItem>(prefix: string, endpoint?: string
     endpoint,
     method: "post",
     data: item,
+    actionParams: { item, tempID: getTempID() },
     onRequest:  prefix + CREATE_REQUEST,
     onSuccess:  prefix + CREATE_SUCCESS,
     onError:    prefix + CREATE_ERROR,
@@ -45,10 +49,11 @@ export const makeList = <T extends CrudItem>(prefix: string, endpoint?: string):
 export const makeUpdate = <T extends CrudItem>(prefix: string, endpoint?: string): UpdateActionCreator<T> => {
   endpoint = endpoint || prefix;
   prefix += "/";
-  return (item: T) => (dispatch, getState) => callAPI(dispatch, {
+  return (oldItem: T, item: T) => (dispatch, getState) => callAPI(dispatch, {
     endpoint: `${endpoint}/${item.id}`,
     method: "put",
     data: item,
+    actionParams: { item, oldItem },
     onRequest:  prefix + UPDATE_REQUEST,
     onSuccess:  prefix + UPDATE_SUCCESS,
     onError:    prefix + UPDATE_ERROR,
@@ -61,6 +66,7 @@ export const makeDelete = <T extends CrudItem>(prefix: string, endpoint?: string
   return (item: T) => (dispatch, getState) => callAPI(dispatch, {
     endpoint: `${endpoint}/${item.id}`,
     method: "delete",
+    actionParams: { item },
     onRequest:  prefix + DELETE_REQUEST,
     onSuccess:  prefix + DELETE_SUCCESS,
     onError:    prefix + DELETE_ERROR,
