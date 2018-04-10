@@ -28,11 +28,11 @@
     opacity: 0;
     pointer-events: none;
     font-size: 18px;
-    transition: all 300ms 100ms;
+    background-color: rgba(34, 41, 49, 0.75);
+    transition: all 300ms;
 
     .drag-active & {
       opacity: 1;
-      transition: all 250ms;
     }
   }
 
@@ -41,7 +41,8 @@
     padding: @padding - 1;
     border-style: dashed;
     .drop-message {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(25, 45, 68, 0.75);
+      transition: all 100ms;
     }
   }
 
@@ -49,9 +50,11 @@
 
   button { width: 100%; }
 
-  .catalog {
-    flex: 1 0 auto;
+  .catalog-items {
+    flex: 1 1 auto;
     overflow-y: auto;
+    margin: 10px 0 0;
+    // border-top: 1px solid #7f8ea0;
 
     .design {
       border: @panel-border;

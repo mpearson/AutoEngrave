@@ -2,8 +2,9 @@ import * as React from "react";
 // import { RootState } from "../../redux/types";
 // import { Dispatch, connect } from "react-redux";
 import { CrudState } from "../../redux/CRUD/types";
-import { Design } from "../../redux/catalog/types";
+import { Design, ImageMetadata } from "../../redux/catalog/types";
 import { DesignThumbnail } from "./DesignThumbnail";
+import { buildImageDataURL } from "../../redux/catalog/utils";
 
 export interface DesignCatalogProps extends CrudState<Design> {
   onSelect: (design: Design) => void;
@@ -84,28 +85,41 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
   private loadFiles(files: FileList) {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
+
+      this.loadImage(file).then(
+        metadata => this.props.onUpload({
+          name: file.name,
+          description: "",
+          ...metadata,
+        }),
+        (error) => {
+          console.error(error);
+        }
+      );
+    }
+  }
+
+  private loadImage(file: File) {
+    return new Promise<ImageMetadata>((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => {
         const image = new Image();
-        image.onload = () => {
-          if (file.type === "image/svg+xml") {
-            this.props.onUpload({
-              name: file.name,
-              description: "",
-              width: image.width,
-              height: image.height,
-              imageData: reader.result,
-              dpi: 72, // how the balls do we detect this? look for friggin Inkscape SVG comments? yuck
-              filetype: file.type,
-            });
-          }
-        };
-        image.src = reader.result;
+        image.onload = () => resolve({
+          imageData: image.src,
+          width: image.width,
+          height: image.height,
+          filetype: file.type,
+          dpi: 72, // how the balls do we detect this? look for friggin Inkscape SVG comments? yuck
+        });
+        image.src = buildImageDataURL(file.type, reader.result);
       };
-      reader.readAsDataURL(file);
-    }
 
-    // console.log(files);
-    // "data:image/svg+xml;utf8,"
+      if (file.type === "image/svg+xml")
+        reader.readAsText(file);
+      else if (file.type.startsWith("image/"))
+        reader.readAsDataURL(file);
+      else
+        reject("aint no image file homes");
+    });
   }
 }

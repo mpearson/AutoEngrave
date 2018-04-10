@@ -25,3 +25,13 @@ export function calculateSize(
     height: height + "px",
   };
 }
+
+/**
+ * Renders the provided image data, either as SVG text or as base64 dataURL,
+ * depending on the filetype.
+ */
+export function buildImageDataURL(filetype: string, imageData: string) {
+  if (filetype === "image/svg+xml")
+    return "data:image/svg+xml," + imageData;
+  return imageData;
+}

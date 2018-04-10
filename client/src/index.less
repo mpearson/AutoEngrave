@@ -16,6 +16,7 @@ body {
   }
 
   button {
+    flex: none;
     cursor: pointer;
     background-color: @button-color;
     color: @button-text-color;
@@ -39,6 +40,7 @@ header {
   height: 60px;
   background: rgba(0, 0, 0, 0.5);
   padding: 0 20px;
+  flex: none;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -86,7 +88,7 @@ header h1 {
 #main-content {
   display: flex;
   flex-direction: row;
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   padding: 10px 5px;
   & > * { margin: 0 5px; }
 }
