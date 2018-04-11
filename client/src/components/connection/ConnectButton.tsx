@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ConnectionPanelProps } from ".";
+import { ConnectionPanelProps } from "./ConnectionPanel";
 import { LoadingSpinner } from "../LoadingSpinner";
 import { PortState } from "../../redux/connection/types";
 

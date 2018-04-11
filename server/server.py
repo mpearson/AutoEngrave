@@ -165,26 +165,28 @@ x = 0
 #                             Design Catalog API                              #
 #-----------------------------------------------------------------------------#
 
-# @app.route("/api/catalog", methods=[])
-@app.route("/api/catalog", methods=["GET", "POST"])
+@app.route("/api/catalog", methods=["GET"])
 def list_designs():
-    if request.method == "GET":
-        return json.dumps({"results": []})
+    return json.dumps({"results": []})
 
-    if request.method == "POST":
-        # file = request.files["files"]
-        # design = request.json
-        x += 1
-        return json.dumps({"results": x})
+@app.route("/api/catalog", methods=["POST"])
+def create_design():
+    global x
+    # if "files" not in request.files:
+    #     return json.dumps({"error": "File missing from request!"}), 400
 
+    # file = request.files["files"]
+    # design = request.json
+    x += 1
+    return json.dumps({"results": x}), 201
 
-@app.route("/api/catalog/<int:designID>", methods=["PUT", "DELETE"])
+@app.route("/api/catalog/<int:designID>", methods=["PUT"])
 def update_design(designID):
-    if request.method == "PUT":
-        design = request.json
+    design = request.json
 
-    if request.method == "DELETE":
-        pass
+@app.route("/api/catalog/<int:designID>", methods=["DELETE"])
+def delete_design(designID):
+    pass
 
 
 

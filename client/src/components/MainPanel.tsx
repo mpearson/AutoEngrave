@@ -1,8 +1,8 @@
 import * as React from "react";
-import { ConsoleConnected } from "./console";
-import { WorkspaceConnected } from "./workspace";
-import { ConnectionPanelConnected } from "./connection";
-import { CatalogPanelConnected } from "./catalog";
+import { ConsoleConnected } from "./console/Console";
+import { WorkspaceConnected } from "./workspace/Workspace";
+import { ConnectionPanelConnected } from "./connection/ConnectionPanel";
+import { CatalogPanelConnected } from "./catalog/CatalogPanel";
 
 export class MainPanel extends React.Component {
   private onDragStart = (e: DragEvent) => {
@@ -34,5 +34,5 @@ export class MainPanel extends React.Component {
         </div>
       </div>
     );
-  };
+  }
 }

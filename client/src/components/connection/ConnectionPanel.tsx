@@ -7,7 +7,7 @@ import { ComPort, baudrates, PortState } from "../../redux/connection/types";
 import { ConnectButton } from "./ConnectButton";
 import { PortScanButton } from "./PortScanButton";
 
-import "./index.less";
+import "./connection.less";
 
 interface DispatchProps {
   scanComPorts: () => void;

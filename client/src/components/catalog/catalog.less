@@ -57,10 +57,15 @@
     // border-top: 1px solid #7f8ea0;
 
     .design {
+      cursor: pointer;
       border: @panel-border;
       &.loading {
         width: 50px;
         height: 50px;
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
       }
     }
   }

@@ -38,29 +38,24 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
 
     return (
       <div id="catalog-panel" className="design-editor">
+        <label>Name</label>
         <input type="text" onChange={e => this.onChange("name", e.target.value)} value={design.name} />
-        <div>
-          <label>Format</label>
-          <span>{design.filetype}</span>
-        </div>
-        <div>
-          <label>Width</label>
-          <span>{design.width}</span>
-        </div>
-        <div>
-          <label>Height</label>
-          <span>{design.height}</span>
-        </div>
-        <div>
-          <label>Created</label>
-          <span>{design.created}</span>
-        </div>
-        <div>
-          <label>Updated</label>
-          <span>{design.updated}</span>
-        </div>
+        <dl>
+          <dt>Format</dt>
+          <dd>{design.filetype}</dd>
+          <dt>Width</dt>
+          <dd>{design.width}</dd>
+          <dt>Height</dt>
+          <dd>{design.height}</dd>
+          <dt>Created</dt>
+          <dd>{design.created}</dd>
+          <dt>Updated</dt>
+          <dd>{design.updated}</dd>
+        </dl>
+        <label>DPI</label>
         <input type="text" onChange={e => this.onChange("dpi", e.target.value)} value={design.dpi} />
-        <textarea onChange={e => this.onChange("description", e.target.value)} value={design.name} />
+        <label>Description</label>
+        <textarea onChange={e => this.onChange("description", e.target.value)} value={design.description} />
         <div className="image-preview">
           <img src={"data:image/svg+xml;utf8," + design.imageData} style={imageSize} />
         </div>

@@ -3,11 +3,11 @@ import { RootState } from "../../redux/types";
 import { connect } from "react-redux";
 import { CrudState, CreateActionCreator, UpdateActionCreator, DeleteActionCreator } from "../../redux/CRUD/types";
 import { Design } from "../../redux/catalog/types";
-
-import "./index.less";
 import { DesignCatalog } from "./DesignCatalog";
 import { DesignEditor } from "./DesignEditor";
 import * as actions from "../../redux/catalog/actions";
+
+import "./catalog.less";
 
 export interface CatalogPanelProps extends CrudState<Design> {
   // dispatch: Dispatch<RootState>;

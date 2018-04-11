@@ -6,7 +6,7 @@ import * as actions from "../../redux/console/actions";
 import { ConsoleInput } from "./ConsoleInput";
 import { PortState } from "../../redux/connection/types";
 
-import "./index.less";
+import "./console.less";
 
 export interface ConsoleProps extends ConsoleState {
   connectionState: PortState;
