@@ -117,9 +117,6 @@ def connection_status():
     })
 
 
-
-
-
 #-----------------------------------------------------------------------------#
 #                            Machine Profile API                              #
 #-----------------------------------------------------------------------------#
@@ -162,30 +159,32 @@ def delete_material(materialID):
     pass
 
 
+x = 0
+
 #-----------------------------------------------------------------------------#
 #                             Design Catalog API                              #
 #-----------------------------------------------------------------------------#
 
-@app.route("/api/catalog", methods=["GET"])
+# @app.route("/api/catalog", methods=[])
+@app.route("/api/catalog", methods=["GET", "POST"])
 def list_designs():
-    return json.dumps({"results": []})
+    if request.method == "GET":
+        return json.dumps({"results": []})
 
-@app.route("/api/catalog", methods=["POST"])
-def create_design():
-    if "files" not in request.files:
-        return json.dumps({"error": "File missing from request!"}), 400
+    if request.method == "POST":
+        # file = request.files["files"]
+        # design = request.json
+        x += 1
+        return json.dumps({"results": x})
 
-    file = request.files["files"]
-    design = request.json
 
-@app.route("/api/catalog/<int:designID>", methods=["PUT"])
+@app.route("/api/catalog/<int:designID>", methods=["PUT", "DELETE"])
 def update_design(designID):
-    design = request.json
+    if request.method == "PUT":
+        design = request.json
 
-@app.route("/api/catalog/<int:designID>", methods=["DELETE"])
-def delete_design(designID):
-    pass
-
+    if request.method == "DELETE":
+        pass
 
 
 
