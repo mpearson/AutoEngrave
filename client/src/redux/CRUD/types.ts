@@ -20,7 +20,9 @@ export interface CrudAction<T extends CrudItem> extends APIAction {
   tempID?: number;
 }
 
-export type CreateActionCreator<T extends CrudItem> = (item: T) => AsyncPromiseAction<CrudAction<T>>;
-export type ReadActionCreator<T extends CrudItem> = () => AsyncPromiseAction<CrudAction<T>>;
-export type UpdateActionCreator<T extends CrudItem> = (oldItem: T, item: T) => AsyncPromiseAction<CrudAction<T>>;
-export type DeleteActionCreator<T extends CrudItem> = (item: T) => AsyncPromiseAction<CrudAction<T>>;
+type APIReturn<T> = AsyncPromiseAction<CrudAction<T>>;
+
+export type CreateActionCreator<T extends CrudItem> = (item: T) => APIReturn<T>;
+export type ReadActionCreator<T extends CrudItem> = () => APIReturn<T>;
+export type UpdateActionCreator<T extends CrudItem> = (oldItem: T, item: Partial<T>) => APIReturn<T>;
+export type DeleteActionCreator<T extends CrudItem> = (item: T) => APIReturn<T>;

@@ -5,7 +5,7 @@ import math
 import random
 from serial_comms import getCOMPorts, SerialConnection
 import time
-import database
+from database import db, Design
 import peewee
 import datetime
 
@@ -169,32 +169,72 @@ x = 0
 
 @app.route("/api/catalog", methods=["GET"])
 def list_designs():
-    return json.dumps({"results": []})
+    try:
+        records = Design.select().order_by(Design.updated.desc())
+        results = [record.serialize() for record in records]
+    except Exception as e:
+        return json.dumps({"error": str(e)}), 500
+
+    return json.dumps({"results": results})
 
 @app.route("/api/catalog", methods=["POST"])
 def create_design():
-    data = request.json
-    data["created"] = datetime.datetime.now()
-    data["updated"] = datetime.datetime.now()
-
+    # return json.dumps({"results": int(random.random() * 1000)})
     try:
-        with database.db.atomic() as transaction:
-            record = database.Design(data)
-            record.save()
-        return json.dumps({"results": {"id": record.id}}), 201
-
-    except peewee.IntegrityError as e:
-        return json.dumps({"error": str(e)}), 400
+        jsonData = request.json
+        with db.atomic() as transaction:
+            record = Design.create(
+                name        = jsonData["name"],
+                description = jsonData["description"],
+                width       = jsonData["width"],
+                height      = jsonData["height"],
+                dpi         = jsonData["dpi"],
+                filetype    = jsonData["filetype"],
+                imageData   = jsonData["imageData"],
+            )
+        return json.dumps({
+            "results": {
+                "id": record.id,
+                "created": record.created.isoformat(),
+            }
+        }), 201
+    except Exception as e:
+        return json.dumps({"error": str(e)}), 500
 
 @app.route("/api/catalog/<int:designID>", methods=["PUT"])
 def update_design(designID):
-    design = request.json
+    try:
+        jsonData = request.json
+        with db.atomic() as transaction:
+            record = Design.get_by_id(designID)
+            record.name         = jsonData["name"]
+            record.description  = jsonData["description"]
+            record.dpi          = jsonData["dpi"]
+            record.updated      = datetime.datetime.now()
+            record.save()
+
+    except Exception as e:
+        return json.dumps({"error": str(e)}), 500
+    else:
+        return json.dumps({
+            "results": {
+                "updated": record.updated.isoformat(),
+            }
+        })
 
 @app.route("/api/catalog/<int:designID>", methods=["DELETE"])
 def delete_design(designID):
-    pass
+    try:
+        record = Design.delete_by_id(designID)
+    except DoesNotExist:
+        pass
+    except Exception as e:
+        return json.dumps({"error": str(e)}), 500
+    else:
+        return "", 204
 
 
 
 if __name__ == "__main__":
     app.run()
+    db.connect()

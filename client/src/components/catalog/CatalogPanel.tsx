@@ -6,6 +6,7 @@ import { Design } from "../../redux/catalog/types";
 import { DesignCatalog } from "./DesignCatalog";
 import { DesignEditor } from "./DesignEditor";
 import * as actions from "../../redux/catalog/actions";
+import * as _ from "lodash";
 
 import "./catalog.less";
 
@@ -38,10 +39,12 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
   }
 
   private onSave = (design: Design) => {
-    if (design.id)
-      this.props.updateDesign(this.state.editingDesign, design);
-    else
+    if (design.id) {
+      const newDesign = _.pick(design, ["id", "name", "description", "dpi"]);
+      this.props.updateDesign(this.state.editingDesign, newDesign);
+    } else {
       this.props.createDesign(design);
+    }
 
     this.setState({ editingDesign: null });
   }

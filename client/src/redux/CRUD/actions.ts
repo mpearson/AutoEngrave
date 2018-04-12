@@ -49,7 +49,7 @@ export const makeList = <T extends CrudItem>(prefix: string, endpoint?: string):
 export const makeUpdate = <T extends CrudItem>(prefix: string, endpoint?: string): UpdateActionCreator<T> => {
   endpoint = endpoint || prefix;
   prefix += "/";
-  return (oldItem: T, item: T) => (dispatch, getState) => callAPI(dispatch, {
+  return (oldItem: T, item: Partial<T>) => (dispatch, getState) => callAPI(dispatch, {
     endpoint: `${endpoint}/${item.id}`,
     method: "put",
     data: item,

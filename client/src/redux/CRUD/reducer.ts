@@ -17,10 +17,10 @@ const createItemMap = <T extends CrudItem>(items: T[]): OrderedMap<number, T> =>
 
 export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState<T>> => {
   return (state = getDefaultState<T>(), action: CrudAction<T>) => {
-    const [ actionPrefix, actionName ] = action.type.split("/", 1);
-    if (actionPrefix)
+    const [ actionPrefix, actionType ] = action.type.split("/");
+    if (actionPrefix !== name)
       return state;
-    switch (actionName) {
+    switch (actionType) {
       // Create
       case actions.CREATE_REQUEST: {
         return {
@@ -30,10 +30,16 @@ export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState
         };
       }
       case actions.CREATE_SUCCESS: {
-        const id: number = action.results;
+        const { results } = action;
+        const item: T = {
+          ...action.item as any,
+          id: results.id,
+          created: results.created,
+          updated: results.created,
+        };
         return {
           ...state,
-          items: state.items.delete(action.tempID).set(id, { ...action.item as any, id }),
+          items: state.items.delete(action.tempID).set(item.id, item),
           isCreatingItem: false,
         };
       }
@@ -63,9 +69,14 @@ export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState
         };
       }
       case actions.UPDATE_SUCCESS: {
+        const item: T = {
+          ...action.oldItem as any,
+          ...action.item as any,
+          updated: action.results.updated,
+        };
         return {
           ...state,
-          items: state.items.set(action.item.id, action.item),
+          items: state.items.set(item.id, item),
           isUpdatingItem: false,
         };
       }

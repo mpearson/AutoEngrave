@@ -1,5 +1,6 @@
 import peewee
 import os
+import datetime
 
 
 databaseName = "auto-engrave.db"
@@ -14,10 +15,27 @@ class SQLiteModel(peewee.Model):
 class Design(SQLiteModel):
     name = peewee.CharField()
     description = peewee.CharField()
+    width = peewee.IntegerField()
+    height = peewee.IntegerField()
+    dpi = peewee.IntegerField()
     filetype = peewee.CharField()
-    file = peewee.BlobField()
-    created = peewee.DateTimeField()
-    updated = peewee.DateTimeField()
+    imageData = peewee.TextField()
+    created = peewee.DateTimeField(default=datetime.datetime.now)
+    updated = peewee.DateTimeField(default=datetime.datetime.now)
+
+    def serialize(self):
+        return dict(
+            id          = self.id,
+            name        = self.name,
+            description = self.description,
+            width       = self.width,
+            height      = self.height,
+            dpi         = self.dpi,
+            filetype    = self.filetype,
+            imageData   = self.imageData,
+            created     = self.created.isoformat(),
+            updated     = self.updated.isoformat(),
+        )
 
 
 class MachineProfile(SQLiteModel):
