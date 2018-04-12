@@ -39,9 +39,8 @@ def disableAntialiasing(node, root):
 '''
 loads an SVG file and renders it into a numpy array
 '''
-def loadSVG(filename, outputDPI=72, inputDPI=72, ignoreStrokes=False, antialiasing=True, monochrome=False):
-    with open(filename, "r") as f:
-        tree = cairosvg.surface.Tree(file_obj=f)
+def loadSVG(bytestring, outputDPI=72, inputDPI=72, ignoreStrokes=False, antialiasing=True, monochrome=False):
+    tree = cairosvg.surface.Tree(bytestring=bytestring)
 
     if ignoreStrokes:
         traverse(tree, removeStrokes)

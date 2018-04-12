@@ -58,7 +58,8 @@ t0 = time.time()
 dpi = 80
 mmPerPixel = 25.4 / dpi
 overscan = 15 # mm
-img = loadSVG("test.svg", inputDPI=72, outputDPI=dpi, ignoreStrokes=True, antialiasing=False, monochrome=True)
+with open("test.svg", "rb") as f:
+    img = loadSVG(f.read(), inputDPI=72, outputDPI=dpi, ignoreStrokes=True, antialiasing=False, monochrome=True)
 
 moveList = engrave(img, mmPerPixel, 0, 0, overscan=overscan)
 

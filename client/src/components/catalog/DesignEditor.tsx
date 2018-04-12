@@ -33,31 +33,40 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
   // dangerouslySetInnerHTML={{ __html: "" }}
 
   public render() {
+    const { onSave, onCancel } = this.props;
     const { design } = this.state;
     const imageSize = calculateSize(design.width, design.height, 200);
 
     return (
-      <div id="catalog-panel" className="design-editor">
-        <label>Name</label>
-        <input type="text" onChange={e => this.onChange("name", e.target.value)} value={design.name} />
-        <dl>
-          <dt>Format</dt>
-          <dd>{design.filetype}</dd>
-          <dt>Width</dt>
-          <dd>{design.width}</dd>
-          <dt>Height</dt>
-          <dd>{design.height}</dd>
-          <dt>Created</dt>
-          <dd>{design.created}</dd>
-          <dt>Updated</dt>
-          <dd>{design.updated}</dd>
-        </dl>
-        <label>DPI</label>
-        <input type="text" onChange={e => this.onChange("dpi", e.target.value)} value={design.dpi} />
-        <label>Description</label>
-        <textarea onChange={e => this.onChange("description", e.target.value)} value={design.description} />
-        <div className="image-preview">
-          <img src={"data:image/svg+xml;utf8," + design.imageData} style={imageSize} />
+      <div className="catalog-panel">
+        <div className="design-editor">
+          <section>
+            <label>Name</label>
+            <input type="text" onChange={e => this.onChange("name", e.target.value)} value={design.name} />
+            <dl>
+              <dt>Format</dt>
+              <dd>{design.filetype}</dd>
+              <dt>Width</dt>
+              <dd>{design.width}</dd>
+              <dt>Height</dt>
+              <dd>{design.height}</dd>
+              <dt>Created</dt>
+              <dd>{design.created}</dd>
+              <dt>Updated</dt>
+              <dd>{design.updated}</dd>
+            </dl>
+            <label>DPI</label>
+            <input type="text" onChange={e => this.onChange("dpi", e.target.value)} value={design.dpi} />
+            <label>Description</label>
+            <textarea onChange={e => this.onChange("description", e.target.value)} value={design.description} />
+            <div className="image-preview">
+              <img src={"data:image/svg+xml;utf8," + design.imageData} style={imageSize} />
+            </div>
+          </section>
+          <section className="action-buttons">
+            <button onClick={() => onSave(design)}>Save</button>
+            <button onClick={() => onCancel()}>Cancel</button>
+          </section>
         </div>
       </div>
     );

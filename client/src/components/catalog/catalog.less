@@ -1,6 +1,6 @@
 @import "../../variables.less";
 
-#catalog-panel {
+.catalog-panel {
   @padding: 10px;
 
   width: 250px;
@@ -14,6 +14,17 @@
   border: @panel-border;
   border-radius: 2px;
   box-sizing: border-box;
+
+  &.drag-hover {
+    border-width: 2px;
+    padding: @padding - 1;
+    border-style: dashed;
+
+    .drop-message {
+      background-color: rgba(25, 45, 68, 0.75);
+      transition: all 100ms;
+    }
+  }
 
   .drop-message {
     position: absolute;
@@ -36,37 +47,41 @@
     }
   }
 
-  &.drag-hover {
-    border-width: 2px;
-    padding: @padding - 1;
-    border-style: dashed;
-    .drop-message {
-      background-color: rgba(25, 45, 68, 0.75);
-      transition: all 100ms;
+  .design-catalog {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+
+    .file-input { display: none; }
+
+    .upload-button { width: 100%; }
+
+    .catalog-items {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      margin: 10px 0 0;
+      // border-top: 1px solid #7f8ea0;
+
+      .design {
+        cursor: pointer;
+        border: @panel-border;
+        &.loading {
+          width: 50px;
+          height: 50px;
+        }
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
     }
+
   }
 
-  .file-input { display: none; }
-
-  button { width: 100%; }
-
-  .catalog-items {
-    flex: 1 1 auto;
-    overflow-y: auto;
-    margin: 10px 0 0;
-    // border-top: 1px solid #7f8ea0;
-
-    .design {
-      cursor: pointer;
-      border: @panel-border;
-      &.loading {
-        width: 50px;
-        height: 50px;
-      }
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
+  .design-editor {
+    .action-buttons {
+      margin-top: 10px;
+      button { margin-right: 10px; }
     }
   }
 }

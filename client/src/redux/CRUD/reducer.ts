@@ -17,9 +17,10 @@ const createItemMap = <T extends CrudItem>(items: T[]): OrderedMap<number, T> =>
 
 export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState<T>> => {
   return (state = getDefaultState<T>(), action: CrudAction<T>) => {
-    if (action.type.substr(0, name.length) !== name)
+    const [ actionPrefix, actionName ] = action.type.split("/", 1);
+    if (actionPrefix)
       return state;
-    switch (action.type.substr(name.length + 1)) {
+    switch (actionName) {
       // Create
       case actions.CREATE_REQUEST: {
         return {

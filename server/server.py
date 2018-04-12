@@ -6,6 +6,8 @@ import random
 from serial_comms import getCOMPorts, SerialConnection
 import time
 import database
+import peewee
+import datetime
 
 staticDir = os.path.join("..", "client", "build")
 
@@ -171,14 +173,18 @@ def list_designs():
 
 @app.route("/api/catalog", methods=["POST"])
 def create_design():
-    global x
-    # if "files" not in request.files:
-    #     return json.dumps({"error": "File missing from request!"}), 400
+    data = request.json
+    data["created"] = datetime.datetime.now()
+    data["updated"] = datetime.datetime.now()
 
-    # file = request.files["files"]
-    # design = request.json
-    x += 1
-    return json.dumps({"results": x}), 201
+    try:
+        with database.db.atomic() as transaction:
+            record = database.Design(data)
+            record.save()
+        return json.dumps({"results": {"id": record.id}}), 201
+
+    except peewee.IntegrityError as e:
+        return json.dumps({"error": str(e)}), 400
 
 @app.route("/api/catalog/<int:designID>", methods=["PUT"])
 def update_design(designID):

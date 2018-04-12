@@ -3,12 +3,12 @@ import os
 
 
 databaseName = "auto-engrave.db"
-database = peewee.SqliteDatabase(databaseName)
+db = peewee.SqliteDatabase(databaseName)
 
 
 class SQLiteModel(peewee.Model):
     class Meta:
-        database = database
+        database = db
 
 
 class Design(SQLiteModel):
