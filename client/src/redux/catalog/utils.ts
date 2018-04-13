@@ -4,21 +4,20 @@ import * as React from "react";
  * Calculates dimensions for image thumbnail so that no side is longer than
  * MAX_IMAGE_SIZE and, if possible, no side is shorter than MIN_IMAGE_SIZE
  */
-export function calculateSize(
+export function calculateImageSize(
   srcWidth: number,
   srcHeight: number,
-  maxSize: number,
-  minSize: number = 0
+  size: number
 ): React.CSSProperties {
   let width: number;
   let height: number;
   const aspect = srcWidth / srcHeight;
   if (aspect >= 1.0) {
-    height = Math.min(minSize, maxSize / aspect);
-    width = height / aspect;
+    width = size;
+    height = size / aspect;
   } else {
-    width = Math.min(minSize, maxSize / aspect);
-    height = width / aspect;
+    height = size;
+    width = size * aspect;
   }
   return {
     width: width + "px",

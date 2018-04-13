@@ -4,7 +4,7 @@ import * as React from "react";
 import { CrudState } from "../../redux/CRUD/types";
 import { Design, ImageMetadata } from "../../redux/catalog/types";
 import { DesignThumbnail } from "./DesignThumbnail";
-import { buildImageDataURL } from "../../redux/catalog/utils";
+// import { buildImageDataURL } from "../../redux/catalog/utils";
 
 export interface DesignCatalogProps extends CrudState<Design> {
   onSelect: (design: Design) => void;
@@ -56,7 +56,12 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
       classList.push("drag-hover");
 
     const thumbnails = items.toKeyedSeq().map((item, id) => (
-      <DesignThumbnail key={id} design={item} onClick={() => onSelect(item)} />
+      <DesignThumbnail
+        key={id}
+        size={100}
+        design={item}
+        onClick={() => onSelect(item)}
+      />
     )).toArray();
 
     return (
@@ -112,12 +117,14 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
           filetype: file.type,
           dpi: 72, // how the balls do we detect this? look for friggin Inkscape SVG comments? yuck
         });
-        image.src = buildImageDataURL(file.type, reader.result);
+        image.src = reader.result;
+        // image.src = buildImageDataURL(file.type, reader.result);
       };
 
-      if (file.type === "image/svg+xml")
-        reader.readAsText(file);
-      else if (file.type.startsWith("image/"))
+      // if (file.type === "image/svg+xml")
+      //   reader.readAsText(file);
+      // else if (file.type.startsWith("image/"))
+      if (file.type.startsWith("image/"))
         reader.readAsDataURL(file);
       else
         reject("aint no image file homes");

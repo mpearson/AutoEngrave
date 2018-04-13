@@ -18,17 +18,30 @@ body {
   button {
     flex: none;
     cursor: pointer;
-    background-color: @button-color;
+    background-color: @button-blue;
     color: @button-text-color;
     outline: none;
     font-size: 13px;
-    &:hover:not(:disabled) { background-color: lighten(@button-color, 7%); }
-    &:active:not(:disabled) { background-color: darken(@button-color, 7%); }
+    &:hover:not(:disabled) { background-color: lighten(@button-blue, 7%); }
+    &:active:not(:disabled) { background-color: darken(@button-blue, 7%); }
     &:disabled {
       cursor: default;
       color: fade(@button-text-color, 50%);
-      background-color: @button-disabled-color;
+      background-color: @button-disabled-blue;
     }
+  }
+
+  button.red {
+    background-color: @button-red;
+    &:hover:not(:disabled) { background-color: lighten(@button-red, 7%); }
+    &:active:not(:disabled) { background-color: darken(@button-red, 7%); }
+    &:disabled { background-color: @button-disabled-red; }
+  }
+
+  input.dark {
+    color: white;
+    background: fade(white, 10%);
+    border: @panel-border;
   }
 }
 

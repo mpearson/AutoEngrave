@@ -53,15 +53,28 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
     this.setState({ editingDesign: null });
   }
 
+  private onDelete = () => {
+    this.props.deleteDesign(this.state.editingDesign);
+    this.setState({ editingDesign: null });
+  }
+
   public render() {
     const { editingDesign } = this.state;
     // const classList: string[] = [];
     // if (dragHover)
     //   classList.push("drag-hover");
-    if (editingDesign === null)
+    if (editingDesign === null) {
       return <DesignCatalog {...this.props} onSelect={this.onSelect} onUpload={this.onSave} />;
-    else
-      return <DesignEditor design={editingDesign} onSave={this.onSave} onCancel={this.onCancel} />;
+    } else {
+      return (
+        <DesignEditor
+          design={editingDesign}
+          onSave={this.onSave}
+          onCancel={this.onCancel}
+          onDelete={this.onDelete}
+        />
+      );
+    }
   }
 
 }

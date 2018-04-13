@@ -3,17 +3,24 @@
 .catalog-panel {
   @padding: 10px;
 
-  width: 250px;
+  width: 370px;
   padding: @padding;
   // height: 350px;
   position: relative;
-  overflow-y: auto;
+  // overflow-y: auto;
   display: flex;
   flex-direction: column;
   background-color: rgba(0, 0, 0, 0.5);
   border: @panel-border;
   border-radius: 2px;
   box-sizing: border-box;
+
+  .design {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
 
   &.drag-hover {
     border-width: 2px;
@@ -58,30 +65,93 @@
 
     .catalog-items {
       flex: 1 1 auto;
-      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 100px 100px 100px;
+      grid-gap: 10px;
+      // display: flex;
+      // flex-direction: row;
+      // justify-content: space-between;
+      overflow-x: hidden;
+      overflow-y: scroll;
       margin: 10px 0 0;
       // border-top: 1px solid #7f8ea0;
 
+      &::-webkit-scrollbar-track {
+        border: none;
+        background-color: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: #fff;
+      }
+
       .design {
+        height: 100px;
+        width: 100px;
+        border: 1px solid #7f8ea0;
         cursor: pointer;
-        border: @panel-border;
-        &.loading {
-          width: 50px;
-          height: 50px;
-        }
+        // &.loading {
+        //   width: 50px;
+        //   height: 50px;
+        // }
 
         &:hover {
           background-color: rgba(255, 255, 255, 0.1);
         }
+
+        img { filter: invert(100%); }
       }
     }
 
   }
 
   .design-editor {
+    .design {
+      img { filter: invert(100%); }
+
+    }
+
+    section {
+      margin-bottom: 10px;
+    }
+
+    dl {
+      display: grid;
+      grid-template-columns: 30% 70%;
+    }
+    dt, dd {
+      margin: 0;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    dt {
+      height: 30px;
+      opacity: 0.5;
+      padding-right: 10px;
+      justify-content: flex-end;
+    }
+    dd {
+      input { height: 25px; }
+      .name-input, .description-input {
+        width: 100%;
+      }
+      .dpi-input {
+        width: 35px;
+      }
+    }
+
     .action-buttons {
-      margin-top: 10px;
-      button { margin-right: 10px; }
+      display: flex;
+      flex-direction: row;
+
+      button {
+        margin-right: 10px;
+        width: 80px;
+      }
+      button.delete {
+        width: unset;
+        margin: 0 0 0 auto;
+      }
     }
   }
 }
