@@ -2,7 +2,7 @@ import * as React from "react";
 // import { RootState } from "../../redux/types";
 // import { Dispatch, connect } from "react-redux";
 import { Design } from "../../redux/catalog/types";
-import { DesignThumbnail } from './DesignThumbnail';
+import { DesignThumbnail } from "./DesignThumbnail";
 import * as moment from "moment";
 // import { calculateImageSize } from "../../redux/catalog/utils";
 
@@ -38,6 +38,11 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
     });
   }
 
+  private onDelete = () => {
+    if (window.confirm("Oh?"))
+      this.props.onDelete();
+  }
+
   public componentDidMount() {
     window.addEventListener("keydown", this.onEscape);
   }
@@ -47,7 +52,7 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
   }
 
   public render() {
-    const { onSave, onCancel, onDelete } = this.props;
+    const { onSave, onCancel } = this.props;
     const { design } = this.state;
 
     const mmWidth = Math.round(design.width * 2540 / design.dpi) / 100;
@@ -57,9 +62,9 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
       <div className="catalog-panel">
         <div className="design-editor">
           <section className="action-buttons">
-            <button onClick={() => onSave(design)}>Save</button>
+            <button onClick={() => onSave(design)} className="blue">Save</button>
             <button onClick={() => onCancel()}>Cancel</button>
-            <button onClick={() => onDelete()} className="delete red fas fa-trash-alt" title="Delete, duh" />
+            <button onClick={this.onDelete} className="red fas fa-trash-alt" title="Delete, duh" />
           </section>
           <section>
             <dl>

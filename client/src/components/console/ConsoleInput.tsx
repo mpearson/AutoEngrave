@@ -38,9 +38,9 @@ export class ConsoleInput extends React.Component<ConsoleInputProps, ConsoleInpu
   public render() {
     const disableSend = this.props.disabled || this.state.input.length === 0;
     return (
-      <div id="console-input-box">
+      <div className="console-input-box">
         <input
-          id="console-input"
+          className="console-input"
           type="text"
           autoCorrect="off"
           autoCapitalize="off"
@@ -50,7 +50,7 @@ export class ConsoleInput extends React.Component<ConsoleInputProps, ConsoleInpu
           onChange={this.onChange}
           ref={elem => this.inputElem = elem}
         />
-        <button id="console-send-button" onClick={this.onSend} disabled={disableSend}>Send</button>
+        <button className="console-send-button blue" onClick={this.onSend} disabled={disableSend}>Send</button>
       </div>
     );
   }

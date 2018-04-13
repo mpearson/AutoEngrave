@@ -32,7 +32,7 @@ export const ConnectionPanel: React.SFC<ConnectionPanelProps> = props => {
   const disableConfig = state !== PortState.Closed;
 
   return (
-    <div id="connection-panel">
+    <div className="connection-panel">
       <PortScanButton onClick={scanComPorts} loading={isFetchingPorts} />
       <select
         id="port-list"

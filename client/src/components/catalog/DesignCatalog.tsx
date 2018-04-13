@@ -94,7 +94,7 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
 
       this.loadImage(file).then(
         metadata => this.props.onUpload({
-          name: file.name,
+          name: file.name.replace(/\.\w+$/i, ""),
           description: "",
           ...metadata,
         }),

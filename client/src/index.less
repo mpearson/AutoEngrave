@@ -18,24 +18,50 @@ body {
   button {
     flex: none;
     cursor: pointer;
-    background-color: @button-blue;
+    background-color: @button-default;
     color: @button-text-color;
     outline: none;
     font-size: 13px;
-    &:hover:not(:disabled) { background-color: lighten(@button-blue, 7%); }
-    &:active:not(:disabled) { background-color: darken(@button-blue, 7%); }
+    border: 1px solid @button-default-border;
+    transition: all 100ms;
+    &:hover:not(:disabled) {
+      background-color: lighten(@button-default, 4%);
+      border-color: lighten(@button-default-border, 4%);
+    }
+    &:active:not(:disabled) {
+      background-color: darken(@button-default, 7%);
+      border-color: darken(@button-default-border, 7%);
+    }
     &:disabled {
-      cursor: default;
-      color: fade(@button-text-color, 50%);
-      background-color: @button-disabled-blue;
+      cursor: not-allowed;
+      filter: saturate(50%) brightness(50%);
+    }
+  }
+
+  button.blue {
+    background-color: @button-blue;
+    border: 1px solid @button-blue-border;
+    &:hover:not(:disabled) {
+      background-color: lighten(@button-blue, 3%);
+      border-color: lighten(@button-blue-border, 6%);
+    }
+    &:active:not(:disabled) {
+      background-color: darken(@button-blue, 4%);
+      border-color: darken(@button-blue-border, 2%);
     }
   }
 
   button.red {
     background-color: @button-red;
-    &:hover:not(:disabled) { background-color: lighten(@button-red, 7%); }
-    &:active:not(:disabled) { background-color: darken(@button-red, 7%); }
-    &:disabled { background-color: @button-disabled-red; }
+    border: 1px solid @button-red-border;
+    &:hover:not(:disabled) {
+      background-color: lighten(@button-red, 4%);
+      border-color: lighten(@button-red-border, 4%);
+    }
+    &:active:not(:disabled) {
+      background-color: darken(@button-red, 7%);
+      border-color: darken(@button-red-border, 7%);
+    }
   }
 
   input.dark {

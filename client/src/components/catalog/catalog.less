@@ -68,13 +68,9 @@
       display: grid;
       grid-template-columns: 100px 100px 100px;
       grid-gap: 10px;
-      // display: flex;
-      // flex-direction: row;
-      // justify-content: space-between;
       overflow-x: hidden;
       overflow-y: scroll;
       margin: 10px 0 0;
-      // border-top: 1px solid #7f8ea0;
 
       &::-webkit-scrollbar-track {
         border: none;
@@ -89,10 +85,6 @@
         width: 100px;
         border: 1px solid #7f8ea0;
         cursor: pointer;
-        // &.loading {
-        //   width: 50px;
-        //   height: 50px;
-        // }
 
         &:hover {
           background-color: rgba(255, 255, 255, 0.1);
@@ -107,7 +99,6 @@
   .design-editor {
     .design {
       img { filter: invert(100%); }
-
     }
 
     section {
@@ -148,7 +139,7 @@
         margin-right: 10px;
         width: 80px;
       }
-      button.delete {
+      button:last-child {
         width: unset;
         margin: 0 0 0 auto;
       }
