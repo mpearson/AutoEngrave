@@ -51,7 +51,7 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
   public render() {
     const { items, onSelect } = this.props;
     const { dragHover } = this.state;
-    const classList = ["catalog-panel"];
+    const classList = ["catalog-panel", "design-catalog"];
     if (dragHover)
       classList.push("drag-hover");
 
@@ -71,8 +71,8 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
         onDragOver={this.onDragOver}
         onDragLeave={this.onDragLeave}
       >
-        <div className="drop-message">Drop filez here, yo</div>
-        <div className="design-catalog">
+      <div className="drop-message">Drop filez here, yo</div>
+        <header className="action-buttons">
           <input
             type="file"
             className="file-input"
@@ -80,10 +80,10 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
             onChange={this.onSelectFile}
           />
           <button className="upload-button" onClick={() => this.fileInput.click()}>Upload Design</button>
-          <div className="catalog-items">
-            {thumbnails}
-          </div>
-        </div>
+        </header>
+        <section className="catalog-items">
+          {thumbnails}
+        </section>
       </div>
     );
   }

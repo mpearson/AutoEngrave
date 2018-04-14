@@ -59,62 +59,58 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
     const mmHeight = Math.round(design.height * 2540 / design.dpi) / 100;
 
     return (
-      <div className="catalog-panel">
-        <div className="design-editor">
-          <section className="action-buttons">
-            <button onClick={() => onSave(design)} className="blue">Save</button>
-            <button onClick={() => onCancel()}>Cancel</button>
-            <button onClick={this.onDelete} className="red fas fa-trash-alt" title="Delete, duh" />
-          </section>
-          <section>
-            <dl>
-              <dt>Name</dt>
-              <dd>
-                <input
-                  type="text"
-                  className="name-input dark"
-                  onChange={e => this.onChange("name", e.target.value)}
-                  value={design.name}
-                />
-              </dd>
-              <dt>DPI</dt>
-              <dd>
-                <input
-                  type="text"
-                  className="dpi-input dark"
-                  onChange={e => this.onChange("dpi", e.target.value)}
-                  value={design.dpi}
-                />
-              </dd>
-              <dt>Description</dt>
-              <dd>
-                <input
-                  type="text"
-                  className="description-input dark"
-                  onChange={e => this.onChange("description", e.target.value)}
-                  value={design.description}
-                />
-              </dd>
-            </dl>
-            <div className="image-preview">
-              <DesignThumbnail size={200} design={design} />
-            </div>
-          </section>
-          <section>
-            <dl>
-              <dt>Format</dt>
-              <dd>{design.filetype}</dd>
-              <dt>Width</dt>
-              <dd>{`${mmWidth}mm`}</dd>
-              <dt>Height</dt>
-              <dd>{`${mmHeight}mm`}</dd>
-              <dt>Created</dt>
-              <dd>{moment(design.created).format("YYYY-MM-DD h:mm A")}</dd>
-              <dt>Updated</dt>
-              <dd>{moment(design.updated).format("YYYY-MM-DD h:mm A")}</dd>
-            </dl>
-          </section>
-        </div>
+      <div className="catalog-panel design-editor">
+        <header className="action-buttons">
+          <button onClick={() => onSave(design)} className="blue">Save</button>
+          <button onClick={() => onCancel()}>Cancel</button>
+          <button onClick={this.onDelete} className="red fas fa-trash-alt" title="Delete, duh" />
+        </header>
+        <section className="design-details">
+          <dl>
+            <dt>Name</dt>
+            <dd>
+              <input
+                type="text"
+                className="name-input dark"
+                onChange={e => this.onChange("name", e.target.value)}
+                value={design.name}
+              />
+            </dd>
+            <dt>DPI</dt>
+            <dd>
+              <input
+                type="text"
+                className="dpi-input dark"
+                onChange={e => this.onChange("dpi", e.target.value)}
+                value={design.dpi}
+              />
+            </dd>
+            <dt>Description</dt>
+            <dd>
+              <input
+                type="text"
+                className="description-input dark"
+                onChange={e => this.onChange("description", e.target.value)}
+                value={design.description}
+              />
+            </dd>
+          </dl>
+          <div className="image-preview">
+            <DesignThumbnail size={200} design={design} />
+          </div>
+          <dl>
+            <dt>Format</dt>
+            <dd>{design.filetype}</dd>
+            <dt>Width</dt>
+            <dd>{`${mmWidth}mm`}</dd>
+            <dt>Height</dt>
+            <dd>{`${mmHeight}mm`}</dd>
+            <dt>Created</dt>
+            <dd>{moment(design.created).format("YYYY-MM-DD h:mm A")}</dd>
+            <dt>Updated</dt>
+            <dd>{moment(design.updated).format("YYYY-MM-DD h:mm A")}</dd>
+          </dl>
+        </section>
       </div>
     );
   }

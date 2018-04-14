@@ -22,12 +22,12 @@ export class MainPanel extends React.Component {
 
   public render() {
     return (
-      <div id="main-wrapper">
-        <header>
-        <h1>AutoEngrave 1.0</h1>
-        <ConnectionPanelConnected />
+      <div className="main-wrapper">
+        <header className="main-header">
+          <h1>AutoEngrave 1.0</h1>
+          <ConnectionPanelConnected />
         </header>
-        <div id="main-content">
+        <div className="main-content">
           <CatalogPanelConnected />
           <WorkspaceConnected />
           <ConsoleConnected />

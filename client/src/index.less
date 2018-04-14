@@ -6,89 +6,73 @@ body {
   color: @text-color;
   font-family: @default-font-face;
   font-size: @default-font-size;
+}
 
-  button, input, select {
-    display: inline-block;
-    border: none;
-    height: 30px;
-    padding: 0 10px;
-    border-radius: 2px;
-  }
+button, input, select {
+  display: inline-block;
+  border: none;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 2px;
+}
 
-  button {
-    flex: none;
-    cursor: pointer;
-    background-color: @button-default;
-    color: @button-text-color;
-    outline: none;
-    font-size: 13px;
-    border: 1px solid @button-default-border;
-    transition: all 100ms;
-    &:hover:not(:disabled) {
-      background-color: lighten(@button-default, 4%);
-      border-color: lighten(@button-default-border, 4%);
-    }
-    &:active:not(:disabled) {
-      background-color: darken(@button-default, 7%);
-      border-color: darken(@button-default-border, 7%);
-    }
-    &:disabled {
-      cursor: not-allowed;
-      filter: saturate(50%) brightness(50%);
-    }
+button {
+  flex: none;
+  cursor: pointer;
+  background-color: @button-default;
+  color: @button-text-color;
+  outline: none;
+  font-size: 13px;
+  border: 1px solid @button-default-border;
+  transition: all 100ms;
+  &:hover:not(:disabled) {
+    background-color: lighten(@button-default, 4%);
+    border-color: lighten(@button-default-border, 4%);
   }
+  &:active:not(:disabled) {
+    background-color: darken(@button-default, 7%);
+    border-color: darken(@button-default-border, 7%);
+  }
+  &:disabled {
+    cursor: not-allowed;
+    filter: saturate(50%) brightness(50%);
+  }
+}
 
-  button.blue {
-    background-color: @button-blue;
-    border: 1px solid @button-blue-border;
-    &:hover:not(:disabled) {
-      background-color: lighten(@button-blue, 3%);
-      border-color: lighten(@button-blue-border, 6%);
-    }
-    &:active:not(:disabled) {
-      background-color: darken(@button-blue, 4%);
-      border-color: darken(@button-blue-border, 2%);
-    }
+button.blue {
+  background-color: @button-blue;
+  border: 1px solid @button-blue-border;
+  &:hover:not(:disabled) {
+    background-color: lighten(@button-blue, 3%);
+    border-color: lighten(@button-blue-border, 6%);
   }
+  &:active:not(:disabled) {
+    background-color: darken(@button-blue, 4%);
+    border-color: darken(@button-blue-border, 2%);
+  }
+}
 
-  button.red {
-    background-color: @button-red;
-    border: 1px solid @button-red-border;
-    &:hover:not(:disabled) {
-      background-color: lighten(@button-red, 4%);
-      border-color: lighten(@button-red-border, 4%);
-    }
-    &:active:not(:disabled) {
-      background-color: darken(@button-red, 7%);
-      border-color: darken(@button-red-border, 7%);
-    }
+button.red {
+  background-color: @button-red;
+  border: 1px solid @button-red-border;
+  &:hover:not(:disabled) {
+    background-color: lighten(@button-red, 4%);
+    border-color: lighten(@button-red-border, 4%);
   }
+  &:active:not(:disabled) {
+    background-color: darken(@button-red, 7%);
+    border-color: darken(@button-red-border, 7%);
+  }
+}
 
-  input.dark {
-    color: white;
-    background: fade(white, 10%);
-    border: @panel-border;
-  }
+input.dark {
+  color: white;
+  background: fade(white, 10%);
+  border: @panel-border;
 }
 
 select {
   outline: none;
-}
-
-header {
-  height: 60px;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 0 20px;
-  flex: none;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-header h1 {
-  font-size: 24px;
-  font-weight: normal;
-  margin: 0;
 }
 
 .loading-spinner {
@@ -118,13 +102,29 @@ header h1 {
 
 #root { height: 100%; }
 
-#main-wrapper {
+.main-wrapper {
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  .main-header {
+    height: 60px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0 20px;
+    flex: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    h1 {
+      font-size: 24px;
+      font-weight: normal;
+      margin: 0;
+    }
+  }
 }
 
-#main-content {
+.main-content {
   display: flex;
   flex-direction: row;
   flex: 1 1 auto;

@@ -43,50 +43,61 @@ export const callAPI = (dispatch: Dispatch<RootState>, config: APICallConfig) =>
     options.body = JSON.stringify(config.data);
 
   return fetch(`/api/${config.endpoint}`, options).then(
-    response => response.json().then(
-      json => {
-        if (response.ok) {
-          // good response, valid JSON, so extract the results
-          if (typeof onSuccess === "function") {
-            return Promise.resolve(dispatch(onSuccess(json.results, response, actionParams)));
+    response => {
+      if (response.status === 204) {
+        // no content expected, ain't no JSON up in here
+        return Promise.resolve(dispatch({
+          type: onSuccess,
+          response,
+          ...actionParams,
+        }));
+      }
+      return response.json().then(
+        json => {
+          if (response.ok) {
+            // good response, valid JSON, so extract the results
+            if (typeof onSuccess === "function") {
+              return Promise.resolve(dispatch(onSuccess(json.results, response, actionParams)));
+            } else {
+              return Promise.resolve(dispatch({
+                type: onSuccess,
+                results: json.results,
+                response,
+                ...actionParams,
+              }));
+            }
           } else {
-            return Promise.resolve(dispatch({
-              type: onSuccess,
-              results: json.results,
+            // bad response, but valid JSON so extract the error message
+            if (typeof onError === "function") {
+              return Promise.reject(dispatch(onError(json.error, response, actionParams)));
+            } else {
+              return Promise.reject(
+                dispatch({
+                  type: onError,
+                  error: json.error,
+                  response,
+                  ...actionParams,
+                })
+              );
+            }
+          }
+        },
+        error => {
+
+          // response was not valid JSON
+          if (typeof onError === "function") {
+            return Promise.reject(dispatch(onError(error, response, actionParams)));
+          } else {
+            return Promise.reject(dispatch({
+              type: onError,
+              error,
               response,
               ...actionParams,
             }));
           }
-        } else {
-          // bad response, but valid JSON so extract the error message
-          if (typeof onError === "function") {
-            return Promise.reject(dispatch(onError(json.error, response, actionParams)));
-          } else {
-            return Promise.reject(
-              dispatch({
-                type: onError,
-                error: json.error,
-                response,
-                ...actionParams,
-              })
-            );
-          }
         }
-      },
-      error => {
-        // response was not valid JSON
-        if (typeof onError === "function") {
-          return Promise.reject(dispatch(onError(error, response, actionParams)));
-        } else {
-          return Promise.reject(dispatch({
-            type: onError,
-            error,
-            response,
-            ...actionParams,
-          }));
-        }
-      }
-    ),
+      );
+    },
     error => {
       // request failed so hard we didn't even get a response
       if (typeof onError === "function") {
