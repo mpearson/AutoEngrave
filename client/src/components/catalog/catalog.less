@@ -1,16 +1,14 @@
 @import "../../variables.less";
 
 .catalog-panel {
-  @padding: 10px;
+  // @padding: 10px;
+  // padding: @padding;
   width: 355px;
   padding: 1px;
-  // padding: @padding;
-  // height: 350px;
   position: relative;
-  // overflow-y: auto;
   display: flex;
   flex-direction: column;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: @panel-background;
   border: @panel-border;
   border-radius: 2px;
   box-sizing: border-box;
@@ -18,6 +16,7 @@
   header {
     padding: 10px;
     flex: 0 0 auto;
+    border-bottom: @panel-border;
   }
 
   .design {
@@ -25,6 +24,8 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    border: 1px solid @panel-border-color;
+    background-color: black;
   }
 
   &.drag-hover {
@@ -43,6 +44,7 @@
     position: absolute;
     top: 0;
     left: 0;
+    z-index:1000;
     width: 100%;
     height: 100%;
     display: flex;
@@ -53,80 +55,79 @@
     pointer-events: none;
     font-size: 18px;
     background-color: rgba(34, 41, 49, 0.75);
-    transition: all 300ms;
+    transition: background-color 300ms ease-in-out;
 
     .drag-active & {
       opacity: 1;
     }
   }
 
-  .catalog-items, .design-details {
+  section.scrollable {
+    height: 0; // impossible to remember hack that fixes overflow scroll in flexbox! AGHHH
+    flex: 1 1 auto;
     overflow-x: hidden;
     overflow-y: auto;
     padding: 10px;
-    border-top: @panel-border;
 
     &::-webkit-scrollbar {
       width: 10px;
       background-color: transparent;
     }
-
     &::-webkit-scrollbar-thumb {
-      // background-color: fade(@panel-border-color, 50%);
       background-color: fade(@panel-border-color, 50%);
-      // background-color: @button-default;
-      // border: 1px solid @button-default-border;
       border-radius: 1px;
     }
   }
 
-  &.design-catalog {
-    display: flex;
-    flex-direction: column;
+  .design img { filter: invert(100%); }
 
+  &.design-catalog {
     .file-input { display: none; }
 
     .upload-button { width: 100%; }
 
     .catalog-items {
-      flex: 1 1 auto;
       display: grid;
       grid-template-columns: 100px 100px 100px;
       grid-gap: 10px;
-      // padding: 10px;
-
-      &:-webkit-scrollbar-track {
-        display: none;
-      }
 
       .design {
         height: 100px;
         width: 100px;
-        border: 1px solid #7f8ea0;
         cursor: pointer;
 
         &:hover {
           background-color: rgba(255, 255, 255, 0.1);
         }
-
-        img { filter: invert(100%); }
       }
     }
   }
 
   &.design-editor {
-    display: flex;
-    flex-direction: column;
+    .action-buttons {
+      display: flex;
+      flex-direction: row;
 
-    .design {
-      img { filter: invert(100%); }
+      button {
+        margin-right: 10px;
+        width: 80px;
+      }
+      button:last-child {
+        width: unset;
+        margin: 0 0 0 auto;
+      }
+    }
+
+    .image-preview {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
     }
 
     section {
       margin-bottom: 10px;
       &:last-child { margin-bottom: 0; }
     }
-
     dl {
       display: grid;
       grid-template-columns: 30% 70%;
@@ -145,12 +146,8 @@
     }
     dd {
       input { height: 25px; }
-      .name-input, .description-input {
-        width: 100%;
-      }
-      .dpi-input {
-        width: 35px;
-      }
+      .name-input, .description-input { width: 100%; }
+      .dpi-input { width: 35px; }
     }
 
     .action-buttons {

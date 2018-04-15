@@ -65,7 +65,7 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
           <button onClick={() => onCancel()}>Cancel</button>
           <button onClick={this.onDelete} className="red fas fa-trash-alt" title="Delete, duh" />
         </header>
-        <section className="design-details">
+        <section className="design-details scrollable">
           <dl>
             <dt>Name</dt>
             <dd>

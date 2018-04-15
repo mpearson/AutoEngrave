@@ -81,7 +81,7 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
           />
           <button className="upload-button" onClick={() => this.fileInput.click()}>Upload Design</button>
         </header>
-        <section className="catalog-items">
+        <section className="catalog-items scrollable">
           {thumbnails}
         </section>
       </div>
