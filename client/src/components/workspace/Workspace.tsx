@@ -1,6 +1,7 @@
 import * as React from "react";
 import { RootState } from "../../redux/types";
 import { Dispatch, connect } from "react-redux";
+import { TemplateMenuConnected } from "./TemplateMenu";
 
 import "./workspace.less";
 
@@ -13,7 +14,11 @@ export const Workspace: React.SFC<WorkspaceProps> = props => {
   // const { ports, portScanFetching, sendFetching, entries, scanComPorts, sendCommand } = props;
 
   return (
-    <div id="workspace-panel">
+    <div className="workspace-panel">
+      <TemplateMenuConnected />
+      <div className="machine-bed">
+
+      </div>
     </div>
   );
 };

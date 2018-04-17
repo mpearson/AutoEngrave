@@ -1,11 +1,16 @@
 @import "../../variables.less";
 
-#workspace-panel {
+.workspace-panel {
   position: relative;
   flex: 1 1 auto;
   border: @panel-border;
   margin-left: 10px;
   border-radius: 2px;
+
+  .machine-bed {
+    border: 1px solid green;
+
+  }
 
   &::after {
     content: "";

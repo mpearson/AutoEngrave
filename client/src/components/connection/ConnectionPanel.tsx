@@ -34,20 +34,10 @@ export const ConnectionPanel: React.SFC<ConnectionPanelProps> = props => {
   return (
     <div className="connection-panel">
       <PortScanButton onClick={scanComPorts} loading={isFetchingPorts} />
-      <select
-        id="port-list"
-        value={port || ""}
-        onChange={e => onSelectPort(e.target.value)}
-        disabled={disableConfig}
-      >
+      <select value={port || ""} onChange={e => onSelectPort(e.target.value)} disabled={disableConfig}>
         {portList}
       </select>
-      <select
-        id="baudrate-list"
-        value={baudrate || ""}
-        onChange={e => onSelectBaudrate(e.target.value)}
-        disabled={disableConfig}
-      >
+      <select value={baudrate || ""} onChange={e => onSelectBaudrate(e.target.value)} disabled={disableConfig}>
         {baudrates.map(b => <option value={b} key={b}>{b}</option>)}
       </select>
       <ConnectButton {...props} />

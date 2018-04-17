@@ -21,3 +21,18 @@ store.dispatch(getPorts()).then(() => store.dispatch(getConnectionStatus()));
 store.dispatch(listMachineProfiles());
 store.dispatch(listMaterialProfiles());
 store.dispatch(listDesigns());
+
+store.dispatch({
+  type: "templates/LIST_RECEIVE",
+  results: [{
+    id: 1,
+    name: "Coasters - 8x",
+    notes: "",
+    slots: [{
+      x: 0,
+      y: 0,
+      width: 102,
+      height: 102,
+    }]
+  }]
+});

@@ -5,12 +5,16 @@ import { ConnectionState } from "./connection/reducer";
 import { SettingsState } from "./settings/reducer";
 import { CrudState } from "./CRUD/types";
 import { Design } from "./catalog/types";
+import { Template } from "./templates/types";
+import { WorkspaceState } from "./workspace/reducer";
 
 export type RootState = {
   catalog: CrudState<Design>;
   connection: ConnectionState;
   console: ConsoleState;
   settings: SettingsState;
+  templates: CrudState<Template>;
+  workspace: WorkspaceState;
 };
 
 export type AsyncAction<T = any> = ThunkAction<T, RootState, void>;
