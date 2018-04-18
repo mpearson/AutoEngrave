@@ -6,14 +6,18 @@ import { MainPanel } from "./components/MainPanel";
 import { getConnectionStatus, getPorts } from "./redux/connection/actions";
 import { listMachineProfiles, listMaterialProfiles } from "./redux/settings/actions";
 import { listDesigns } from "./redux/catalog/actions";
+import { DragDropContextProvider } from "react-dnd";
+import HTML5Backend from "react-dnd-html5-backend";
 
 import "./index.less";
 import "./normalize.css";
 
 export const app = ReactDOM.render(
-  <Provider store={store}>
-    <MainPanel />
-  </Provider>,
+  <DragDropContextProvider backend={HTML5Backend}>
+    <Provider store={store}>
+      <MainPanel />
+    </Provider>
+  </DragDropContextProvider>,
   document.getElementById("root"),
 );
 
