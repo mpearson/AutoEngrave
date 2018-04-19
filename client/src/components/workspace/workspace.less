@@ -25,3 +25,13 @@
     box-sizing: border-box;
   }
 }
+
+.workspace-slot {
+  width: 100px;
+  height: 100px;
+  border: 1px solid green;
+  margin:10px;
+
+  &.can-drop { background-color: fade(green, 10%); }
+  &.drag-hover { background-color: fade(green, 20%); }
+}

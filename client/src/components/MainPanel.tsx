@@ -5,19 +5,19 @@ import { ConnectionPanelConnected } from "./connection/ConnectionPanel";
 import { CatalogPanelConnected } from "./catalog/CatalogPanel";
 
 export class MainPanel extends React.Component {
-  private onDragStart = (e: DragEvent) => {
-    e.preventDefault();
-    document.querySelector("body").classList.add("drag-active");
-  }
-  private onDragEnd = (e: DragEvent) => {
-    e.preventDefault();
-    document.querySelector("body").classList.remove("drag-active");
-  }
+  // private onDragStart = (e: DragEvent) => {
+  //   e.preventDefault();
+  //   document.querySelector("body").classList.add("drag-active");
+  // }
+  // private onDragEnd = (e: DragEvent) => {
+  //   e.preventDefault();
+  //   document.querySelector("body").classList.remove("drag-active");
+  // }
 
   public componentDidMount() {
-    document.addEventListener("dragover", this.onDragStart);
-    document.addEventListener("dragleave", this.onDragEnd);
-    document.addEventListener("drop", this.onDragEnd);
+    // document.addEventListener("dragover", this.onDragStart);
+    // document.addEventListener("dragleave", this.onDragEnd);
+    // document.addEventListener("drop", this.onDragEnd);
   }
 
   public render() {

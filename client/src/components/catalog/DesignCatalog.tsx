@@ -3,7 +3,7 @@ import * as React from "react";
 // import { Dispatch, connect } from "react-redux";
 import { CrudState } from "../../redux/CRUD/types";
 import { Design, ImageMetadata } from "../../redux/catalog/types";
-import { DesignThumbnail } from "./DesignThumbnail";
+import { DraggableDesignThumbnail } from "./DesignThumbnail";
 // import { buildImageDataURL } from "../../redux/catalog/utils";
 
 export interface DesignCatalogProps extends CrudState<Design> {
@@ -27,21 +27,21 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
 
   private fileInput: HTMLInputElement;
 
-  private onDragOver: React.DragEventHandler<HTMLDivElement> = e => {
-    e.preventDefault();
-    this.setState({ dragHover: true });
-  }
+  // private onDragOver: React.DragEventHandler<HTMLDivElement> = e => {
+  //   e.preventDefault();
+  //   this.setState({ dragHover: true });
+  // }
 
-  private onDragLeave: React.DragEventHandler<HTMLDivElement> = e => {
-    e.preventDefault();
-    this.setState({ dragHover: false });
-  }
+  // private onDragLeave: React.DragEventHandler<HTMLDivElement> = e => {
+  //   e.preventDefault();
+  //   this.setState({ dragHover: false });
+  // }
 
-  private onDrop: React.DragEventHandler<HTMLDivElement> = e => {
-    e.preventDefault();
-    this.setState({ dragHover: false });
-    this.loadFiles(e.dataTransfer.files);
-  }
+  // private onDrop: React.DragEventHandler<HTMLDivElement> = e => {
+  //   e.preventDefault();
+  //   this.setState({ dragHover: false });
+  //   this.loadFiles(e.dataTransfer.files);
+  // }
 
   private onSelectFile: React.ChangeEventHandler<HTMLInputElement> = e => {
     this.loadFiles(this.fileInput.files);
@@ -56,7 +56,7 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
       classList.push("drag-hover");
 
     const thumbnails = items.toKeyedSeq().map((item, id) => (
-      <DesignThumbnail
+      <DraggableDesignThumbnail
         key={id}
         size={100}
         design={item}
@@ -67,11 +67,11 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
     return (
       <div
         className={classList.join(" ")}
-        onDrop={this.onDrop}
-        onDragOver={this.onDragOver}
-        onDragLeave={this.onDragLeave}
+        // onDrop={this.onDrop}
+        // onDragOver={this.onDragOver}
+        // onDragLeave={this.onDragLeave}
       >
-      <div className="drop-message">Drop filez here, yo</div>
+        <div className="drop-message">Drop filez here, yo</div>
         <header className="action-buttons">
           <input
             type="file"

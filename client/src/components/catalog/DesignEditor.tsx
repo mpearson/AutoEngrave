@@ -2,7 +2,7 @@ import * as React from "react";
 // import { RootState } from "../../redux/types";
 // import { Dispatch, connect } from "react-redux";
 import { Design } from "../../redux/catalog/types";
-import { DesignThumbnail } from "./DesignThumbnail";
+import { DraggableDesignThumbnail } from "./DesignThumbnail";
 import * as moment from "moment";
 // import { calculateImageSize } from "../../redux/catalog/utils";
 
@@ -96,7 +96,7 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
             </dd>
           </dl>
           <div className="image-preview">
-            <DesignThumbnail size={200} design={design} />
+            <DraggableDesignThumbnail size={200} design={design} />
           </div>
           <dl>
             <dt>Format</dt>
