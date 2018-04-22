@@ -16,11 +16,11 @@ import "./index.less";
 import "./normalize.css";
 
 export const app = ReactDOM.render(
-  <DragDropContextProvider backend={HTML5Backend}>
-    <Provider store={store}>
+  <Provider store={store}>
+    <DragDropContextProvider backend={HTML5Backend}>
       <MainPanel />
-    </Provider>
-  </DragDropContextProvider>,
+    </DragDropContextProvider>
+  </Provider>,
   document.getElementById("root"),
 );
 
@@ -77,19 +77,3 @@ store.dispatch({
   item: defaultTemplate,
   results: { id: 1000 },
 });
-
-store.dispatch({
-  type: "templates/LIST_RECEIVE",
-  results: [{
-    id: 1,
-    name: "Coasters - 8x",
-    notes: "",
-    slots: [{
-      x: 0,
-      y: 0,
-      width: 102,
-      height: 102,
-    }]
-  }]
-});
-

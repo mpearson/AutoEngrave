@@ -4,10 +4,8 @@ import { TemplateSlot } from "../../redux/templates/types";
 import { DesignDragSourceInfo } from "../catalog/DesignThumbnail";
 
 
-export interface WorkspaceSlotProps {
-  slot?: TemplateSlot;
-  x?: number;
-  y?: number;
+export interface TemplateDropZoneProps {
+  slot: TemplateSlot;
   onDrop?: () => void;
   onHover?: (isOver: boolean) => void;
 }
@@ -20,10 +18,10 @@ export interface DropTargetProps {
   dragSourceInfo?: DesignDragSourceInfo;
 }
 
-type CombinedProps = WorkspaceSlotProps & DropTargetProps;
+type CombinedProps = TemplateDropZoneProps & DropTargetProps;
 
 /** Config object for DropTarget */
-const dropTargetSpec: DropTargetSpec<WorkspaceSlotProps> = {
+const dropTargetSpec: DropTargetSpec<TemplateDropZoneProps> = {
   /** Calls props.onDrop (if defined) with the node being dragged and the location of this drop zone.  */
   drop(props, monitor) {
     if (props.onDrop) {
@@ -56,8 +54,14 @@ class TemplateDropZoneComponent extends React.Component<CombinedProps> {
   }
 
   public render() {
-    const {connectDropTarget, isOver, canDrop} = this.props;
-    const classList = ["workspace-slot"];
+    const {connectDropTarget, isOver, canDrop, slot} = this.props;
+    const classList = ["template-slot"];
+    const style: React.CSSProperties = {
+      left: slot.x + "px",
+      top: slot.y + "px",
+      width: slot.width + "px",
+      height: slot.height + "px",
+    };
 
     if (canDrop) {
       classList.push("can-drop");
@@ -66,7 +70,10 @@ class TemplateDropZoneComponent extends React.Component<CombinedProps> {
       }
     }
 
-    return connectDropTarget(<div className={classList.join(" ")}><div></div></div>);
+    return connectDropTarget(
+      <div className={classList.join(" ")} style={style}>
+      </div>
+    );
   }
 }
 
