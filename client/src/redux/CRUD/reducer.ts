@@ -2,6 +2,7 @@ import { Reducer } from "redux";
 import * as actions from "./actions";
 import { CrudItem, CrudState, CrudAction } from "./types";
 import { OrderedMap, Seq } from "immutable";
+import * as moment from "moment";
 
 const getDefaultState = <T extends CrudItem>(): CrudState<T> => ({
   items: OrderedMap(),
@@ -11,8 +12,14 @@ const getDefaultState = <T extends CrudItem>(): CrudState<T> => ({
   isDeletingItem: false,
 });
 
-const createItemMap = <T extends CrudItem>(items: T[]): OrderedMap<number, T> => {
-  return OrderedMap(Seq(items).map(item => [item.id, item]));
+const parseDates = <T extends CrudItem>(item: any): T => ({
+  ...item,
+  created: moment(item.created),
+  updated: moment(item.updated),
+});
+
+const createItemMap = <T extends CrudItem>(items: any[]): OrderedMap<number, T> => {
+  return OrderedMap(Seq(items).map(item => [item.id, parseDates(item)]));
 };
 
 export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState<T>> => {
@@ -34,8 +41,8 @@ export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState
         const item: T = {
           ...action.item as any,
           id: results.id,
-          created: results.created,
-          updated: results.created,
+          created: moment(results.created),
+          updated: moment(results.created),
         };
         return {
           ...state,
@@ -72,7 +79,7 @@ export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState
         const item: T = {
           ...action.oldItem as any,
           ...action.item as any,
-          updated: action.results.updated,
+          updated: moment(action.results.updated),
         };
         return {
           ...state,

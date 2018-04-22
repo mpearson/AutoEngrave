@@ -1,7 +1,7 @@
 import { makeCreate, makeList, makeUpdate, makeDelete } from "../CRUD/actions";
-import { Template } from "./types";
+import { Template, TEMPLATES_PREFIX } from "./types";
 
-export const createTemplate = makeCreate<Template>("templates");
-export const listTemplates = makeList<Template>("templates");
-export const updateTemplate = makeUpdate<Template>("templates");
-export const deleteTemplate = makeDelete<Template>("templates");
+export const createTemplate = makeCreate<Template>(TEMPLATES_PREFIX);
+export const listTemplates = makeList<Template>(TEMPLATES_PREFIX);
+export const updateTemplate = makeUpdate<Template>(TEMPLATES_PREFIX);
+export const deleteTemplate = makeDelete<Template>(TEMPLATES_PREFIX);

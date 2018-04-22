@@ -1,11 +1,11 @@
 import { CrudItem } from "../CRUD/types";
 
+export const CATALOG_PREFIX = "catalog";
+
 export interface Design extends CrudItem, ImageMetadata {
   name: string;
   description: string;
   // thumbnail?: string;
-  created?: string;
-  updated?: string;
 }
 
 export interface ImageMetadata {

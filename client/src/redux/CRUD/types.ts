@@ -1,9 +1,12 @@
 import { OrderedMap } from "immutable";
 import { APIAction, AsyncPromiseAction } from "../types";
+import { Moment } from "moment";
 
 export interface CrudItem {
   id?: number;
   isFetching?: boolean;
+  created?: Moment;
+  updated?: Moment;
 }
 
 export interface CrudState<T extends CrudItem> {

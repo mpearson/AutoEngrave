@@ -1,4 +1,4 @@
-import { Design } from "./types";
+import { Design, CATALOG_PREFIX } from "./types";
 import { makeReducer } from "../CRUD/reducer";
 
-export const catalogReducer = makeReducer<Design>("catalog");
+export const catalogReducer = makeReducer<Design>(CATALOG_PREFIX);

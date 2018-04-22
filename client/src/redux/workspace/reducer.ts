@@ -15,6 +15,9 @@ export const workspaceReducer = (state = defaultState, action: actions.Workspace
     case actions.SELECT_TEMPLATE: {
       return { ...state, templateID: action.templateID };
     }
+    case actions.SELECT_MACHINE: {
+      return { ...state, machineID: action.machineID };
+    }
     default:
       return state;
   }

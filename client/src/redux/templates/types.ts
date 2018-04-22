@@ -1,10 +1,10 @@
 import { CrudItem } from "../CRUD/types";
 
+export const TEMPLATES_PREFIX = "templates";
+
 export interface Template extends CrudItem {
   name: string;
   notes: string;
-  created?: string;
-  updated?: string;
   slots: TemplateSlot[];
 }
 

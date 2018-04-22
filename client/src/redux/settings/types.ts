@@ -1,12 +1,13 @@
 import { CrudItem } from "../CRUD/types";
 
+export const MACHINES_PREFIX = "machines";
+export const MATERIALS_PREFIX = "materials";
+
 export type Axis = "X" | "Y" | "Z";
 
 export interface Machine extends CrudItem {
   name: string;
   description: string;
-  created: string;
-  updated: string;
 
   leftRightAxis: Axis;
   frontBackAxis: Axis;

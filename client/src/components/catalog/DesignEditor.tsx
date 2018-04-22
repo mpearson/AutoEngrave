@@ -3,7 +3,6 @@ import * as React from "react";
 // import { Dispatch, connect } from "react-redux";
 import { Design } from "../../redux/catalog/types";
 import { DraggableDesignThumbnail } from "./DesignThumbnail";
-import * as moment from "moment";
 // import { calculateImageSize } from "../../redux/catalog/utils";
 
 export interface DesignEditorProps {
@@ -106,9 +105,9 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
             <dt>Height</dt>
             <dd>{`${mmHeight}mm`}</dd>
             <dt>Created</dt>
-            <dd>{moment(design.created).format("YYYY-MM-DD h:mm A")}</dd>
+            <dd>{design.created.format("YYYY-MM-DD h:mm A")}</dd>
             <dt>Updated</dt>
-            <dd>{moment(design.updated).format("YYYY-MM-DD h:mm A")}</dd>
+            <dd>{design.updated.format("YYYY-MM-DD h:mm A")}</dd>
           </dl>
         </section>
       </div>
