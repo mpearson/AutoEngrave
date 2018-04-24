@@ -7,6 +7,7 @@ import { getConnectionStatus, getPorts } from "./redux/connection/actions";
 import { listMachineProfiles, listMaterialProfiles } from "./redux/settings/actions";
 import { TEMPLATES_PREFIX, Template } from "./redux/templates/types";
 import { MACHINES_PREFIX, Machine } from "./redux/settings/types";
+import { SELECT_MACHINE, SELECT_TEMPLATE } from "./redux/workspace/actions";
 import { CREATE_SUCCESS } from "./redux/CRUD/actions";
 import { listDesigns } from "./redux/catalog/actions";
 import { DragDropContextProvider } from "react-dnd";
@@ -77,3 +78,5 @@ store.dispatch({
   item: defaultTemplate,
   results: { id: 1000 },
 });
+store.dispatch({ type: SELECT_MACHINE, machineID: 1000 });
+store.dispatch({ type: SELECT_TEMPLATE, templateID: 1000 });
