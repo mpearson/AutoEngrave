@@ -2,8 +2,11 @@ import * as React from "react";
 // import { RootState } from "../../redux/types";
 // import { Dispatch, connect } from "react-redux";
 import { CrudState } from "../../redux/CRUD/types";
-import { Design, ImageMetadata } from "../../redux/catalog/types";
+import { Design } from "../../redux/catalog/types";
 import { DraggableDesignThumbnail } from "./DesignThumbnail";
+import { ConnectDropTarget, DropTargetSpec, DropTargetCollector, DropTarget } from "react-dnd";
+import { NativeTypes } from "react-dnd-html5-backend";
+import { uploadDesigns } from "../../redux/catalog/utils";
 // import { buildImageDataURL } from "../../redux/catalog/utils";
 
 export interface DesignCatalogProps extends CrudState<Design> {
@@ -12,48 +15,62 @@ export interface DesignCatalogProps extends CrudState<Design> {
 }
 
 export interface DesignCatalogState {
-  dragHover: boolean;
   editingDesign: Design;
 }
 
-export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCatalogState> {
-  constructor(props: DesignCatalogProps) {
+interface FileDragInfo {
+  files: FileList;
+}
+
+// properties injected by the DropTargetConnector
+export interface DropTargetProps {
+  connectDropTarget?: ConnectDropTarget;
+  isOver?: boolean;
+  canDrop?: boolean;
+}
+
+type CombinedProps = DesignCatalogProps & DropTargetProps;
+
+// config object for DropTarget
+const dropTargetSpec: DropTargetSpec<DesignCatalogProps> = {
+  drop(props, monitor) {
+    const files = (monitor.getItem() as FileDragInfo).files;
+    uploadDesigns(files, props.onUpload);
+  }
+};
+
+// calculate properties to be injected into DesignCatalogComponent
+const dropTargetCollector: DropTargetCollector = (connector, monitor) => {
+  return {
+    connectDropTarget: connector.dropTarget(),
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop(),
+  };
+};
+
+export class DesignCatalogComponent extends React.Component<CombinedProps, DesignCatalogState> {
+  constructor(props: CombinedProps) {
     super(props);
     this.state = {
-      dragHover: false,
       editingDesign: null,
     };
   }
 
   private fileInput: HTMLInputElement;
 
-  // private onDragOver: React.DragEventHandler<HTMLDivElement> = e => {
-  //   e.preventDefault();
-  //   this.setState({ dragHover: true });
-  // }
-
-  // private onDragLeave: React.DragEventHandler<HTMLDivElement> = e => {
-  //   e.preventDefault();
-  //   this.setState({ dragHover: false });
-  // }
-
-  // private onDrop: React.DragEventHandler<HTMLDivElement> = e => {
-  //   e.preventDefault();
-  //   this.setState({ dragHover: false });
-  //   this.loadFiles(e.dataTransfer.files);
-  // }
-
   private onSelectFile: React.ChangeEventHandler<HTMLInputElement> = e => {
-    this.loadFiles(this.fileInput.files);
+    uploadDesigns(this.fileInput.files, this.props.onUpload);
   }
 
-  // dangerouslySetInnerHTML={{ __html: "" }}
   public render() {
-    const { items, onSelect } = this.props;
-    const { dragHover } = this.state;
+    const { items, onSelect, isOver, canDrop, connectDropTarget } = this.props;
     const classList = ["catalog-panel", "design-catalog"];
-    if (dragHover)
-      classList.push("drag-hover");
+    if (canDrop) {
+      classList.push("dnd-can-drop");
+      if (isOver) {
+        classList.push("dnd-hover");
+      }
+    }
 
     const thumbnails = items.toKeyedSeq().map((item, id) => (
       <DraggableDesignThumbnail
@@ -64,13 +81,8 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
       />
     )).toArray();
 
-    return (
-      <div
-        className={classList.join(" ")}
-        // onDrop={this.onDrop}
-        // onDragOver={this.onDragOver}
-        // onDragLeave={this.onDragLeave}
-      >
+    return connectDropTarget(
+      <div className={classList.join(" ")}>
         <div className="drop-message">Drop filez here, yo</div>
         <header className="action-buttons">
           <input
@@ -87,47 +99,7 @@ export class DesignCatalog extends React.Component<DesignCatalogProps, DesignCat
       </div>
     );
   }
-
-  private loadFiles(files: FileList) {
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-
-      this.loadImage(file).then(
-        metadata => this.props.onUpload({
-          name: file.name.replace(/\.\w+$/i, ""),
-          description: "",
-          ...metadata,
-        }),
-        (error) => {
-          console.error(error);
-        }
-      );
-    }
-  }
-
-  private loadImage(file: File) {
-    return new Promise<ImageMetadata>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const image = new Image();
-        image.onload = () => resolve({
-          imageData: image.src,
-          width: image.width,
-          height: image.height,
-          filetype: file.type,
-          dpi: 72, // how the balls do we detect this? look for friggin Inkscape SVG comments? yuck
-        });
-        image.src = reader.result;
-        // image.src = buildImageDataURL(file.type, reader.result);
-      };
-
-      // if (file.type === "image/svg+xml")
-      //   reader.readAsText(file);
-      // else if (file.type.startsWith("image/"))
-      if (file.type.startsWith("image/"))
-        reader.readAsDataURL(file);
-      else
-        reject("aint no image file homes");
-    });
-  }
 }
+
+
+export const DesignCatalog = DropTarget(NativeTypes.FILE, dropTargetSpec, dropTargetCollector)(DesignCatalogComponent);

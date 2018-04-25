@@ -28,15 +28,14 @@
     background-color: black;
   }
 
-  &.drag-hover {
+  &.dnd-hover {
     border-width: 2px;
     padding: 0px;
     // padding: @padding - 1;
     border-style: dashed;
 
     .drop-message {
-      background-color: rgba(25, 45, 68, 0.75);
-      transition: all 100ms;
+      background-color: #192d44;
     }
   }
 
@@ -54,13 +53,11 @@
     opacity: 0;
     pointer-events: none;
     font-size: 18px;
-    background-color: rgba(34, 41, 49, 0.75);
-    transition: background-color 300ms ease-in-out;
-
-    .drag-active & {
-      opacity: 1;
-    }
+    background-color: #222931;
+    transition: opacity 300ms ease-in-out;
   }
+
+  &.dnd-can-drop .drop-message { opacity: 0.9; }
 
   section.scrollable {
     height: 0; // impossible to remember hack that fixes overflow scroll in flexbox! AGHHH

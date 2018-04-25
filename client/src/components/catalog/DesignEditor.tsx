@@ -13,7 +13,6 @@ export interface DesignEditorProps {
 }
 
 export interface DesignEditorState {
-  dragHover: boolean;
   design: Design;
 }
 
@@ -21,7 +20,6 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
   constructor(props: DesignEditorProps) {
     super(props);
     this.state = {
-      dragHover: false,
       design: props.design,
     };
   }
