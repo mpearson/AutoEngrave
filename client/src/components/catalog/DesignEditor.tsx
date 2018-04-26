@@ -3,6 +3,7 @@ import * as React from "react";
 // import { Dispatch, connect } from "react-redux";
 import { Design } from "../../redux/catalog/types";
 import { DraggableDesignThumbnail } from "./DesignThumbnail";
+import { pixelsToMillimeters } from "../../redux/catalog/utils";
 // import { calculateImageSize } from "../../redux/catalog/utils";
 
 export interface DesignEditorProps {
@@ -52,8 +53,8 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
     const { onSave, onCancel } = this.props;
     const { design } = this.state;
 
-    const mmWidth = Math.round(design.width * 2540 / design.dpi) / 100;
-    const mmHeight = Math.round(design.height * 2540 / design.dpi) / 100;
+    const mmWidth = pixelsToMillimeters(design.width, design.dpi).toFixed(2);
+    const mmHeight = pixelsToMillimeters(design.height, design.dpi).toFixed(2);
 
     return (
       <div className="catalog-panel design-editor">

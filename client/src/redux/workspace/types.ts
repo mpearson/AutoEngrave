@@ -17,19 +17,27 @@ interface GCodeTask extends MachineTaskBase {
   commands: string[];
 }
 
-interface VectorCutTask extends MachineTaskBase {
+interface DesignTask extends MachineTaskBase {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  dpi: number;
+}
+
+interface VectorCutTask extends DesignTask {
   type: "vector-cut";
   design: Design;
   // groups: string[];
 }
 
-interface VectorRasterTask extends MachineTaskBase {
+interface VectorRasterTask extends DesignTask {
   type: "vector-raster";
   design: Design;
   // groups: string[];
 }
 
-interface BitmapRasterTask extends MachineTaskBase {
+interface BitmapRasterTask extends DesignTask {
   type: "bitmap-raster";
   design: Design;
 }

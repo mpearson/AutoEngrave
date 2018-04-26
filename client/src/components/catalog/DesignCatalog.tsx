@@ -1,13 +1,10 @@
 import * as React from "react";
-// import { RootState } from "../../redux/types";
-// import { Dispatch, connect } from "react-redux";
 import { CrudState } from "../../redux/CRUD/types";
 import { Design } from "../../redux/catalog/types";
 import { DraggableDesignThumbnail } from "./DesignThumbnail";
 import { ConnectDropTarget, DropTargetSpec, DropTargetCollector, DropTarget } from "react-dnd";
 import { NativeTypes } from "react-dnd-html5-backend";
 import { uploadDesigns } from "../../redux/catalog/utils";
-// import { buildImageDataURL } from "../../redux/catalog/utils";
 
 export interface DesignCatalogProps extends CrudState<Design> {
   onSelect: (design: Design) => void;
@@ -100,6 +97,5 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
     );
   }
 }
-
 
 export const DesignCatalog = DropTarget(NativeTypes.FILE, dropTargetSpec, dropTargetCollector)(DesignCatalogComponent);

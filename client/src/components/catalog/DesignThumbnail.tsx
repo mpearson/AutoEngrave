@@ -31,11 +31,6 @@ export class DesignThumbnail extends React.Component<DesignThumbnailProps & Drag
   }
 }
 
-export interface DesignDragSourceInfo {
-  design: Design;
-}
-
-
 /** Properties injected by the DragSourceConnector */
 export interface DragSourceProps {
   isDragging: boolean;
@@ -47,13 +42,13 @@ const dragSourceSpec: DragSourceSpec<DesignThumbnailProps> = {
   canDrag(props, monitor) {
     return true;
   },
-  beginDrag(props, monitor, component: DesignThumbnail): DesignDragSourceInfo {
+  beginDrag(props, monitor, component: DesignThumbnail): Design {
     if (props.onBeginDrag) {
       props.onBeginDrag();
     }
     console.log("start");
 
-    return { design: props.design };
+    return props.design;
   },
   endDrag(props) {
     console.log("end");
