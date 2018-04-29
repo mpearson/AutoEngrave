@@ -1,23 +1,24 @@
-import { Design } from "../catalog/types";
-
 export interface Job {
   id?: number;
   name: string;
+  templateID?: number;
   tasks: MachineTask[];
 }
 
 export type MachineTaskType = "gcode" | "vector-cut" | "vector-raster" | "bitmap-raster";
 
-interface MachineTaskBase {
+export interface MachineTaskBase {
   type: MachineTaskType;
+  slotIndex?: number;
 }
 
-interface GCodeTask extends MachineTaskBase {
+export interface GCodeTask extends MachineTaskBase {
   type: "gcode";
   commands: string[];
 }
 
-interface DesignTask extends MachineTaskBase {
+export interface DesignTask extends MachineTaskBase {
+  designID: number;
   x: number;
   y: number;
   width: number;
@@ -25,21 +26,18 @@ interface DesignTask extends MachineTaskBase {
   dpi: number;
 }
 
-interface VectorCutTask extends DesignTask {
+export interface VectorCutTask extends DesignTask {
   type: "vector-cut";
-  design: Design;
   // groups: string[];
 }
 
-interface VectorRasterTask extends DesignTask {
+export interface VectorRasterTask extends DesignTask {
   type: "vector-raster";
-  design: Design;
   // groups: string[];
 }
 
-interface BitmapRasterTask extends DesignTask {
+export interface BitmapRasterTask extends DesignTask {
   type: "bitmap-raster";
-  design: Design;
 }
 
-export type MachineTask = GCodeTask | VectorCutTask | VectorRasterTask | BitmapRasterTask;
+export type MachineTask = GCodeTask | DesignTask;

@@ -66,8 +66,7 @@ const TemplateDropZoneComponent: React.SFC<CombinedProps> = props => {
   }
 
   return connectDropTarget(
-    <div className={classList.join(" ")} style={style}>
-    </div>
+    <div className={classList.join(" ")} style={style} />
   );
 };
 

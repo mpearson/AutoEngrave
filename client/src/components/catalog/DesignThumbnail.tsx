@@ -46,13 +46,10 @@ const dragSourceSpec: DragSourceSpec<DesignThumbnailProps> = {
     if (props.onBeginDrag) {
       props.onBeginDrag();
     }
-    console.log("start");
 
     return props.design;
   },
   endDrag(props) {
-    console.log("end");
-
     if (props.onEndDrag) {
       props.onEndDrag();
     }

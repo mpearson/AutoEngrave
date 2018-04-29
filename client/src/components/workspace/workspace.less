@@ -14,10 +14,20 @@
 
     .template-slot {
       position: absolute;
+      z-index: 2;
       border: 1px solid green;
 
       &.can-drop { background-color: fade(green, 10%); }
       &.drag-hover { background-color: fade(green, 50%); }
+    }
+
+    .workspace-item {
+
+      position: absolute;
+      z-index: 1;
+
+      img { filter: invert(100%); }
+
     }
   }
 

@@ -28,6 +28,8 @@ export function calculateImageSize(
 
 export const pixelsToMillimeters = (px: number, dpi: number) => px * 25.40 / dpi;
 
+export const millimetersToPixels = (mm: number, dpi: number) => mm * dpi / 25.40;
+
 /**
  * Renders the provided image data, either as SVG text or as base64 dataURL,
  * depending on the filetype.

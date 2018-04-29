@@ -8,14 +8,14 @@ import { Design } from "./catalog/types";
 import { Template } from "./templates/types";
 import { WorkspaceState } from "./workspace/reducer";
 
-export type RootState = {
+export interface RootState {
   catalog: CrudState<Design>;
   connection: ConnectionState;
   console: ConsoleState;
   settings: SettingsState;
   templates: CrudState<Template>;
   workspace: WorkspaceState;
-};
+}
 
 export type AsyncAction<T = any> = ThunkAction<T, RootState, void>;
 export type AsyncPromiseAction<T = any> = ThunkAction<Promise<T>, RootState, void>;

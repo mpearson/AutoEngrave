@@ -7,14 +7,14 @@ import { SELECT_TEMPLATE } from "../../redux/workspace/actions";
 
 import "./template-menu.less";
 
-export interface TemplateMenuProps extends CrudState<Template> {
+export interface WorkspaceMenuProps extends CrudState<Template> {
   selected: number;
   selectTemplate: (templateID: number) => void;
 }
 
 
 
-export const TemplateMenu: React.SFC<TemplateMenuProps> = props => {
+export const WorkspaceMenu: React.SFC<WorkspaceMenuProps> = props => {
   const { items, selected, selectTemplate } = props;
 
   return (
@@ -38,4 +38,4 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => ({
 });
 
 
-export const TemplateMenuConnected = connect(mapStateToProps, mapDispatchToProps)(TemplateMenu);
+export const WorkspaceMenuConnected = connect(mapStateToProps, mapDispatchToProps)(WorkspaceMenu);
