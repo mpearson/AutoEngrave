@@ -9,20 +9,19 @@ import { TemplateDropZone } from "./TemplateDropZone";
 import { WorkspaceState } from "../../redux/workspace/reducer";
 import { addDesignToTemplate } from "../../redux/workspace/actions";
 import { Design } from "../../redux/catalog/types";
-import { WorkspaceItemConnected } from "./WorkspaceItem";
+import { WorkspaceItem } from "./WorkspaceItem";
 
 import "./workspace.less";
 
 export interface WorkspaceProps extends WorkspaceState {
   machines: OrderedMap<number, Machine>;
   templates: OrderedMap<number, Template>;
+  catalog: OrderedMap<number, Design>;
   onDropDesign: (design: Design, slotIndex: number) => any;
-  // scanComPorts: () => Promise<actions.ConsoleAction>;
-  // sendCommand: (command: string) => Promise<actions.ConsoleAction>;
 }
 
 export const Workspace: React.SFC<WorkspaceProps> = props => {
-  const { machines, templates, machineID, templateID, onDropDesign, activeJob } = props;
+  const { machines, templates, machineID, templateID, onDropDesign, activeJob, catalog } = props;
   const template = templates.get(templateID);
   const machine = machines.get(machineID);
 
@@ -33,22 +32,30 @@ export const Workspace: React.SFC<WorkspaceProps> = props => {
   } else {
     machineStyle.display = "none";
   }
-  let taskItems: JSX.Element[] = null;
-  if (activeJob)
-    taskItems = activeJob.tasks.map((task, index) => <WorkspaceItemConnected task={task} key={index} />);
 
-  let templateSlots: JSX.Element[] = null;
-  if (template) {
-    templateSlots = template.slots.map((slot, index) => {
-      return (
-        <TemplateDropZone
-          slot={slot}
-          key={index}
-          onDrop={design => onDropDesign(design, index)}
+  const tasks = activeJob ? activeJob.tasks : [];
+  const taskItems: JSX.Element[] = tasks.reduce((items, task) => {
+    if (task.type !== "gcode")
+      items.push(
+        <WorkspaceItem
+          task={task}
+          design={catalog.get(task.designID)}
+          key={task.slotIndex}
         />
       );
-    });
-  }
+    return items;
+  }, []);
+
+  const slots = template ? template.slots : [];
+  const templateSlots: JSX.Element[] = slots.map((slot, index) => {
+    return (
+      <TemplateDropZone
+        slot={slot}
+        key={index}
+        onDrop={design => onDropDesign(design, index)}
+      />
+    );
+  });
 
   return (
     <div className="workspace-panel">
@@ -65,6 +72,7 @@ const mapStateToProps = (state: RootState) => ({
   ...state.workspace,
   machines: state.settings.machines.items,
   templates: state.templates.items,
+  catalog: state.catalog.items,
 });
 
 const mapDispatchToProps = ({

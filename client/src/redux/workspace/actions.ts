@@ -53,12 +53,19 @@ export const addDesignToTemplate = (design: Design, slotIndex: number): AsyncAct
       dpi: 400,
     };
 
-    const existingTaskIndex = newJob.tasks.findIndex(task => task.slotIndex === slotIndex);
-    if (existingTaskIndex !== -1)
-      newJob.tasks[existingTaskIndex] = newTask;
+    const existingSlot = newJob.tasks.findIndex(task => task.type !== "gcode" && task.slotIndex === slotIndex);
+    if (existingSlot !== -1)
+      newJob.tasks[existingSlot] = newTask;
     else
       newJob.tasks.push(newTask);
 
     dispatch({ type: SET_ACTIVE_JOB, job: newJob });
+  };
+};
+
+export const generateGCode = (): AsyncAction => {
+  return (dispatch, getState) => {
+    // const state = getState();
+
   };
 };

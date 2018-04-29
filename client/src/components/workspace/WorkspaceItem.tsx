@@ -1,20 +1,15 @@
 import * as React from "react";
 import { Design } from "../../redux/catalog/types";
-import { MachineTask } from "../../redux/workspace/types";
-import { connect } from "react-redux";
-import { RootState } from "../../redux/types";
-import { OrderedMap } from "immutable";
+import { DesignTask } from "../../redux/workspace/types";
 
 export interface WorkspaceItemProps {
-  task: MachineTask;
-  catalog: OrderedMap<number, Design>;
+  task: DesignTask;
+  design: Design;
 }
 
 export const WorkspaceItem: React.SFC<WorkspaceItemProps> = props => {
-  const { task, catalog } = props;
-  if (task.type === "vector-raster" || task.type === "bitmap-raster") {
-    const design = catalog.get(task.designID);
-
+  const { task, design } = props;
+  if (design !== null) {
     const containerStyle: React.CSSProperties = {
       left: task.x + "px",
       top: task.y + "px",
@@ -35,9 +30,46 @@ export const WorkspaceItem: React.SFC<WorkspaceItemProps> = props => {
   }
 };
 
-const mapStateToProps = (state: RootState) => ({
-  catalog: state.catalog.items,
-});
+// const mapStateToProps = (state: RootState) => ({
+//   catalog: state.catalog.items,
+// });
 
-export const WorkspaceItemConnected = connect(mapStateToProps)(WorkspaceItem);
+// export const WorkspaceItemConnected = connect(mapStateToProps)(WorkspaceItem);
 
+
+// /** Properties injected by the DragSourceConnector */
+// export interface DragSourceProps {
+//   isDragging: boolean;
+//   connectDragSource: ConnectDragSource;
+// }
+
+// /** Config object for DragSource */
+// const dragSourceSpec: DragSourceSpec<DesignThumbnailProps> = {
+//   canDrag(props, monitor) {
+//     return true;
+//   },
+//   beginDrag(props, monitor, component: DesignThumbnail): Design {
+//     if (props.onBeginDrag) {
+//       props.onBeginDrag();
+//     }
+
+//     return props.design;
+//   },
+//   endDrag(props) {
+//     if (props.onEndDrag) {
+//       props.onEndDrag();
+//     }
+//   }
+// };
+
+// /** Calculate properties to be injected into DesignThumbnail */
+// const dragSourceCollector: DragSourceCollector = (connect, monitor) => {
+//   return {
+//     connectDragSource: connect.dragSource(),
+//     isDragging: monitor.isDragging()
+//   };
+// };
+
+// const dragSourceWrapper = DragSource("design", dragSourceSpec, dragSourceCollector);
+
+// export const DraggableDesignThumbnail = dragSourceWrapper(DesignThumbnail as any);

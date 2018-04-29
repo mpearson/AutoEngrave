@@ -9,7 +9,6 @@ export type MachineTaskType = "gcode" | "vector-cut" | "vector-raster" | "bitmap
 
 export interface MachineTaskBase {
   type: MachineTaskType;
-  slotIndex?: number;
 }
 
 export interface GCodeTask extends MachineTaskBase {
@@ -18,7 +17,9 @@ export interface GCodeTask extends MachineTaskBase {
 }
 
 export interface DesignTask extends MachineTaskBase {
+  type: Exclude<MachineTaskType, "gcode">;
   designID: number;
+  slotIndex?: number;
   x: number;
   y: number;
   width: number;
