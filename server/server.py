@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, request
+from flask import Flask, send_from_directory, request, Response
 import os
 import json
 import math
@@ -8,6 +8,7 @@ import time
 from database import db, Design
 import peewee
 import datetime
+from job_queue import export_gcode
 
 staticDir = os.path.join("..", "client", "build")
 
@@ -83,6 +84,16 @@ def console_resume():
 # M106 - fan on
 # M107 - fan  off
 
+
+@app.route("/api/job/export", methods=["POST"])
+def job_export_gcode():
+    job = request.json
+
+    response = Response(export_gcode(job), mimetype="text/plain")
+    fileName = datetime.datetime.now().isoformat() + ".g"
+    response.headers["Content-Disposition"] = "attachment; filename=" + fileName
+
+    return response
 
 
 @app.route("/api/connection/scan", methods=["GET"])

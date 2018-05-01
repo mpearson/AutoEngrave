@@ -1,9 +1,10 @@
-import { APIAction, AsyncAction } from "./../types";
+import { APIAction, AsyncAction, AsyncPromiseAction } from "./../types";
 import { Template } from "../templates/types";
 import { Job, DesignTask } from "./types";
 import { Design } from "../catalog/types";
 import { cloneDeep } from "lodash";
 import { pixelsToMillimeters } from "../catalog/utils";
+import { callAPI } from "../../services/api";
 
 export const SELECT_TEMPLATE = "workspace/SELECT_TEMPLATE";
 export const SELECT_MACHINE = "workspace/SELECT_MACHINE";
@@ -63,9 +64,14 @@ export const addDesignToTemplate = (design: Design, slotIndex: number): AsyncAct
   };
 };
 
-export const generateGCode = (): AsyncAction => {
-  return (dispatch, getState) => {
-    // const state = getState();
-
-  };
+export const generateGCode = (): AsyncPromiseAction => {
+  return (dispatch, getState) => callAPI(dispatch, {
+    endpoint: "job/export",
+    method: "post",
+    data: getState().workspace.activeJob,
+    actionParams: { },
+    onRequest: null,
+    onSuccess: null,
+    onError: null,
+  });
 };
