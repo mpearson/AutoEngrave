@@ -85,11 +85,14 @@ def console_resume():
 # M107 - fan  off
 
 
-@app.route("/api/job/export", methods=["POST"])
+@app.route("/api/job/export", methods=["GET", "POST"])
 def job_export_gcode():
-    job = request.json
+    if request.method == "GET":
+        job = json.loads(request.args.get("job"))
+    else:
+        job = request.json
 
-    response = Response(export_gcode(job), mimetype="text/plain")
+    response = Response(export_gcode(job), mimetype="application/octet-stream")
     fileName = datetime.datetime.now().isoformat() + ".g"
     response.headers["Content-Disposition"] = "attachment; filename=" + fileName
 

@@ -1,10 +1,9 @@
-import { APIAction, AsyncAction, AsyncPromiseAction } from "./../types";
+import { APIAction, AsyncAction } from "./../types";
 import { Template } from "../templates/types";
 import { Job, DesignTask } from "./types";
 import { Design } from "../catalog/types";
 import { cloneDeep } from "lodash";
 import { pixelsToMillimeters } from "../catalog/utils";
-import { callAPI } from "../../services/api";
 
 export const SELECT_TEMPLATE = "workspace/SELECT_TEMPLATE";
 export const SELECT_MACHINE = "workspace/SELECT_MACHINE";
@@ -64,14 +63,21 @@ export const addDesignToTemplate = (design: Design, slotIndex: number): AsyncAct
   };
 };
 
-export const generateGCode = (): AsyncPromiseAction => {
-  return (dispatch, getState) => callAPI(dispatch, {
-    endpoint: "job/export",
-    method: "post",
-    data: getState().workspace.activeJob,
-    actionParams: { },
-    onRequest: null,
-    onSuccess: null,
-    onError: null,
-  });
+export const generateGCode = (): AsyncAction => {
+  return (dispatch, getState) => {
+    const job = getState().workspace.activeJob;
+    window.location.href = "/api/job/export?job=" + encodeURIComponent(JSON.stringify(job));
+  };
 };
+
+// export const generateGCode = (): AsyncPromiseAction => {
+//   return (dispatch, getState) => callAPI(dispatch, {
+//     endpoint: "job/export",
+//     method: "post",
+//     data: getState().workspace.activeJob,
+//     actionParams: { },
+//     onRequest: null,
+//     onSuccess: null,
+//     onError: null,
+//   });
+// };
