@@ -5,36 +5,25 @@ import { ConnectionPanelConnected } from "./connection/ConnectionPanel";
 import { MachinePanelConnected } from "./machine/MachinePanel";
 import { CatalogPanelConnected } from "./catalog/CatalogPanel";
 
-export class MainPanel extends React.Component {
-  // private onDragStart = (e: DragEvent) => {
-  //   e.preventDefault();
-  //   document.querySelector("body").classList.add("drag-active");
-  // }
-  // private onDragEnd = (e: DragEvent) => {
-  //   e.preventDefault();
-  //   document.querySelector("body").classList.remove("drag-active");
-  // }
+import "./main-panel.less";
 
-  public componentDidMount() {
-    // document.addEventListener("dragover", this.onDragStart);
-    // document.addEventListener("dragleave", this.onDragEnd);
-    // document.addEventListener("drop", this.onDragEnd);
-  }
-
-  public render() {
-    return (
-      <div className="main-wrapper">
-        <header className="main-header">
-          <h1>AutoEngrave 1.0</h1>
-          <ConnectionPanelConnected />
-          <MachinePanelConnected />
-        </header>
-        <div className="main-content">
-          <CatalogPanelConnected />
-          <WorkspaceConnected />
-          <ConsoleConnected />
-        </div>
-      </div>
-    );
-  }
-}
+export const MainPanel: React.SFC = props => (
+  <div className="main-wrapper">
+    <header className="main-header">
+      <h1>AutoEngrave 1.0</h1>
+      <ConnectionPanelConnected />
+      <MachinePanelConnected />
+    </header>
+    <div className="main-content">
+      <section className="left-column">
+        <CatalogPanelConnected />
+      </section>
+      <section className="center-column">
+        <WorkspaceConnected />
+      </section>
+      <section className="right-column">
+        <ConsoleConnected />
+      </section>
+    </div>
+  </div>
+);
