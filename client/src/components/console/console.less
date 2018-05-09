@@ -1,13 +1,16 @@
 @import "../../variables.less";
 
 .console-panel {
-  flex: 1 1 auto;
+  flex: 0 0 auto;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
 
   .console-log {
+    flex: 1 0 auto;
     position: relative;
     margin-bottom: 10px;
     padding: 10px;
-    height: 350px;
     overflow-y: auto;
     display: flex;
     flex-direction: column-reverse;

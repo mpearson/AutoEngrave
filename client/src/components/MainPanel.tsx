@@ -20,9 +20,9 @@ export const MainPanel: React.SFC = props => (
       </section>
       <section className="center-column">
         <WorkspaceConnected />
+        <ConsoleConnected />
       </section>
       <section className="right-column">
-        <ConsoleConnected />
       </section>
     </div>
   </div>
