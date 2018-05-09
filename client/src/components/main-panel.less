@@ -1,0 +1,26 @@
+.main-content {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+  padding: 10px 5px;
+  & > * { margin: 0 5px; }
+
+
+  & > section {
+    display: flex;
+    flex-direction: column;
+
+    &.left-column {
+      width: 355px;
+      // display: flex;
+      // flex-direction: column;
+    }
+    &.center-column {
+      flex: 1 1 auto;
+    }
+    &.right-column {
+      width: 300px;
+    }
+  }
+
+}
