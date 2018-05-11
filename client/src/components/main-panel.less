@@ -1,27 +1,24 @@
+@import "../variables.less";
+
 .main-content {
   display: flex;
   flex-direction: row;
   flex: 1 1 auto;
-  padding: 0 5px 10px 5px;
-  & > * { margin: 0 5px; }
-
 
   & > section {
     display: flex;
     flex-direction: column;
-    & > * { margin-top: 10px; }
 
     &.left-column {
       width: 355px;
-      // display: flex;
-      // flex-direction: column;
+      border-right: @panel-border;
     }
     &.center-column {
       flex: 1 1 auto;
     }
     &.right-column {
       width: 300px;
+      border-left: @panel-border;
     }
   }
-
 }

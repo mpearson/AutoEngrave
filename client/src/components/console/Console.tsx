@@ -31,7 +31,7 @@ export const Console: React.SFC<ConsoleProps> = props => {
 
   return (
     <div className="console-panel">
-      <div className="console-log" ref={scrollToBottom}>{logEntries.reverse()}</div>
+      <div className="console-log scrollable" ref={scrollToBottom}>{logEntries.reverse()}</div>
       <ConsoleInput sendCommand={sendCommand} disabled={connectionState !== PortState.Open} />
     </div>
   );

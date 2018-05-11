@@ -7,16 +7,14 @@
   flex-direction: column;
 
   .console-log {
-    flex: 1 0 auto;
     position: relative;
-    margin-bottom: 10px;
     padding: 10px;
     overflow-y: auto;
     display: flex;
     flex-direction: column-reverse;
     background-color: rgba(0, 0, 0, 0.5);
     border: @panel-border;
-    border-radius: 2px;
+    border-width: 1px 0;
     font-family: 'Consolas', monospace;
 
     .command {
@@ -34,6 +32,7 @@
   .console-input-box {
     display: flex;
     flex-direction: row;
+    padding: 10px;
   }
 
   .console-input {
@@ -45,7 +44,7 @@
     border: @panel-border;
     height: 30px;
     padding: 0 10px;
-    margin-right: 5px;
+    margin-right: 10px;
     font-family: 'Consolas', monospace;
   }
 

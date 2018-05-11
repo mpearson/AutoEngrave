@@ -2,20 +2,15 @@
 
 .catalog-panel {
   flex: 1 1 auto;
-  // @padding: 10px;
-  // padding: @padding;
-  padding: 1px;
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: @panel-background;
-  border: @panel-border;
-  border-radius: 2px;
   box-sizing: border-box;
 
   header {
     padding: 10px;
     flex: 0 0 auto;
+    background-color: @panel-background;
     border-bottom: @panel-border;
   }
 
@@ -30,12 +25,10 @@
 
   &.dnd-hover {
     border-width: 2px;
-    padding: 0px;
-    // padding: @padding - 1;
-    border-style: dashed;
-
     .drop-message {
       background-color: #192d44;
+      border-width: 2px;
+      border-style: dashed;
     }
   }
 
@@ -50,6 +43,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
     opacity: 0;
     pointer-events: none;
     font-size: 18px;
@@ -59,23 +53,6 @@
 
   &.dnd-can-drop .drop-message { opacity: 0.9; }
 
-  section.scrollable {
-    height: 0; // impossible to remember hack that fixes overflow scroll in flexbox! AGHHH
-    flex: 1 1 auto;
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding: 10px;
-
-    &::-webkit-scrollbar {
-      width: 10px;
-      background-color: transparent;
-    }
-    &::-webkit-scrollbar-thumb {
-      background-color: fade(@panel-border-color, 50%);
-      border-radius: 1px;
-    }
-  }
-
   .design img { filter: invert(100%); }
 
   &.design-catalog {
@@ -84,11 +61,6 @@
     .upload-button { width: 100%; }
 
     .catalog-items {
-      padding-right: 0;
-      // display: grid;
-      // grid-template-columns: 100px 100px 100px;
-      // grid-gap: 10px;
-
       .design {
         float: left;
         margin: 0 5px 5px 0;

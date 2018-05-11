@@ -1,11 +1,11 @@
 import * as React from "react";
-import { Job } from '../../redux/workspace/types';
-import { RootState } from '../../redux/types';
-import { OrderedMap } from 'immutable';
-import { Design } from '../../redux/catalog/types';
+import { Job } from "../../redux/workspace/types";
+import { RootState } from "../../redux/types";
+import { OrderedMap } from "immutable";
+import { Design } from "../../redux/catalog/types";
+import { connect } from "react-redux";
 
 import "./job.less";
-import { connect } from 'react-redux';
 
 export interface JobPanelProps {
   activeJob: Job;
@@ -18,7 +18,9 @@ export const JobPanel: React.SFC<JobPanelProps> = props => {
 
   return (
     <div className="job-panel">
-      {activeJob ? activeJob.tasks.length : "Get a job!"}
+      <section className="scrollable">
+        {activeJob ? activeJob.tasks.length : "Get a job!"}
+      </section>
     </div>
   );
 };

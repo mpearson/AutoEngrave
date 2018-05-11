@@ -107,6 +107,7 @@ select {
   .main-header {
     height: 60px;
     background: rgba(0, 0, 0, 0.5);
+    border-bottom: @panel-border;
     padding: 0 20px;
     flex: none;
     display: flex;
@@ -121,6 +122,22 @@ select {
   }
 }
 
+.scrollable {
+  height: 0; // impossible to remember hack that fixes overflow scroll in flexbox! AGHHH
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 10px;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: fade(@panel-border-color, 50%);
+    border-radius: 1px;
+  }
+}
 
 
 img {
