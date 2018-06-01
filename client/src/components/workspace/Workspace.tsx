@@ -58,7 +58,7 @@ export const Workspace: React.SFC<WorkspaceProps> = props => {
   });
 
   return (
-    <div className="workspace-panel">
+    <div className="panel workspace-panel">
       <WorkspaceMenuConnected />
       <div className="machine-bed" style={machineStyle}>
         {taskItems}

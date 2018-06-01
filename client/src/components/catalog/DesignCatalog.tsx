@@ -61,7 +61,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
 
   public render() {
     const { items, onSelect, isOver, canDrop, connectDropTarget } = this.props;
-    const classList = ["catalog-panel", "design-catalog"];
+    const classList = ["panel", "catalog-panel", "design-catalog"];
     if (canDrop) {
       classList.push("dnd-can-drop");
       if (isOver) {

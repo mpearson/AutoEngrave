@@ -12,13 +12,11 @@ export interface WorkspaceMenuProps extends CrudState<Template> {
   generateGCode: () => void;
 }
 
-
-
 export const WorkspaceMenu: React.SFC<WorkspaceMenuProps> = props => {
   const { items, selected, selectTemplate } = props;
 
   return (
-    <div className="workspace-menu">
+    <header className="workspace-menu">
       <label>Template</label>
       <select value={selected || ""} onChange={e => selectTemplate(Number(e.target.value))} disabled={false}>
         <option value={0}>None</option>
@@ -27,7 +25,7 @@ export const WorkspaceMenu: React.SFC<WorkspaceMenuProps> = props => {
       <div className="spacer" />
       <button className="button" onClick={props.resetTemplate}>Clear</button>
       <button className="button blue" onClick={props.generateGCode}>Generate G-Code</button>
-    </div>
+    </header>
   );
 };
 

@@ -3,7 +3,8 @@ import { Job } from "../../redux/workspace/types";
 import { RootState } from "../../redux/types";
 import { OrderedMap } from "immutable";
 import { Design } from "../../redux/catalog/types";
-import { connect } from "react-redux";
+import { connect, Dispatch } from "react-redux";
+import { SET_ACTIVE_JOB } from "../../redux/workspace/actions";
 
 import "./job.less";
 
@@ -18,6 +19,9 @@ export const JobPanel: React.SFC<JobPanelProps> = props => {
 
   return (
     <div className="job-panel">
+      <section>
+        <input type="text" className="simple-input" />
+      </section>
       <section className="scrollable">
         {activeJob ? activeJob.tasks.length : "Get a job!"}
       </section>
@@ -31,8 +35,9 @@ const mapStateToProps = (state: RootState) => ({
   catalog: state.catalog.items,
 });
 
-const mapDispatchToProps = ({
+const mapDispatchToProps = (dispatch: Dispatch<RootState>) => ({
   // onDropDesign: addDesignToTemplate,
+  updateJob: (job: Job) => dispatch({ type: SET_ACTIVE_JOB, job }),
 });
 
 

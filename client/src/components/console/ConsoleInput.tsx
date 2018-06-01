@@ -13,34 +13,33 @@ export class ConsoleInput extends React.Component<ConsoleInputProps, ConsoleInpu
   constructor(props: ConsoleInputProps) {
     super(props);
     this.state = { input: "" };
-    this.onChange = this.onChange.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this);
-    this.onSend = this.onSend.bind(this);
   }
 
   private inputElem: HTMLInputElement;
 
-  private onChange(e: React.ChangeEvent<HTMLInputElement>) {
+  private sendEnabled = () => this.state.input.length > 0 && !this.props.disabled;
+
+  private onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ input: e.target.value.toUpperCase() });
   }
 
-  private onKeyPress(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter")
+  private onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && this.sendEnabled())
       this.onSend();
   }
 
-  private onSend() {
+  private onSend = () => {
     this.props.sendCommand(this.state.input);
     if (this.inputElem)
       this.inputElem.select();
   }
 
   public render() {
-    const disableSend = this.props.disabled || this.state.input.length === 0;
+    const disableSend = !this.sendEnabled();
     return (
       <div className="console-input-box">
         <input
-          className="console-input"
+          className="console-input simple-input"
           type="text"
           autoCorrect="off"
           autoCapitalize="off"
@@ -50,7 +49,9 @@ export class ConsoleInput extends React.Component<ConsoleInputProps, ConsoleInpu
           onChange={this.onChange}
           ref={elem => this.inputElem = elem}
         />
-        <button className="console-send-button blue" onClick={this.onSend} disabled={disableSend}>Send</button>
+        <button className="console-send-button blue" onClick={this.onSend} disabled={disableSend}>
+          Send
+        </button>
       </div>
     );
   }

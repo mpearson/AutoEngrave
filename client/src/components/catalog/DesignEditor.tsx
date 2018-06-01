@@ -57,10 +57,11 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
     const mmHeight = pixelsToMillimeters(design.height, design.dpi).toFixed(2);
 
     return (
-      <div className="catalog-panel design-editor">
-        <header className="action-buttons">
+      <div className="panel catalog-panel design-editor">
+        <header>
           <button onClick={() => onSave(design)} className="blue">Save</button>
           <button onClick={() => onCancel()}>Cancel</button>
+          <div className="spacer" />
           <button onClick={this.onDelete} className="red fas fa-trash-alt" title="Delete, duh" />
         </header>
         <section className="design-details scrollable">
@@ -69,7 +70,7 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
             <dd>
               <input
                 type="text"
-                className="name-input dark"
+                className="name-input simple-input"
                 onChange={e => this.onChange("name", e.target.value)}
                 value={design.name}
               />
@@ -78,7 +79,7 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
             <dd>
               <input
                 type="text"
-                className="dpi-input dark"
+                className="dpi-input simple-input"
                 onChange={e => this.onChange("dpi", e.target.value)}
                 value={design.dpi}
               />
@@ -87,7 +88,7 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
             <dd>
               <input
                 type="text"
-                className="description-input dark"
+                className="description-input simple-input"
                 onChange={e => this.onChange("description", e.target.value)}
                 value={design.description}
               />

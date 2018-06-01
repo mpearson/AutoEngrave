@@ -1,19 +1,6 @@
 @import "../../variables.less";
 
 .catalog-panel {
-  flex: 1 1 auto;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-
-  header {
-    padding: 10px;
-    flex: 0 0 auto;
-    background-color: @panel-background;
-    border-bottom: @panel-border;
-  }
-
   .design {
     display: flex;
     flex-direction: row;
@@ -21,15 +8,6 @@
     align-items: center;
     border: 1px solid @panel-border-color;
     background-color: black;
-  }
-
-  &.dnd-hover {
-    border-width: 2px;
-    .drop-message {
-      background-color: #192d44;
-      border-width: 2px;
-      border-style: dashed;
-    }
   }
 
   .drop-message {
@@ -49,8 +27,12 @@
     font-size: 18px;
     background-color: #222931;
     transition: opacity 300ms ease-in-out;
+    border: 2px dashed fade(white, 80%);
   }
 
+  &.dnd-hover .drop-message {
+    background-color: #192d44;
+  }
   &.dnd-can-drop .drop-message { opacity: 0.9; }
 
   .design img { filter: invert(100%); }
@@ -76,18 +58,9 @@
   }
 
   &.design-editor {
-    .action-buttons {
-      display: flex;
-      flex-direction: row;
-
-      button {
-        margin-right: 10px;
-        width: 80px;
-      }
-      button:last-child {
-        width: unset;
-        margin: 0 0 0 auto;
-      }
+    header {
+      button { width: 80px; }
+      button:last-child { width: unset; }
     }
 
     .image-preview {
@@ -96,43 +69,24 @@
       justify-content: center;
     }
 
-    section {
-      margin-bottom: 10px;
-      &:last-child { margin-bottom: 0; }
-    }
     dl {
       display: grid;
       grid-template-columns: 30% 70%;
-    }
-    dt, dd {
-      margin: 0;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-    }
-    dt {
-      height: 30px;
-      opacity: 0.5;
-      padding-right: 10px;
-      justify-content: flex-end;
-    }
-    dd {
-      input { height: 25px; }
-      .name-input, .description-input { width: 100%; }
-      .dpi-input { width: 35px; }
-    }
-
-    .action-buttons {
-      display: flex;
-      flex-direction: row;
-
-      button {
-        margin-right: 10px;
-        width: 80px;
+      dt, dd {
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
       }
-      button:last-child {
-        width: unset;
-        margin: 0 0 0 auto;
+      dt {
+        height: 35px;
+        opacity: 0.5;
+        padding-right: 10px;
+        justify-content: flex-end;
+      }
+      dd {
+        .name-input, .description-input { width: 100%; }
+        .dpi-input { width: 35px; }
       }
     }
   }

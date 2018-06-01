@@ -66,7 +66,7 @@ button.red {
   }
 }
 
-input.dark {
+input.simple-input {
   color: white;
   background: fade(white, 10%);
   border: @panel-border;
@@ -139,13 +139,42 @@ select {
   }
 }
 
+.panel {
+  flex: 1 1 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 
-img {
+  & > header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+    padding: 0 10px;
+    flex: 0 0 auto;
+    background-color: @panel-background;
+    border-bottom: @panel-border;
+
+
+    & > * { margin-right: 10px; }
+    & > *:last-child { margin-right: 0; }
+
+    & > .spacer { flex-grow: 1; }
+  }
+
+  & > section {
+    margin-bottom: 10px;
+    &:last-child { margin-bottom: 0; }
+  }
+}
+
+// img {
   // -webkit-user-drag: none;
   // -khtml-user-drag: none;
   // -moz-user-drag: none;
   // -o-user-drag: none;
   // user-drag: none;
-}
+// }
 
 textarea { resize: none; }

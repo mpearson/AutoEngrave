@@ -1,9 +1,6 @@
 @import "../../variables.less";
 
 .workspace-panel {
-  flex: 1 1 auto;
-  position: relative;
-
   .machine-bed {
     border: 1px dashed #f5d005;
     position: relative;
@@ -39,21 +36,3 @@
     box-sizing: border-box;
   }
 }
-
-.workspace-menu {
-  background-color: @panel-background;
-  border-bottom: @panel-border;
-  height: 50px;
-  width: auto;
-  border-radius: 2px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0 20px;
-
-  & > * { margin-right: 10px; }
-  & > *:last-child { margin-right: 0; }
-
-  .spacer { flex-grow: 1; }
-}
-
