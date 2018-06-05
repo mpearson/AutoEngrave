@@ -4,7 +4,7 @@ import { CrudItem, CrudState, CrudAction } from "./types";
 import { OrderedMap, Seq } from "immutable";
 import * as moment from "moment";
 
-const getDefaultState = <T extends CrudItem>(): CrudState<T> => ({
+export const getDefaultCrudState = <T extends CrudItem>(): CrudState<T> => ({
   items: OrderedMap(),
   isFetchingItems: false,
   isCreatingItem: false,
@@ -23,7 +23,7 @@ const createItemMap = <T extends CrudItem>(items: any[]): OrderedMap<number, T> 
 };
 
 export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState<T>> => {
-  return (state = getDefaultState<T>(), action: CrudAction<T>) => {
+  return (state = getDefaultCrudState<T>(), action: CrudAction<T>) => {
     const [ actionPrefix, actionType ] = action.type.split("/");
     if (actionPrefix !== name)
       return state;

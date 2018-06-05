@@ -25,7 +25,7 @@
     opacity: 0;
     pointer-events: none;
     font-size: 18px;
-    background-color: #222931;
+    background-color: @dark-blue-background;
     transition: opacity 300ms ease-in-out;
     border: 2px dashed fade(white, 80%);
   }
@@ -35,12 +35,18 @@
   }
   &.dnd-can-drop .drop-message { opacity: 0.9; }
 
-  .design img { filter: invert(100%); }
+  .design img {
+    filter: invert(100%);
+    mix-blend-mode: screen;
+  }
 
   &.design-catalog {
     .file-input { display: none; }
 
-    .upload-button { width: 100%; }
+    .upload-button {
+      width: 140px;
+      margin-right: auto;
+    }
 
     .catalog-items {
       .design {
@@ -51,7 +57,12 @@
         cursor: pointer;
 
         &:hover {
-          background-color: rgba(255, 255, 255, 0.1);
+          background-color: darken(@dark-blue-background, 10%);
+        }
+
+        &.selected {
+          border-color: @button-blue-border;
+          background-color: @dark-blue-background;
         }
       }
     }

@@ -64,7 +64,13 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
     // if (dragHover)
     //   classList.push("drag-hover");
     if (editingDesign === null) {
-      return <DesignCatalog {...this.props} onSelect={this.onSelect} onUpload={this.onSave} />;
+      return (
+        <DesignCatalog
+          {...this.props}
+          onSelect={this.onSelect}
+          onUpload={this.onSave}
+        />
+      );
     } else {
       return (
         <DesignEditor

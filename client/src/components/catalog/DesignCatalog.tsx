@@ -5,6 +5,7 @@ import { DraggableDesignThumbnail } from "./DesignThumbnail";
 import { ConnectDropTarget, DropTargetSpec, DropTargetCollector, DropTarget } from "react-dnd";
 import { NativeTypes } from "react-dnd-html5-backend";
 import { uploadDesigns } from "../../redux/catalog/utils";
+// import { RootState } from '../../redux/types';
 
 export interface DesignCatalogProps extends CrudState<Design> {
   onSelect: (design: Design) => void;
@@ -97,5 +98,9 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
     );
   }
 }
+
+// const mapStateToProps = (state: RootState) => ({
+//   x: state.catalog.items
+// });
 
 export const DesignCatalog = DropTarget(NativeTypes.FILE, dropTargetSpec, dropTargetCollector)(DesignCatalogComponent);
