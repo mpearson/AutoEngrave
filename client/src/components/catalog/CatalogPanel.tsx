@@ -7,6 +7,7 @@ import { Design } from "../../redux/catalog/types";
 import { DesignCatalog } from "./DesignCatalog";
 import { DesignEditor } from "./DesignEditor";
 import * as actions from "../../redux/catalog/actions";
+import { addDesignToTemplate } from "../../redux/workspace/actions";
 import * as _ from "lodash";
 
 import "./catalog.less";
@@ -16,6 +17,7 @@ export interface CatalogPanelProps extends CatalogState {
   updateDesign: UpdateActionCreator<Design>;
   deleteDesign: DeleteActionCreator<Design>;
   selectDesign: (item: Design) => CrudAction<Design>;
+  addToWorkspace: (item: Design, slotIndex?: number) => any;
 }
 
 export interface CatalogPanelState {
@@ -55,7 +57,7 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
   }
 
   public render() {
-    const { items, selectedID, selectDesign, deleteDesign } = this.props;
+    const { items, selectedID, addToWorkspace, selectDesign, deleteDesign } = this.props;
     const { editingDesign } = this.state;
     // const classList: string[] = [];
     // if (dragHover)
@@ -66,6 +68,7 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
           items={items}
           selectedID={selectedID}
           onSelect={selectDesign}
+          onAdd={addToWorkspace}
           onEdit={this.openEditDialog}
           onDelete={deleteDesign}
           onUpload={this.onSave}
@@ -98,6 +101,7 @@ const mapDispatchToProps = {
   updateDesign: actions.updateDesign,
   deleteDesign: actions.deleteDesign,
   selectDesign: actions.selectDesign,
+  addToWorkspace: addDesignToTemplate,
 };
 
 

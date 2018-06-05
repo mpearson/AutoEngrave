@@ -10,6 +10,7 @@ export interface DesignCatalogProps {
   items: OrderedMap<number, Design>;
   selectedID: number;
   onSelect: (design: Design) => void;
+  onAdd: (design: Design) => void;
   onEdit: (design: Design) => void;
   onDelete: (design: Design) => void;
   onUpload: (design: Design) => void;
@@ -64,7 +65,8 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
   }
 
   public render() {
-    const { items, onSelect, onEdit, onDelete, selectedID, isOver, canDrop, connectDropTarget } = this.props;
+    const { items, onSelect, onAdd, onEdit, onDelete, selectedID } = this.props;
+    const { isOver, canDrop, connectDropTarget } = this.props;
     const classList = ["panel", "catalog-panel", "design-catalog"];
     if (canDrop) {
       classList.push("dnd-can-drop");
@@ -75,8 +77,24 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
     if (selectedID !== null) {
       const design = items.get(selectedID);
       actionButtons = [
-        <button key="0" onClick={() => onEdit(design)} className="blue fas fa-edit" title="Like, edit or whatever" />,
-        <button key="1" onClick={() => onDelete(design)} className="red fas fa-trash-alt" title="Delete, duh" />
+        <button
+          key="add"
+          onClick={() => onAdd(design)}
+          className="blue fas fa-plus"
+          title="Add to the thing"
+        />,
+        <button
+          key="edit"
+          onClick={() => onEdit(design)}
+          className="blue fas fa-edit"
+          title="Like, edit or whatever"
+        />,
+        <button
+          key="delete"
+          onClick={() => onDelete(design)}
+          className="red fas fa-trash-alt"
+          title="Delete, duh"
+        />
       ];
     }
 

@@ -4,6 +4,7 @@ import { Job, DesignTask } from "./types";
 import { Design } from "../catalog/types";
 import { cloneDeep } from "lodash";
 import { pixelsToMillimeters } from "../catalog/utils";
+import { Seq } from "immutable";
 
 export const SELECT_TEMPLATE = "workspace/SELECT_TEMPLATE";
 export const SELECT_MACHINE = "workspace/SELECT_MACHINE";
@@ -30,12 +31,27 @@ const getNewJob = (activeJob: Job) => {
   };
 };
 
-export const addDesignToTemplate = (design: Design, slotIndex: number): AsyncAction => {
+const findNextAvailableSlot = (template: Template, job: Job): number => {
+  const occupiedSlots = Seq(job.tasks).map(task => (task as DesignTask).slotIndex).toSet();
+
+  for (let i = 0; i < template.slots.length; i++)
+    if (!occupiedSlots.has(i))
+      return i;
+  return null;
+};
+
+export const addDesignToTemplate = (design: Design, slotIndex?: number): AsyncAction => {
   return (dispatch, getState) => {
     const state = getState();
     const { templateID, activeJob } = state.workspace;
     const template = state.templates.items.get(templateID);
     const newJob = getNewJob(activeJob);
+
+    if (slotIndex === undefined) {
+      slotIndex = findNextAvailableSlot(template, newJob);
+      if (slotIndex === null)
+        return;
+    }
 
     const slot = template.slots[slotIndex];
 
