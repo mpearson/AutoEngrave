@@ -7,7 +7,9 @@ import { ConnectDragSource, DragSourceSpec, DragSourceCollector, DragSource } fr
 export interface DesignThumbnailProps {
   design: Design;
   size: number;
+  selected?: boolean;
   onClick?: () => void;
+  onDoubleClick?: () => void;
   onBeginDrag?: () => void;
   onEndDrag?: () => void;
   droppable?: boolean;
@@ -15,15 +17,44 @@ export interface DesignThumbnailProps {
 }
 
 export class DesignThumbnail extends React.Component<DesignThumbnailProps & DragSourceProps> {
+  private clickTimeout: number = null;
+
+  private clearClickTimeout = () => {
+    window.clearTimeout(this.clickTimeout);
+    this.clickTimeout = null;
+  }
+
+  /**
+   * First click, fire onClick(). Second click, fire onDoubleClick() instead.
+   */
+  private onClick = () => {
+    const { onClick, onDoubleClick } = this.props;
+    if (this.clickTimeout === null) {
+      this.clickTimeout = window.setTimeout(this.clearClickTimeout, 300);
+      onClick();
+    } else {
+      this.clearClickTimeout();
+      onDoubleClick();
+    }
+  }
+
+  public componentWillUnmount() {
+    if (this.clickTimeout)
+      this.clearClickTimeout();
+  }
+
   public render() {
-    const { design, size, onClick, connectDragSource } = this.props;
+    const { design, size, selected, connectDragSource } = this.props;
     const { isFetching, width, height, imageData } = design;
     if (isFetching) {
       return <div className="design loading"><LoadingSpinner /></div>;
     } else {
+      const classList = ["design"];
+      if (selected)
+        classList.push("selected");
       const imageSize = calculateImageSize(width, height, size);
       return connectDragSource(
-        <div className="design" onClick={onClick}>
+        <div className={classList.join(" ")} onClick={this.onClick}>
           <img src={imageData} style={imageSize} />
         </div>
       );

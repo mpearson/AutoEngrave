@@ -4,12 +4,12 @@ import { Action } from "redux";
 import { ConnectionState } from "./connection/reducer";
 import { SettingsState } from "./settings/reducer";
 import { CrudState } from "./CRUD/types";
-import { Design } from "./catalog/types";
 import { Template } from "./templates/types";
 import { WorkspaceState } from "./workspace/reducer";
+import { CatalogState } from "./catalog/reducer";
 
 export interface RootState {
-  catalog: CrudState<Design>;
+  catalog: CatalogState;
   connection: ConnectionState;
   console: ConsoleState;
   settings: SettingsState;

@@ -18,16 +18,17 @@ export const getDefaultState = (): CatalogState => ({
 export const catalogReducer: Reducer<CatalogState> = (
   state = getDefaultState(),
   action: CrudAction<Design>
-) => {
-  switch(action.type) {
+): CatalogState => {
+  switch (action.type) {
     case actions.SELECT_DESIGN: {
+      const newID = action.item.id;
       return {
         ...state,
-        selected: action.item,
-      }
+        selectedID: state.selectedID === newID ? null : newID,
+      };
     }
     default: {
-      return state;
+      return baseReducer(state, action) as CatalogState;
     }
   }
 };

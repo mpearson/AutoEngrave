@@ -1,7 +1,8 @@
 import * as React from "react";
 import { RootState } from "../../redux/types";
 import { connect } from "react-redux";
-import { CrudState, CreateActionCreator, UpdateActionCreator, DeleteActionCreator } from "../../redux/CRUD/types";
+import { CatalogState } from "../../redux/catalog/reducer";
+import { CreateActionCreator, UpdateActionCreator, DeleteActionCreator, CrudAction } from "../../redux/CRUD/types";
 import { Design } from "../../redux/catalog/types";
 import { DesignCatalog } from "./DesignCatalog";
 import { DesignEditor } from "./DesignEditor";
@@ -10,16 +11,11 @@ import * as _ from "lodash";
 
 import "./catalog.less";
 
-export interface CatalogPanelProps extends CrudState<Design> {
-  // dispatch: Dispatch<RootState>;
-  // scanComPorts: () => Promise<actions.ConsoleAction>;
-  // sendCommand: (command: string) => Promise<actions.ConsoleAction>;
-  // createDesign: (design: Design) => void;
-  // updateDesign: (oldDesign: Design, design: Design) => void;
-  // deleteDesign: (design: Design) => void;
+export interface CatalogPanelProps extends CatalogState {
   createDesign: CreateActionCreator<Design>;
   updateDesign: UpdateActionCreator<Design>;
   deleteDesign: DeleteActionCreator<Design>;
+  selectDesign: (item: Design) => CrudAction<Design>;
 }
 
 export interface CatalogPanelState {
@@ -34,7 +30,7 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
     };
   }
 
-  private onSelect = (design: Design) => {
+  private openEditDialog = (design: Design) => {
     this.setState({ editingDesign: design });
   }
 
@@ -59,6 +55,7 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
   }
 
   public render() {
+    const { items, selectedID, selectDesign, deleteDesign } = this.props;
     const { editingDesign } = this.state;
     // const classList: string[] = [];
     // if (dragHover)
@@ -66,8 +63,11 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
     if (editingDesign === null) {
       return (
         <DesignCatalog
-          {...this.props}
-          onSelect={this.onSelect}
+          items={items}
+          selectedID={selectedID}
+          onSelect={selectDesign}
+          onEdit={this.openEditDialog}
+          onDelete={deleteDesign}
           onUpload={this.onSave}
         />
       );
@@ -97,6 +97,7 @@ const mapDispatchToProps = {
   createDesign: actions.createDesign,
   updateDesign: actions.updateDesign,
   deleteDesign: actions.deleteDesign,
+  selectDesign: actions.selectDesign,
 };
 
 

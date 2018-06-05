@@ -1,14 +1,17 @@
 import * as React from "react";
-import { CrudState } from "../../redux/CRUD/types";
 import { Design } from "../../redux/catalog/types";
 import { DraggableDesignThumbnail } from "./DesignThumbnail";
 import { ConnectDropTarget, DropTargetSpec, DropTargetCollector, DropTarget } from "react-dnd";
 import { NativeTypes } from "react-dnd-html5-backend";
 import { uploadDesigns } from "../../redux/catalog/utils";
-// import { RootState } from '../../redux/types';
+import { OrderedMap } from "immutable";
 
-export interface DesignCatalogProps extends CrudState<Design> {
+export interface DesignCatalogProps {
+  items: OrderedMap<number, Design>;
+  selectedID: number;
   onSelect: (design: Design) => void;
+  onEdit: (design: Design) => void;
+  onDelete: (design: Design) => void;
   onUpload: (design: Design) => void;
 }
 
@@ -61,23 +64,34 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
   }
 
   public render() {
-    const { items, onSelect, isOver, canDrop, connectDropTarget } = this.props;
+    const { items, onSelect, onEdit, onDelete, selectedID, isOver, canDrop, connectDropTarget } = this.props;
     const classList = ["panel", "catalog-panel", "design-catalog"];
     if (canDrop) {
       classList.push("dnd-can-drop");
-      if (isOver) {
+      if (isOver)
         classList.push("dnd-hover");
-      }
+    }
+    let actionButtons: JSX.Element[];
+    if (selectedID !== null) {
+      const design = items.get(selectedID);
+      actionButtons = [
+        <button key="0" onClick={() => onEdit(design)} className="blue fas fa-edit" title="Like, edit or whatever" />,
+        <button key="1" onClick={() => onDelete(design)} className="red fas fa-trash-alt" title="Delete, duh" />
+      ];
     }
 
     const thumbnails = items.toKeyedSeq().map((item, id) => (
       <DraggableDesignThumbnail
         key={id}
-        size={100}
         design={item}
+        size={100}
+        selected={id === selectedID}
         onClick={() => onSelect(item)}
+        onDoubleClick={() => onEdit(item)}
       />
     )).toArray();
+
+
 
     return connectDropTarget(
       <div className={classList.join(" ")}>
@@ -90,6 +104,8 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
             onChange={this.onSelectFile}
           />
           <button className="upload-button" onClick={() => this.fileInput.click()}>Upload Design</button>
+          <div className="spacer" />
+          {actionButtons}
         </header>
         <section className="catalog-items scrollable">
           {thumbnails}
