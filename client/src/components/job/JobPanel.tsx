@@ -5,6 +5,7 @@ import { OrderedMap } from "immutable";
 import { Design } from "../../redux/catalog/types";
 import { connect, Dispatch } from "react-redux";
 import { SET_ACTIVE_JOB } from "../../redux/workspace/actions";
+import { TaskCard } from "./TaskCard";
 
 import "./job.less";
 
@@ -24,6 +25,7 @@ export const JobPanel: React.SFC<JobPanelProps> = props => {
       </section>
       <section className="scrollable">
         {activeJob ? activeJob.tasks.length : "Get a job!"}
+        <TaskCard task={null} />
       </section>
     </div>
   );
