@@ -14,8 +14,25 @@
 
       li {
         display: block;
-        margin-right: 20px;
+        height: 30px;
+        line-height: 30px;
+        // margin-right: 20px;
+        padding: 0 10px;
+
+        &:hover { background: fade(white, 10%); }
+
         i { margin-right: 10px; }
+
+        &.power i { color: #ffbe00; }
+        &.speed i { color: #64ff33; }
+
+        & > * { pointer-events: none; }
+
+        small {
+          font-size: 11px;
+          font-weight: bold;
+          margin-left: 2px;
+        }
         // list-style: none;
       }
     }

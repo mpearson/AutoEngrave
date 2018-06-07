@@ -26,9 +26,18 @@ export const TaskCard: React.SFC<TaskCardProps> = props => {
   return (
     <div className="task-card">
       <ul>
-        <li title="Power"><i className="fas fa-bolt" />90</li>
-        <li title="Speed"><i className="fas fa-angle-double-right" />35</li>
-        <li title="DPI"><i className="fas fa-align-justify" />400</li>
+        <li title="Power" className="power">
+          <i className="fas fa-bolt" />
+          <span>90</span>
+        </li>
+        <li title="Speed" className="speed">
+          <i className="fas fa-angle-double-right" />
+          <span>35</span>
+        </li>
+        <li title="DPI" className="dpi">
+          <span>400</span>
+          <small>DPI</small>
+        </li>
       </ul>
     </div>
   );
