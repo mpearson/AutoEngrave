@@ -109,8 +109,6 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
       />
     )).toArray();
 
-
-
     return connectDropTarget(
       <div className={classList.join(" ")}>
         <div className="drop-message">Drop filez here, yo</div>
@@ -132,9 +130,5 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
     );
   }
 }
-
-// const mapStateToProps = (state: RootState) => ({
-//   x: state.catalog.items
-// });
 
 export const DesignCatalog = DropTarget(NativeTypes.FILE, dropTargetSpec, dropTargetCollector)(DesignCatalogComponent);
