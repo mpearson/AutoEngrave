@@ -16,7 +16,10 @@ export interface JobPanelProps {
 
 export const JobPanel: React.SFC<JobPanelProps> = props => {
   const { activeJob } = props;
-
+  let taskCards: JSX.Element[] = null;
+  if (activeJob) {
+    taskCards = activeJob.tasks.map((task, index) => <TaskCard task={task} key={index} />);
+  }
 
   return (
     <div className="job-panel">
@@ -24,8 +27,7 @@ export const JobPanel: React.SFC<JobPanelProps> = props => {
         <input type="text" className="simple-input" />
       </section>
       <section className="scrollable">
-        {activeJob ? activeJob.tasks.length : "Get a job!"}
-        <TaskCard task={null} />
+        {taskCards}
       </section>
     </div>
   );

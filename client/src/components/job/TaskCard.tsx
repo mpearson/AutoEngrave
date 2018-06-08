@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MachineTask } from "../../redux/workspace/types";
+import { MachineTask, GCodeTask, DesignTask } from "../../redux/workspace/types";
 // import { RootState } from "../../redux/types";
 // import { OrderedMap } from "immutable";
 // import { Design } from "../../redux/catalog/types";
@@ -13,32 +13,35 @@ export interface TaskCardProps {
 }
 
 export const TaskCard: React.SFC<TaskCardProps> = props => {
-  // const { task } = props;
-
-  // switch (task.type) {
-  //   case "gcode": {
-
-  //   }
-  // }
-  // const { design } = task;
-
-
-  return (
-    <div className="task-card">
-      <ul>
-        <li title="Power" className="power">
-          <i className="fas fa-bolt" />
-          <span>90</span>
-        </li>
-        <li title="Speed" className="speed">
-          <i className="fas fa-angle-double-right" />
-          <span>35</span>
-        </li>
-        <li title="DPI" className="dpi">
-          <span>400</span>
-          <small>DPI</small>
-        </li>
-      </ul>
-    </div>
-  );
+  const { task } = props;
+  if (task.type === "gcode") {
+    return <GCodeTaskCard task={task} />;
+  } else if (task.type === "vector-raster") {
+    return <DesignTaskCard task={task} />;
+  } else {
+    return null;
+  }
 };
+
+export const DesignTaskCard: React.SFC<{task: DesignTask}> = props => (
+  <div className="task-card">
+    <div title="Power" className="power parameter">
+      <i className="fas fa-bolt" />
+      <span>90</span>
+    </div>
+    <div title="Speed" className="speed parameter">
+      <i className="fas fa-angle-double-right" />
+      <span>35</span>
+    </div>
+    <div title="DPI" className="dpi parameter">
+      <span>400</span>
+      <small>DPI</small>
+    </div>
+  </div>
+);
+
+export const GCodeTaskCard: React.SFC<{task: GCodeTask}> = props => (
+  <div className="task-card">
+    [G-Code]
+  </div>
+);

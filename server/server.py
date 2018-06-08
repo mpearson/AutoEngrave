@@ -159,7 +159,7 @@ def delete_machine(machineID):
 #-----------------------------------------------------------------------------#
 
 @app.route("/api/settings/materials", methods=["GET"])
-def list_macterials():
+def list_materials():
     return json.dumps({"results": []})
 
 @app.route("/api/settings/materials", methods=["POST"])

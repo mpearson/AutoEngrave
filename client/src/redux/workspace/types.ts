@@ -24,7 +24,8 @@ export interface DesignTask extends MachineTaskBase {
   y: number;
   width: number;
   height: number;
-  dpi: number;
+  power: number;
+  speed: number;
 }
 
 export interface VectorCutTask extends DesignTask {
@@ -34,11 +35,13 @@ export interface VectorCutTask extends DesignTask {
 
 export interface VectorRasterTask extends DesignTask {
   type: "vector-raster";
+  dpi: number;
   // groups: string[];
 }
 
 export interface BitmapRasterTask extends DesignTask {
   type: "bitmap-raster";
+  dpi: number;
 }
 
 export type MachineTask = GCodeTask | DesignTask;
