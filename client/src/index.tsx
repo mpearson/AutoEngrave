@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "./store/index";
 import { MainPanel } from "./components/MainPanel";
 import { getConnectionStatus, getPorts } from "./redux/connection/actions";
-import { listMachineProfiles, listMaterialProfiles } from "./redux/settings/actions";
+import { /* listMachineProfiles, */ listMaterialProfiles } from "./redux/settings/actions";
 import { TEMPLATES_PREFIX, Template } from "./redux/templates/types";
 import { MACHINES_PREFIX, Machine } from "./redux/settings/types";
 import { SELECT_MACHINE, SELECT_TEMPLATE } from "./redux/workspace/actions";
@@ -26,7 +26,7 @@ export const app = ReactDOM.render(
 );
 
 store.dispatch(getPorts()).then(() => store.dispatch(getConnectionStatus()));
-store.dispatch(listMachineProfiles());
+// store.dispatch(listMachineProfiles());
 store.dispatch(listMaterialProfiles());
 store.dispatch(listDesigns());
 

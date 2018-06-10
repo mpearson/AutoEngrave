@@ -5,7 +5,7 @@ export interface Job {
   tasks: MachineTask[];
 }
 
-export type MachineTaskType = "gcode" | "vector-cut" | "vector-raster" | "bitmap-raster";
+export type MachineTaskType = "gcode" | "vector" | "raster";
 
 export interface MachineTaskBase {
   type: MachineTaskType;
@@ -28,20 +28,16 @@ export interface DesignTask extends MachineTaskBase {
   speed: number;
 }
 
-export interface VectorCutTask extends DesignTask {
-  type: "vector-cut";
+export interface VectorTask extends DesignTask {
+  type: "vector";
   // groups: string[];
 }
 
-export interface VectorRasterTask extends DesignTask {
-  type: "vector-raster";
-  dpi: number;
+export interface RasterTask extends DesignTask {
+  type: "raster";
   // groups: string[];
+  dpi: number;
 }
 
-export interface BitmapRasterTask extends DesignTask {
-  type: "bitmap-raster";
-  dpi: number;
-}
 
 export type MachineTask = GCodeTask | DesignTask;

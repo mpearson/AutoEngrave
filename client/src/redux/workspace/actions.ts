@@ -1,6 +1,6 @@
 import { APIAction, AsyncAction } from "./../types";
 import { Template } from "../templates/types";
-import { Job, DesignTask } from "./types";
+import { Job, DesignTask, RasterTask } from "./types";
 import { Design } from "../catalog/types";
 import { cloneDeep } from "lodash";
 import { pixelsToMillimeters } from "../catalog/utils";
@@ -58,8 +58,8 @@ export const addDesignToTemplate = (design: Design, slotIndex?: number): AsyncAc
     const width = pixelsToMillimeters(design.width, design.dpi);
     const height = pixelsToMillimeters(design.height, design.dpi);
 
-    let newTask: DesignTask = {
-      type: design.filetype === "image/svg+xml" ? "vector-raster" : "bitmap-raster",
+    let newTask: RasterTask = {
+      type: "raster",
       designID: design.id,
       slotIndex,
       x: slot.x + 0.5 * (slot.width - width),
@@ -67,6 +67,8 @@ export const addDesignToTemplate = (design: Design, slotIndex?: number): AsyncAc
       width,
       height,
       dpi: 400,
+      power: 100,
+      speed: 100,
     };
 
     const existingSlot = newJob.tasks.findIndex(task => task.type !== "gcode" && task.slotIndex === slotIndex);
