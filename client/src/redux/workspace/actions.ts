@@ -1,44 +1,22 @@
 import { APIAction, AsyncAction } from "./../types";
 import { Template } from "../templates/types";
-import { Job, DesignTask, RasterTask } from "./types";
+import { Job, RasterTask, MachineTask } from "./types";
 import { Design } from "../catalog/types";
-import { cloneDeep } from "lodash";
 import { pixelsToMillimeters } from "../catalog/utils";
-import { Seq } from "immutable";
+import { getNewJob, findNextAvailableSlot } from "./utils";
 
 export const SELECT_TEMPLATE = "workspace/SELECT_TEMPLATE";
 export const SELECT_MACHINE = "workspace/SELECT_MACHINE";
 export const SET_ACTIVE_JOB = "workspace/SET_ACTIVE_JOB";
+export const HIGHLIGHT_ACTIVE_JOB = "workspace/HIGHLIGHT_ACTIVE_JOB";
 
 export interface WorkspaceAction extends APIAction {
   template?: Template;
   templateID?: number;
   machineID?: number;
   job?: Job;
+  taskIndex?: number;
 }
-
-/**
- * Deep clones the provided job, or creates a new one if it is null.
- * @param activeJob
- */
-const getNewJob = (activeJob: Job) => {
-  if (activeJob)
-    return cloneDeep(activeJob);
-
-  return {
-    name: "Untitled Job",
-    tasks: [],
-  };
-};
-
-const findNextAvailableSlot = (template: Template, job: Job): number => {
-  const occupiedSlots = Seq(job.tasks).map(task => (task as DesignTask).slotIndex).toSet();
-
-  for (let i = 0; i < template.slots.length; i++)
-    if (!occupiedSlots.has(i))
-      return i;
-  return null;
-};
 
 export const addDesignToTemplate = (design: Design, slotIndex?: number): AsyncAction => {
   return (dispatch, getState) => {
@@ -99,3 +77,27 @@ export const generateGCode = (): AsyncAction => {
 //     onError: null,
 //   });
 // };
+
+export const updateActiveJobTask = (index: number, task: MachineTask): AsyncAction => {
+  return (dispatch, getState) => {
+    const job = getState().workspace.activeJob;
+    const tasks = [...job.tasks];
+    tasks[index] = task;
+
+    dispatch({ type: SET_ACTIVE_JOB, job: { ...job, tasks } });
+  };
+};
+
+export const removeActiveJobTask = (index: number): AsyncAction => {
+  return (dispatch, getState) => {
+    const job = getState().workspace.activeJob;
+    const tasks = job.tasks.filter((task, i) => i !== index);
+
+    dispatch({ type: SET_ACTIVE_JOB, job: { ...job, tasks } });
+  };
+};
+
+export const highlightActiveJobTask = (taskIndex: number): WorkspaceAction => ({
+  type: HIGHLIGHT_ACTIVE_JOB,
+  taskIndex,
+});

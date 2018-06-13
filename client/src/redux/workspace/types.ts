@@ -9,6 +9,7 @@ export type MachineTaskType = "gcode" | "vector" | "raster";
 
 export interface MachineTaskBase {
   type: MachineTaskType;
+  readonly?: boolean;
 }
 
 export interface GCodeTask extends MachineTaskBase {

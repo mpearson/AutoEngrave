@@ -1,24 +1,40 @@
 import * as React from "react";
-import { Job } from "../../redux/workspace/types";
+import { Job, MachineTask } from "../../redux/workspace/types";
 import { RootState } from "../../redux/types";
 import { OrderedMap } from "immutable";
 import { Design } from "../../redux/catalog/types";
-import { connect, Dispatch } from "react-redux";
-import { SET_ACTIVE_JOB } from "../../redux/workspace/actions";
+import { connect } from "react-redux";
+import * as actions from "../../redux/workspace/actions";
 import { TaskCard } from "./TaskCard";
 
 import "./job.less";
 
-export interface JobPanelProps {
+interface StateProps {
   activeJob: Job;
   catalog: OrderedMap<number, Design>;
 }
 
+interface DispatchProps {
+  // updateJob: (job: Job) => void;
+  updateTask: (index: number, task: MachineTask) => any;
+  removeTask: (index: number) => any;
+
+}
+
+type JobPanelProps = StateProps & DispatchProps;
+
 export const JobPanel: React.SFC<JobPanelProps> = props => {
-  const { activeJob } = props;
+  const { activeJob, removeTask } = props;
   let taskCards: JSX.Element[] = null;
   if (activeJob) {
-    taskCards = activeJob.tasks.map((task, index) => <TaskCard task={task} key={index} />);
+    taskCards = activeJob.tasks.map((task, index) => (
+      <TaskCard
+        model={task}
+        key={index}
+        onDelete={() => removeTask(index)}
+        />
+      )
+    );
   }
 
   return (
@@ -34,15 +50,16 @@ export const JobPanel: React.SFC<JobPanelProps> = props => {
 };
 
 
-const mapStateToProps = (state: RootState) => ({
+const mapStateToProps = (state: RootState): StateProps => ({
   activeJob: state.workspace.activeJob,
   catalog: state.catalog.items,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => ({
+const mapDispatchToProps = {
   // onDropDesign: addDesignToTemplate,
-  updateJob: (job: Job) => dispatch({ type: SET_ACTIVE_JOB, job }),
-});
-
+  // updateJob: (job: Job) => { dispatch({ type: SET_ACTIVE_JOB, job }); },
+  updateTask: actions.updateActiveJobTask,
+  removeTask: actions.removeActiveJobTask,
+};
 
 export const JobPanelConnected = connect(mapStateToProps, mapDispatchToProps)(JobPanel);

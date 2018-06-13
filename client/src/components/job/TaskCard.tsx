@@ -8,23 +8,35 @@ import { MachineTask, GCodeTask, RasterTask } from "../../redux/workspace/types"
 
 import "./job.less";
 
-export interface TaskCardProps {
-  task: MachineTask;
+export interface TaskCardProps<T extends MachineTask = MachineTask> {
+  model: T;
+  // onUpdate: (model: T) => void;
+  onDelete: () => void;
 }
 
+export const DeleteButton: React.SFC<{onClick: () => void}> = props => (
+  <button
+    key="delete"
+    onClick={props.onClick}
+    className="red fas fa-trash-alt"
+    title="Delete, duh"
+  />
+);
+
 export const TaskCard: React.SFC<TaskCardProps> = props => {
-  const { task } = props;
-  if (task.type === "gcode") {
-    return <GCodeTaskCard task={task} />;
-  } else if (task.type === "raster") {
-    return <RasterTaskCard task={task as RasterTask} />;
+  const { model } = props;
+  if (model.type === "gcode") {
+    return <GCodeTaskCard {...props as any} />;
+  } else if (model.type === "raster") {
+    return <RasterTaskCard {...props as any} />;
   } else {
     return null;
   }
 };
 
-export const RasterTaskCard: React.SFC<{task: RasterTask}> = props => {
-  const {power, speed, dpi} = props.task;
+export const RasterTaskCard: React.SFC<TaskCardProps<RasterTask>> = props => {
+  const {onDelete} = props;
+  const {power, speed, dpi, readonly} = props.model;
   return (
     <div className="task-card">
       <div title="Power" className="power parameter">
@@ -39,12 +51,18 @@ export const RasterTaskCard: React.SFC<{task: RasterTask}> = props => {
         <span>{dpi}</span>
         <small>DPI</small>
       </div>
+      {readonly ? null : <DeleteButton onClick={onDelete} />}
     </div>
   );
 };
 
-export const GCodeTaskCard: React.SFC<{task: GCodeTask}> = props => (
-  <div className="task-card">
-    [G-Code]
-  </div>
-);
+export const GCodeTaskCard: React.SFC<TaskCardProps<GCodeTask>> = props => {
+  const {onDelete} = props;
+  const {commands, readonly} = props.model;
+  return (
+    <div className="task-card">
+      <span>{commands[0]}</span>
+      {readonly ? null : <DeleteButton onClick={onDelete} />}
+    </div>
+  );
+};
