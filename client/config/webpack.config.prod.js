@@ -80,7 +80,7 @@ module.exports = {
     // We also include JSX as a common component filename extension to support
     // some tools, although we do not recommend using it, see:
     // https://github.com/facebookincubator/create-react-app/issues/290
-    extensions: ['.ts', '.tsx', '.js', '.json', '.jsx'],
+    extensions: [".ts", ".tsx", ".js", ".json", ".jsx", ".less", ".css"]
     // alias: {
     //   // Support React Native Web
     //   // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
@@ -145,6 +145,29 @@ module.exports = {
         query: {
           name: 'static/media/[name].[hash:8].[ext]'
         }
+      },
+      {
+        test: /\.css$/,
+        loader: ["style-loader", "css-loader"]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader"
+          },
+          {
+            loader: "less-loader",
+            // options: {
+            //   paths: [
+            //     path.resolve(__dirname, "node_modules")
+            //   ]
+            // }
+          }
+        ]
       }
     ]
   },

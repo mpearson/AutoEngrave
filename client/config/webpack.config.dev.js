@@ -8,7 +8,6 @@ var getClientEnvironment = require("./env");
 var paths = require("./paths");
 var path = require('path');
 
-
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
 var publicPath = "/";
@@ -96,14 +95,26 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
+          // {
+          //   loader: "file-loader"
+          // },
+          // {
+          //   loader: "extract-loader"
+          // },
           {
             loader: "style-loader"
           },
           {
-            loader: "css-loader"
+            loader: "css-loader",
+            options: {
+              sourceMap: true
+            }
           },
           {
             loader: "less-loader",
+            options: {
+              sourceMap: true
+            }
             // options: {
             //   paths: [
             //     path.resolve(__dirname, "node_modules")

@@ -58,6 +58,7 @@
     "@types/three": "^0.84.30",
     "classnames": "^2.2.5",
     "enzyme": "^3.1.1",
+    "extract-loader": "^2.0.1",
     "history": "^4.7.2",
     "immutable": "^3.8.2",
     "less": "^2.7.3",
