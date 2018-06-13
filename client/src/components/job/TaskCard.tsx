@@ -18,7 +18,7 @@ export const DeleteButton: React.SFC<{onClick: () => void}> = props => (
   <button
     key="delete"
     onClick={props.onClick}
-    className="red fas fa-trash-alt"
+    className="delete-button red fas fa-trash-alt"
     title="Delete, duh"
   />
 );
