@@ -5,10 +5,11 @@ import { DesignTask } from "../../redux/workspace/types";
 export interface WorkspaceItemProps {
   task: DesignTask;
   design: Design;
+  highlight?: boolean;
 }
 
 export const WorkspaceItem: React.SFC<WorkspaceItemProps> = props => {
-  const { task, design } = props;
+  const { task, design, highlight } = props;
   if (design !== null) {
     const containerStyle: React.CSSProperties = {
       left: task.x + "px",
@@ -20,8 +21,12 @@ export const WorkspaceItem: React.SFC<WorkspaceItemProps> = props => {
       height: task.height + "px",
     };
 
+    const classList = ["workspace-item"];
+    if (highlight)
+      classList.push("highlight");
+
     return (
-      <div className="workspace-item" style={containerStyle}>
+      <div className={classList.join(" ")} style={containerStyle}>
         <img src={design.imageData} style={imageSize} />
       </div>
     );

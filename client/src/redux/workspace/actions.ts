@@ -8,7 +8,7 @@ import { getNewJob, findNextAvailableSlot } from "./utils";
 export const SELECT_TEMPLATE = "workspace/SELECT_TEMPLATE";
 export const SELECT_MACHINE = "workspace/SELECT_MACHINE";
 export const SET_ACTIVE_JOB = "workspace/SET_ACTIVE_JOB";
-export const HIGHLIGHT_ACTIVE_JOB = "workspace/HIGHLIGHT_ACTIVE_JOB";
+export const HOVER_ACTIVE_JOB = "workspace/HOVER_ACTIVE_JOB";
 
 export interface WorkspaceAction extends APIAction {
   template?: Template;
@@ -97,7 +97,7 @@ export const removeActiveJobTask = (index: number): AsyncAction => {
   };
 };
 
-export const highlightActiveJobTask = (taskIndex: number): WorkspaceAction => ({
-  type: HIGHLIGHT_ACTIVE_JOB,
+export const hoverActiveJobTask = (taskIndex: number): WorkspaceAction => ({
+  type: HOVER_ACTIVE_JOB,
   taskIndex,
 });

@@ -18,13 +18,13 @@ interface DispatchProps {
   // updateJob: (job: Job) => void;
   updateTask: (index: number, task: MachineTask) => any;
   removeTask: (index: number) => any;
-
+  hoverTask: (index: number) => any;
 }
 
 type JobPanelProps = StateProps & DispatchProps;
 
 export const JobPanel: React.SFC<JobPanelProps> = props => {
-  const { activeJob, removeTask } = props;
+  const { activeJob, removeTask, hoverTask } = props;
   let taskCards: JSX.Element[] = null;
   if (activeJob) {
     taskCards = activeJob.tasks.map((task, index) => (
@@ -32,6 +32,8 @@ export const JobPanel: React.SFC<JobPanelProps> = props => {
         model={task}
         key={index}
         onDelete={() => removeTask(index)}
+        onMouseOver={() => hoverTask(index)}
+        onMouseOut={() => hoverTask(null)}
         />
       )
     );
@@ -60,6 +62,7 @@ const mapDispatchToProps = {
   // updateJob: (job: Job) => { dispatch({ type: SET_ACTIVE_JOB, job }); },
   updateTask: actions.updateActiveJobTask,
   removeTask: actions.removeActiveJobTask,
+  hoverTask: actions.hoverActiveJobTask,
 };
 
 export const JobPanelConnected = connect(mapStateToProps, mapDispatchToProps)(JobPanel);

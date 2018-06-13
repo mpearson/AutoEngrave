@@ -21,7 +21,7 @@ export interface WorkspaceProps extends WorkspaceState {
 }
 
 export const Workspace: React.SFC<WorkspaceProps> = props => {
-  const { machines, templates, machineID, templateID, onDropDesign, activeJob, catalog } = props;
+  const { machines, templates, machineID, templateID, onDropDesign, activeJob, catalog, hoverTaskIndex } = props;
   const template = templates.get(templateID);
   const machine = machines.get(machineID);
 
@@ -34,12 +34,13 @@ export const Workspace: React.SFC<WorkspaceProps> = props => {
   }
 
   const tasks = activeJob ? activeJob.tasks : [];
-  const taskItems: JSX.Element[] = tasks.reduce((items, task) => {
+  const taskItems = tasks.reduce<JSX.Element[]>((items, task, index) => {
     if (task.type !== "gcode")
       items.push(
         <WorkspaceItem
           task={task}
           design={catalog.get(task.designID)}
+          highlight={index === hoverTaskIndex}
           key={task.slotIndex}
         />
       );

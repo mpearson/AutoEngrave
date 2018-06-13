@@ -5,14 +5,14 @@ export type WorkspaceState = {
   readonly templateID: number;
   readonly machineID: number;
   readonly activeJob: Job;
-  readonly highlightTaskIndex: number;
+  readonly hoverTaskIndex: number;
 };
 
 const defaultState: WorkspaceState = {
   templateID: null,
   machineID: null,
   activeJob: null,
-  highlightTaskIndex: null,
+  hoverTaskIndex: null,
 };
 
 export const workspaceReducer = (state = defaultState, action: actions.WorkspaceAction): WorkspaceState => {
@@ -26,8 +26,8 @@ export const workspaceReducer = (state = defaultState, action: actions.Workspace
     case actions.SET_ACTIVE_JOB: {
       return { ...state, activeJob: action.job };
     }
-    case actions.HIGHLIGHT_ACTIVE_JOB: {
-      return { ...state, highlightTaskIndex: action.taskIndex };
+    case actions.HOVER_ACTIVE_JOB: {
+      return { ...state, hoverTaskIndex: action.taskIndex };
     }
     default:
       return state;

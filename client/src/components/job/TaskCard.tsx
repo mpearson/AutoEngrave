@@ -12,6 +12,8 @@ export interface TaskCardProps<T extends MachineTask = MachineTask> {
   model: T;
   // onUpdate: (model: T) => void;
   onDelete: () => void;
+  onMouseOver: () => void;
+  onMouseOut: () => void;
 }
 
 export const DeleteButton: React.SFC<{onClick: () => void}> = props => (
@@ -35,10 +37,10 @@ export const TaskCard: React.SFC<TaskCardProps> = props => {
 };
 
 export const RasterTaskCard: React.SFC<TaskCardProps<RasterTask>> = props => {
-  const {onDelete} = props;
+  const {onDelete, onMouseOver, onMouseOut} = props;
   const {power, speed, dpi, readonly} = props.model;
   return (
-    <div className="task-card">
+    <div className="task-card" onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
       <div title="Power" className="power parameter">
         <i className="fas fa-bolt" />
         <span>{power}</span>
@@ -57,10 +59,10 @@ export const RasterTaskCard: React.SFC<TaskCardProps<RasterTask>> = props => {
 };
 
 export const GCodeTaskCard: React.SFC<TaskCardProps<GCodeTask>> = props => {
-  const {onDelete} = props;
+  const {onDelete, onMouseOver, onMouseOut} = props;
   const {commands, readonly} = props.model;
   return (
-    <div className="task-card">
+    <div className="task-card" onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
       <span>{commands[0]}</span>
       {readonly ? null : <DeleteButton onClick={onDelete} />}
     </div>
