@@ -7,21 +7,33 @@ import { Template } from "../../redux/templates/types";
 import { WorkspaceMenuConnected } from "./WorkspaceMenu";
 import { TemplateDropZone } from "./TemplateDropZone";
 import { WorkspaceState } from "../../redux/workspace/reducer";
-import { addDesignToTemplate } from "../../redux/workspace/actions";
+import * as actions from "../../redux/workspace/actions";
 import { Design } from "../../redux/catalog/types";
 import { WorkspaceItem } from "./WorkspaceItem";
 
 import "./workspace.less";
 
-export interface WorkspaceProps extends WorkspaceState {
+interface StateProps extends WorkspaceState {
   machines: OrderedMap<number, Machine>;
   templates: OrderedMap<number, Template>;
   catalog: OrderedMap<number, Design>;
-  onDropDesign: (design: Design, slotIndex: number) => any;
 }
 
-export const Workspace: React.SFC<WorkspaceProps> = props => {
-  const { machines, templates, machineID, templateID, onDropDesign, activeJob, catalog, hoverTaskIndex } = props;
+interface DispatchProps {
+  onDropDesign: (design: Design, slotIndex: number) => any;
+  hoverTask: (index: number) => any;
+}
+
+type CombinedProps = StateProps & DispatchProps;
+
+export interface WorkspaceProps extends WorkspaceState {
+}
+
+export const Workspace: React.SFC<CombinedProps> = props => {
+  const {
+    machines, templates, machineID, templateID, onDropDesign,
+    activeJob, catalog, hoverTaskIndex, hoverTask,
+  } = props;
   const template = templates.get(templateID);
   const machine = machines.get(machineID);
 
@@ -42,6 +54,8 @@ export const Workspace: React.SFC<WorkspaceProps> = props => {
           design={catalog.get(task.designID)}
           highlight={index === hoverTaskIndex}
           key={task.slotIndex}
+          onMouseOver={() => hoverTask(index)}
+          onMouseOut={() => hoverTask(null)}
         />
       );
     return items;
@@ -77,7 +91,8 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = ({
-  onDropDesign: addDesignToTemplate,
+  onDropDesign: actions.addDesignToTemplate,
+  hoverTask: actions.hoverActiveJobTask,
 });
 
 

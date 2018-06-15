@@ -9,20 +9,24 @@
 
     .template-slot {
       position: absolute;
-      z-index: 2;
+      z-index: 0;
       border: 1px solid green;
 
-      &.can-drop { background-color: fade(green, 10%); }
+      &.can-drop {
+        background-color: fade(green, 10%);
+        z-index: 2;
+      }
       &.drag-hover { background-color: fade(green, 50%); }
     }
 
     .workspace-item {
       position: absolute;
       z-index: 1;
+      border: 1px solid transparent;
 
       img { filter: invert(100%); }
 
-      &.highlight { background: fade(white, 10%); }
+      &.highlight { border-color: fade(lime, 50%); }
     }
   }
 

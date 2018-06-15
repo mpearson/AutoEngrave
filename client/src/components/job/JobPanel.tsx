@@ -11,6 +11,7 @@ import "./job.less";
 
 interface StateProps {
   activeJob: Job;
+  hoverTaskIndex: number;
   catalog: OrderedMap<number, Design>;
 }
 
@@ -24,7 +25,7 @@ interface DispatchProps {
 type JobPanelProps = StateProps & DispatchProps;
 
 export const JobPanel: React.SFC<JobPanelProps> = props => {
-  const { activeJob, removeTask, hoverTask } = props;
+  const { activeJob, hoverTaskIndex, removeTask, hoverTask } = props;
   let taskCards: JSX.Element[] = null;
   if (activeJob) {
     taskCards = activeJob.tasks.map((task, index) => (
@@ -34,9 +35,9 @@ export const JobPanel: React.SFC<JobPanelProps> = props => {
         onDelete={() => removeTask(index)}
         onMouseOver={() => hoverTask(index)}
         onMouseOut={() => hoverTask(null)}
-        />
-      )
-    );
+        highlight={index === hoverTaskIndex}
+      />
+    ));
   }
 
   return (
@@ -54,6 +55,7 @@ export const JobPanel: React.SFC<JobPanelProps> = props => {
 
 const mapStateToProps = (state: RootState): StateProps => ({
   activeJob: state.workspace.activeJob,
+  hoverTaskIndex: state.workspace.hoverTaskIndex,
   catalog: state.catalog.items,
 });
 

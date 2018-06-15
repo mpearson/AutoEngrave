@@ -12,8 +12,9 @@ export interface TaskCardProps<T extends MachineTask = MachineTask> {
   model: T;
   // onUpdate: (model: T) => void;
   onDelete: () => void;
-  onMouseOver: () => void;
-  onMouseOut: () => void;
+  onMouseOver?: () => void;
+  onMouseOut?: () => void;
+  highlight?: boolean;
 }
 
 export const DeleteButton: React.SFC<{onClick: () => void}> = props => (
@@ -37,10 +38,14 @@ export const TaskCard: React.SFC<TaskCardProps> = props => {
 };
 
 export const RasterTaskCard: React.SFC<TaskCardProps<RasterTask>> = props => {
-  const {onDelete, onMouseOver, onMouseOut} = props;
+  const {onDelete, onMouseOver, onMouseOut, highlight} = props;
   const {power, speed, dpi, readonly} = props.model;
+  const classList = ["task-card"];
+  if (highlight)
+    classList.push("highlight");
+
   return (
-    <div className="task-card" onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
+    <div className={classList.join(" ")} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
       <div title="Power" className="power parameter">
         <i className="fas fa-bolt" />
         <span>{power}</span>
@@ -59,10 +64,13 @@ export const RasterTaskCard: React.SFC<TaskCardProps<RasterTask>> = props => {
 };
 
 export const GCodeTaskCard: React.SFC<TaskCardProps<GCodeTask>> = props => {
-  const {onDelete, onMouseOver, onMouseOut} = props;
+  const {onDelete, onMouseOver, onMouseOut, highlight} = props;
   const {commands, readonly} = props.model;
+  const classList = ["task-card"];
+  if (highlight)
+    classList.push("highlight");
   return (
-    <div className="task-card" onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
+    <div className={classList.join(" ")} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
       <span>{commands[0]}</span>
       {readonly ? null : <DeleteButton onClick={onDelete} />}
     </div>

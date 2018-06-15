@@ -6,10 +6,12 @@ export interface WorkspaceItemProps {
   task: DesignTask;
   design: Design;
   highlight?: boolean;
+  onMouseOver?: () => void;
+  onMouseOut?: () => void;
 }
 
 export const WorkspaceItem: React.SFC<WorkspaceItemProps> = props => {
-  const { task, design, highlight } = props;
+  const { task, design, highlight, onMouseOver, onMouseOut } = props;
   if (design !== null) {
     const containerStyle: React.CSSProperties = {
       left: task.x + "px",
@@ -26,7 +28,7 @@ export const WorkspaceItem: React.SFC<WorkspaceItemProps> = props => {
       classList.push("highlight");
 
     return (
-      <div className={classList.join(" ")} style={containerStyle}>
+      <div className={classList.join(" ")} style={containerStyle} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
         <img src={design.imageData} style={imageSize} />
       </div>
     );
