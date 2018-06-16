@@ -25,13 +25,14 @@ interface DispatchProps {
 type JobPanelProps = StateProps & DispatchProps;
 
 export const JobPanel: React.SFC<JobPanelProps> = props => {
-  const { activeJob, hoverTaskIndex, removeTask, hoverTask } = props;
+  const { activeJob, hoverTaskIndex, updateTask, removeTask, hoverTask } = props;
   let taskCards: JSX.Element[] = null;
   if (activeJob) {
     taskCards = activeJob.tasks.map((task, index) => (
       <TaskCard
         model={task}
         key={index}
+        onUpdate={model => updateTask(index, model)}
         onDelete={() => removeTask(index)}
         onMouseOver={() => hoverTask(index)}
         onMouseOut={() => hoverTask(null)}
