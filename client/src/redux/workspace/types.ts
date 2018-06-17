@@ -2,7 +2,14 @@ export interface Job {
   id?: number;
   name: string;
   templateID?: number;
+  groups: MachineTaskGroup[];
+  tasks: MachineTask[]; // TODO: DELETE! DELETE! DELETE!
+}
+
+export interface MachineTaskGroup {
+  name: string;
   tasks: MachineTask[];
+  globalSettings: DesignSettings;
 }
 
 export type MachineTaskType = "gcode" | "vector" | "raster";
@@ -17,7 +24,13 @@ export interface GCodeTask extends MachineTaskBase {
   commands: string[];
 }
 
-export interface DesignTask extends MachineTaskBase {
+export interface DesignSettings {
+  power: number;
+  speed: number;
+  dpi?: number;
+}
+
+export interface DesignTask extends MachineTaskBase, DesignSettings {
   type: Exclude<MachineTaskType, "gcode">;
   designID: number;
   slotIndex?: number;
@@ -25,8 +38,6 @@ export interface DesignTask extends MachineTaskBase {
   y: number;
   width: number;
   height: number;
-  power: number;
-  speed: number;
 }
 
 export interface VectorTask extends DesignTask {

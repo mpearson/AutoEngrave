@@ -1,10 +1,11 @@
 import * as actions from "./actions";
-import { Job } from "./types";
+import { Job, DesignTask } from "./types";
 
 export type WorkspaceState = {
   readonly templateID: number;
   readonly machineID: number;
   readonly activeJob: Job;
+  readonly globalDesignSettings: DesignTask;
   readonly hoverTaskIndex: number;
 };
 
@@ -12,6 +13,7 @@ const defaultState: WorkspaceState = {
   templateID: null,
   machineID: null,
   activeJob: null,
+  globalDesignSettings: null,
   hoverTaskIndex: null,
 };
 

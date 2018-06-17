@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Job, MachineTask } from "../../redux/workspace/types";
+import { Job, MachineTask, DesignTask } from "../../redux/workspace/types";
 import { RootState } from "../../redux/types";
 import { OrderedMap } from "immutable";
 import { Design } from "../../redux/catalog/types";
@@ -11,6 +11,7 @@ import "./job.less";
 
 interface StateProps {
   activeJob: Job;
+  globalDesignSettings: DesignTask;
   hoverTaskIndex: number;
   catalog: OrderedMap<number, Design>;
 }
@@ -26,8 +27,21 @@ type JobPanelProps = StateProps & DispatchProps;
 
 export const JobPanel: React.SFC<JobPanelProps> = props => {
   const { activeJob, hoverTaskIndex, updateTask, removeTask, hoverTask } = props;
+  let globalTaskCard: JSX.Element = null;
   let taskCards: JSX.Element[] = null;
   if (activeJob) {
+    // globalTaskCard = (
+    //   <TaskCard
+    //     model={task}
+    //     key={index}
+    //     onUpdate={model => updateTask(index, model)}
+    //     onDelete={() => removeTask(index)}
+    //     onMouseOver={() => hoverTask(index)}
+    //     onMouseOut={() => hoverTask(null)}
+    //     highlight={index === hoverTaskIndex}
+    //   />
+    // );
+
     taskCards = activeJob.tasks.map((task, index) => (
       <TaskCard
         model={task}
@@ -47,6 +61,7 @@ export const JobPanel: React.SFC<JobPanelProps> = props => {
         <input type="text" className="simple-input" />
       </section>
       <section className="scrollable">
+        {globalTaskCard}
         {taskCards}
       </section>
     </div>
@@ -56,6 +71,7 @@ export const JobPanel: React.SFC<JobPanelProps> = props => {
 
 const mapStateToProps = (state: RootState): StateProps => ({
   activeJob: state.workspace.activeJob,
+  globalDesignSettings: state.workspace.globalDesignSettings,
   hoverTaskIndex: state.workspace.hoverTaskIndex,
   catalog: state.catalog.items,
 });

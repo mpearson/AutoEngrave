@@ -13,6 +13,7 @@ export const getNewJob = (activeJob: Job) => {
   return {
     name: "Untitled Job",
     tasks: [],
+    groups: [],
   };
 };
 
