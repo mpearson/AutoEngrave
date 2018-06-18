@@ -3,7 +3,6 @@ export interface Job {
   name: string;
   templateID?: number;
   groups: MachineTaskGroup[];
-  tasks: MachineTask[]; // TODO: DELETE! DELETE! DELETE!
 }
 
 export interface MachineTaskGroup {
