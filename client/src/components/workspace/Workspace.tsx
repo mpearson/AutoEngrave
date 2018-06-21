@@ -1,3 +1,5 @@
+import "./workspace.less";
+
 import * as React from "react";
 import { RootState } from "../../redux/types";
 import { connect } from "react-redux";
@@ -10,8 +12,6 @@ import { WorkspaceState } from "../../redux/workspace/reducer";
 import * as actions from "../../redux/workspace/actions";
 import { Design } from "../../redux/catalog/types";
 import { WorkspaceItem } from "./WorkspaceItem";
-
-import "./workspace.less";
 
 interface StateProps extends WorkspaceState {
   machines: OrderedMap<number, Machine>;

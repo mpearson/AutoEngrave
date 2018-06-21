@@ -2,14 +2,15 @@ export interface Job {
   id?: number;
   name: string;
   templateID?: number;
-  groups: MachineTaskGroup[];
+  tasks: MachineTask[];
+  // groups: MachineTaskGroup[];
 }
 
-export interface MachineTaskGroup {
-  name: string;
-  tasks: MachineTask[];
-  globalSettings: DesignSettings;
-}
+// export interface MachineTaskGroup {
+//   name: string;
+//   tasks: MachineTask[];
+//   globalSettings: DesignSettings;
+// }
 
 export type MachineTaskType = "gcode" | "vector" | "raster";
 

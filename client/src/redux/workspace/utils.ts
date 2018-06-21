@@ -12,21 +12,23 @@ export const getNewJob = (activeJob: Job): Job => {
 
   return {
     name: "Untitled Job",
-    groups: [{
-      name: "Group 1",
-      globalSettings: {
-        power: 100,
-        speed: 100,
-        dpi: 400,
-      },
-      tasks: [],
-    }],
+    tasks: [],
+    // groups: [{
+    //   name: "Group 1",
+    //   globalSettings: {
+    //     power: 100,
+    //     speed: 100,
+    //     dpi: 400,
+    //   },
+    //   tasks: [],
+    // }],
   };
 };
 
 export const findNextAvailableSlot = (template: Template, job: Job): number => {
-  const occupiedSlots = Seq(job.groups)
-    .flatMap(group => group.tasks)
+  // const occupiedSlots = Seq(job.groups)
+  //   .flatMap(group => group.tasks)
+  const occupiedSlots = Seq(job.tasks)
     .map(task => (task as DesignTask).slotIndex)
     .toSet();
 
