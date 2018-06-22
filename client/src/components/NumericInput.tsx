@@ -28,8 +28,9 @@ export class NumericInput extends React.Component<NumericInputProps, NumericInpu
   };
 
   public static getDerivedStateFromProps(props: NumericInputProps): NumericInputState {
+    const {value} = props;
     return {
-      stagedValue: String(props.value),
+      stagedValue: value === null ? "" : String(value),
       isValid: true,
     };
   }
