@@ -8,4 +8,4 @@ export const createDesign = makeCreate<Design>(CATALOG_PREFIX);
 export const listDesigns = makeList<Design>(CATALOG_PREFIX);
 export const updateDesign = makeUpdate<Design>(CATALOG_PREFIX);
 export const deleteDesign = makeDelete<Design>(CATALOG_PREFIX);
-export const selectDesign = (item: Design): CrudAction<Design> => ({ type: SELECT_DESIGN, item });
+export const selectDesign = (id: number): CrudAction<Design> => ({ type: SELECT_DESIGN, id });

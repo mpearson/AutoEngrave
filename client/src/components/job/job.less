@@ -13,8 +13,12 @@
     align-items: center;
     padding: 5px;
 
+    &.selected {
+      background: fade(white, 8%);
+    }
+
     &.highlight, &:hover {
-      background: fade(white, 5%);
+      border-color: lighten(@panel-border-color, 50%);
     }
 
     .parameter {

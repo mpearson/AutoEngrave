@@ -18,57 +18,73 @@ export const DELETE_SUCCESS = "DELETE_SUCCESS";
 export const DELETE_ERROR   = "DELETE_ERROR";
 
 let tempID = -1;
-export const getTempID = () => tempID++;
+export const getTempID = () => tempID--;
 
 export const makeCreate = <T extends CrudItem>(prefix: string, endpoint?: string): CreateActionCreator<T> => {
   endpoint = endpoint || prefix;
   prefix += "/";
-  return (item: T) => (dispatch, getState) => callAPI(dispatch, {
-    endpoint,
-    method: "post",
-    data: item,
-    actionParams: { item, tempID: getTempID() },
-    onRequest:  prefix + CREATE_REQUEST,
-    onSuccess:  prefix + CREATE_SUCCESS,
-    onError:    prefix + CREATE_ERROR,
-  });
+  return (diff: Partial<T>) => {
+    return (dispatch, getState) => {
+      return callAPI(dispatch, {
+        endpoint,
+        method: "post",
+        data: diff,
+        actionParams: { diff, tempID: getTempID() },
+        onRequest:  prefix + CREATE_REQUEST,
+        onSuccess:  prefix + CREATE_SUCCESS,
+        onError:    prefix + CREATE_ERROR,
+      });
+    };
+  };
 };
 
 export const makeList = <T extends CrudItem>(prefix: string, endpoint?: string): ReadActionCreator<T> => {
   endpoint = endpoint || prefix;
   prefix += "/";
-  return () => (dispatch, getState) => callAPI(dispatch, {
-    endpoint,
-    method: "get",
-    onRequest:  prefix + LIST_REQUEST,
-    onSuccess:  prefix + LIST_RECEIVE,
-    onError:    prefix + LIST_ERROR,
-  });
+  return () => {
+    return (dispatch, getState) => {
+      return callAPI(dispatch, {
+        endpoint,
+        method: "get",
+        onRequest:  prefix + LIST_REQUEST,
+        onSuccess:  prefix + LIST_RECEIVE,
+        onError:    prefix + LIST_ERROR,
+      });
+    };
+  };
 };
 
 export const makeUpdate = <T extends CrudItem>(prefix: string, endpoint?: string): UpdateActionCreator<T> => {
   endpoint = endpoint || prefix;
   prefix += "/";
-  return (oldItem: T, item: Partial<T>) => (dispatch, getState) => callAPI(dispatch, {
-    endpoint: `${endpoint}/${item.id}`,
-    method: "put",
-    data: item,
-    actionParams: { item, oldItem },
-    onRequest:  prefix + UPDATE_REQUEST,
-    onSuccess:  prefix + UPDATE_SUCCESS,
-    onError:    prefix + UPDATE_ERROR,
-  });
+  return (id: number, diff: Partial<T>) => {
+    return (dispatch, getState) => {
+      return callAPI(dispatch, {
+        endpoint: `${endpoint}/${id}`,
+        method: "put",
+        data: diff,
+        actionParams: { id, diff },
+        onRequest:  prefix + UPDATE_REQUEST,
+        onSuccess:  prefix + UPDATE_SUCCESS,
+        onError:    prefix + UPDATE_ERROR,
+      });
+    };
+  };
 };
 
 export const makeDelete = <T extends CrudItem>(prefix: string, endpoint?: string): DeleteActionCreator<T> => {
   endpoint = endpoint || prefix;
   prefix += "/";
-  return (item: T) => (dispatch, getState) => callAPI(dispatch, {
-    endpoint: `${endpoint}/${item.id}`,
-    method: "delete",
-    actionParams: { item },
-    onRequest:  prefix + DELETE_REQUEST,
-    onSuccess:  prefix + DELETE_SUCCESS,
-    onError:    prefix + DELETE_ERROR,
-  });
+  return (id: number) => {
+    return (dispatch, getState) => {
+      return callAPI(dispatch, {
+        endpoint: `${endpoint}/${id}`,
+        method: "delete",
+        actionParams: { id },
+        onRequest:  prefix + DELETE_REQUEST,
+        onSuccess:  prefix + DELETE_SUCCESS,
+        onError:    prefix + DELETE_ERROR,
+      });
+    };
+  };
 };

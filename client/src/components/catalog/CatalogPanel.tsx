@@ -16,53 +16,61 @@ export interface CatalogPanelProps extends CatalogState {
   createDesign: CreateActionCreator<Design>;
   updateDesign: UpdateActionCreator<Design>;
   deleteDesign: DeleteActionCreator<Design>;
-  selectDesign: (item: Design) => CrudAction<Design>;
-  addToWorkspace: (item: Design, slotIndex?: number) => any;
+  selectDesign: (id: number) => CrudAction<Design>;
+  addToWorkspace: (id: number, slotIndex?: number) => any;
 }
 
 export interface CatalogPanelState {
-  editingDesign: Design;
+  editingID: number;
 }
 
 export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPanelState> {
   constructor(props: CatalogPanelProps) {
     super(props);
     this.state = {
-      editingDesign: null,
+      editingID: null,
     };
   }
 
-  private openEditDialog = (design: Design) => {
-    this.setState({ editingDesign: design });
+  private openEditDialog = (editingID: number) => {
+    this.setState({ editingID });
   }
 
-  private onSave = (design: Design) => {
-    if (design.id) {
-      const newDesign = _.pick(design, ["id", "name", "description", "dpi"]);
-      this.props.updateDesign(this.state.editingDesign, newDesign);
+  private onSave = (diff: Partial<Design>) => {
+    const { editingID } = this.state;
+    if (editingID === null) {
+      this.props.createDesign(diff);
     } else {
-      this.props.createDesign(design);
+      this.props.updateDesign(editingID, _.pick(diff, ["id", "name", "description", "dpi"]));
     }
-
-    this.setState({ editingDesign: null });
+    this.closeEditDialog();
   }
 
-  private onCancel = () => {
-    this.setState({ editingDesign: null });
+  private closeEditDialog = () => {
+    this.setState({ editingID: null });
   }
 
   private onDelete = () => {
-    this.props.deleteDesign(this.state.editingDesign);
-    this.setState({ editingDesign: null });
+    this.props.deleteDesign(this.state.editingID);
+    this.closeEditDialog();
   }
 
   public render() {
-    const { items, selectedID, addToWorkspace, selectDesign, deleteDesign } = this.props;
-    const { editingDesign } = this.state;
+    const { items, selectedID, addToWorkspace, deleteDesign, selectDesign } = this.props;
+    const editingModel = items.get(this.state.editingID);
     // const classList: string[] = [];
     // if (dragHover)
     //   classList.push("drag-hover");
-    if (editingDesign === null) {
+    if (editingModel) {
+      return (
+        <DesignEditor
+          design={editingModel}
+          onSave={this.onSave}
+          onCancel={this.closeEditDialog}
+          onDelete={this.onDelete}
+        />
+      );
+    } else {
       return (
         <DesignCatalog
           items={items}
@@ -72,15 +80,6 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
           onEdit={this.openEditDialog}
           onDelete={deleteDesign}
           onUpload={this.onSave}
-        />
-      );
-    } else {
-      return (
-        <DesignEditor
-          design={editingDesign}
-          onSave={this.onSave}
-          onCancel={this.onCancel}
-          onDelete={this.onDelete}
         />
       );
     }

@@ -9,10 +9,10 @@ import { OrderedMap } from "immutable";
 export interface DesignCatalogProps {
   items: OrderedMap<number, Design>;
   selectedID: number;
-  onSelect: (design: Design) => void;
-  onAdd: (design: Design) => void;
-  onEdit: (design: Design) => void;
-  onDelete: (design: Design) => void;
+  onSelect: (id: number) => void;
+  onAdd: (id: number) => void;
+  onEdit: (id: number) => void;
+  onDelete: (id: number) => void;
   onUpload: (design: Design) => void;
 }
 
@@ -75,23 +75,22 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
     }
     let actionButtons: JSX.Element[];
     if (selectedID !== null) {
-      const design = items.get(selectedID);
       actionButtons = [
         <button
           key="add"
-          onClick={() => onAdd(design)}
+          onClick={() => onAdd(selectedID)}
           className="blue fas fa-plus"
           title="Add to the thing"
         />,
         <button
           key="edit"
-          onClick={() => onEdit(design)}
+          onClick={() => onEdit(selectedID)}
           className="blue fas fa-edit"
           title="Like, edit or whatever"
         />,
         <button
           key="delete"
-          onClick={() => onDelete(design)}
+          onClick={() => onDelete(selectedID)}
           className="red fas fa-trash-alt"
           title="Delete, duh"
         />
@@ -104,8 +103,8 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
         design={item}
         size={100}
         selected={id === selectedID}
-        onClick={() => onSelect(item)}
-        onDoubleClick={() => onEdit(item)}
+        onClick={() => onSelect(id)}
+        onDoubleClick={() => onEdit(id)}
       />
     )).toArray();
 

@@ -20,7 +20,7 @@ interface StateProps extends WorkspaceState {
 }
 
 interface DispatchProps {
-  onDropDesign: (design: Design, slotIndex: number) => any;
+  onDropDesign: (id: number, slotIndex: number) => any;
   hoverTask: (index: number) => any;
 }
 
@@ -67,7 +67,7 @@ export const Workspace: React.SFC<CombinedProps> = props => {
       <TemplateDropZone
         slot={slot}
         key={index}
-        onDrop={design => onDropDesign(design, index)}
+        onDrop={design => onDropDesign(design.id, index)}
       />
     );
   });

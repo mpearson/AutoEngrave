@@ -10,22 +10,22 @@ export interface CrudItem {
 }
 
 export interface CrudState<T extends CrudItem> {
-  items: OrderedMap<number, T>;
-  isFetchingItems: boolean;
-  isCreatingItem: boolean;
-  isUpdatingItem: boolean;
-  isDeletingItem: boolean;
+  readonly items: OrderedMap<number, T>;
+  readonly isFetchingItems: boolean;
+  readonly isCreatingItem: boolean;
+  readonly isUpdatingItem: boolean;
+  readonly isDeletingItem: boolean;
 }
 
 export interface CrudAction<T extends CrudItem> extends APIAction {
-  item?: T;
-  oldItem?: T;
+  id?: number;
   tempID?: number;
+  diff?: Partial<T>;
 }
 
 type APIReturn<T> = AsyncPromiseAction<CrudAction<T>>;
 
-export type CreateActionCreator<T extends CrudItem> = (item: T) => APIReturn<T>;
+export type CreateActionCreator<T extends CrudItem> = (diff: Partial<T>) => APIReturn<T>;
 export type ReadActionCreator<T extends CrudItem> = () => APIReturn<T>;
-export type UpdateActionCreator<T extends CrudItem> = (oldItem: T, item: Partial<T>) => APIReturn<T>;
-export type DeleteActionCreator<T extends CrudItem> = (item: T) => APIReturn<T>;
+export type UpdateActionCreator<T extends CrudItem> = (id: number, diff: Partial<T>) => APIReturn<T>;
+export type DeleteActionCreator<T extends CrudItem> = (id: number) => APIReturn<T>;

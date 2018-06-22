@@ -8,7 +8,7 @@ import { pixelsToMillimeters } from "../../redux/catalog/utils";
 
 export interface DesignEditorProps {
   design: Design;
-  onSave: (design: Design) => void;
+  onSave: (diff: Partial<Design>) => void;
   onCancel: () => void;
   onDelete: () => void;
 }

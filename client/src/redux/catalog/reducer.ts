@@ -21,10 +21,10 @@ export const catalogReducer: Reducer<CatalogState> = (
 ): CatalogState => {
   switch (action.type) {
     case actions.SELECT_DESIGN: {
-      const newID = action.item.id;
+      const { id } = action;
       return {
         ...state,
-        selectedID: state.selectedID === newID ? null : newID,
+        selectedID: state.selectedID === id ? null : id,
       };
     }
     default: {

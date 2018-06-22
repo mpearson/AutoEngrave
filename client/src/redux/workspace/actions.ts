@@ -1,14 +1,15 @@
 import { APIAction, AsyncAction } from "./../types";
 import { Template } from "../templates/types";
 import { Job, RasterTask, MachineTask } from "./types";
-import { Design } from "../catalog/types";
 import { pixelsToMillimeters } from "../catalog/utils";
 import { getNewJob, findNextAvailableSlot } from "./utils";
+import { Set } from "immutable";
 
 export const SELECT_TEMPLATE = "workspace/SELECT_TEMPLATE";
 export const SELECT_MACHINE = "workspace/SELECT_MACHINE";
 export const SET_ACTIVE_JOB = "workspace/SET_ACTIVE_JOB";
 export const HOVER_ACTIVE_JOB = "workspace/HOVER_ACTIVE_JOB";
+export const SET_TASK_SELECTION = "workspace/SET_TASK_SELECTION";
 
 export interface WorkspaceAction extends APIAction {
   template?: Template;
@@ -16,12 +17,14 @@ export interface WorkspaceAction extends APIAction {
   machineID?: number;
   job?: Job;
   taskIndex?: number;
+  selectedTasks?: Set<number>;
 }
 
-export const addDesignToTemplate = (design: Design, slotIndex?: number): AsyncAction => {
+export const addDesignToTemplate = (id: number, slotIndex?: number): AsyncAction<void> => {
   return (dispatch, getState) => {
     const state = getState();
     const { templateID, activeJob } = state.workspace;
+    const design = state.catalog.items.get(id);
     const template = state.templates.items.get(templateID);
     const newJob = getNewJob(activeJob);
 
@@ -91,7 +94,7 @@ export const generateGCode = (): AsyncAction => {
 //   });
 // };
 
-export const updateActiveJobTask = (index: number, task: MachineTask): AsyncAction => {
+export const updateActiveJobTask = (index: number, task: MachineTask): AsyncAction<void> => {
   return (dispatch, getState) => {
     const job = getState().workspace.activeJob;
     const tasks = [...job.tasks];
@@ -101,7 +104,7 @@ export const updateActiveJobTask = (index: number, task: MachineTask): AsyncActi
   };
 };
 
-export const removeActiveJobTask = (index: number): AsyncAction => {
+export const removeActiveJobTask = (index: number): AsyncAction<void> => {
   return (dispatch, getState) => {
     const job = getState().workspace.activeJob;
     const tasks = job.tasks.filter((task, i) => i !== index);
@@ -114,3 +117,38 @@ export const hoverActiveJobTask = (taskIndex: number): WorkspaceAction => ({
   type: HOVER_ACTIVE_JOB,
   taskIndex,
 });
+
+export const selectTasks = (taskIndex: number, ctrl: boolean, shift: boolean): AsyncAction<void> => {
+  return (dispatch, getState) => {
+    const state = getState().workspace;
+    const { selectedTasks, lastSelectedTask } = state;
+
+    let newSet: Set<number>;
+
+    if (shift) {
+      const start = lastSelectedTask === null ? taskIndex : Math.min(taskIndex, lastSelectedTask);
+      const end = lastSelectedTask === null ? taskIndex : Math.max(taskIndex, lastSelectedTask);
+      let indices: number[] = [];
+      for (let i = start; i <= end; i++) {
+        indices.push(i);
+        newSet = Set(indices);
+      }
+      taskIndex = lastSelectedTask;
+    } else if (ctrl) {
+      if (selectedTasks.has(taskIndex)) {
+        newSet = selectedTasks.remove(taskIndex);
+        taskIndex = null;
+      } else {
+        newSet = selectedTasks.add(taskIndex);
+      }
+    } else {
+      newSet = Set([taskIndex]);
+    }
+
+    dispatch({
+      type: SET_TASK_SELECTION,
+      selectedTasks: newSet,
+      taskIndex,
+    });
+  };
+};

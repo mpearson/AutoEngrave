@@ -53,7 +53,7 @@ const defaultMachine: Machine = {
 
 store.dispatch({
   type: MACHINES_PREFIX + "/" + CREATE_SUCCESS,
-  item: defaultMachine,
+  diff: defaultMachine,
   results: { id: 1000 },
 });
 
@@ -75,7 +75,7 @@ const defaultTemplate: Template = {
 
 store.dispatch({
   type: TEMPLATES_PREFIX + "/" + CREATE_SUCCESS,
-  item: defaultTemplate,
+  diff: defaultTemplate,
   results: { id: 1000 },
 });
 store.dispatch({ type: SELECT_MACHINE, machineID: 1000 });

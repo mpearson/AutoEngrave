@@ -12,15 +12,12 @@ export const getDefaultCrudState = <T extends CrudItem>(): CrudState<T> => ({
   isDeletingItem: false,
 });
 
-const parseDates = <T extends CrudItem>(item: any): T => ({
+const createItemFromJson = <T extends CrudItem>(item: any): T => ({
   ...item,
   created: moment(item.created),
   updated: moment(item.updated),
+  isFetching: false,
 });
-
-const createItemMap = <T extends CrudItem>(items: any[]): OrderedMap<number, T> => {
-  return OrderedMap(Seq(items).map(item => [item.id, parseDates(item)]));
-};
 
 export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState<T>> => {
   return (state = getDefaultCrudState<T>(), action: CrudAction<T>) => {
@@ -30,23 +27,32 @@ export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState
     switch (actionType) {
       // Create
       case actions.CREATE_REQUEST: {
+        const { diff, tempID } = action;
+        const tempModel: T = {
+          ...diff as any,
+          id: tempID,
+          created: moment(),
+          updated: moment(),
+          isFetching: true,
+        };
         return {
           ...state,
-          items: state.items.set(action.tempID, { ...action.item as any, isFetching: true }),
+          items: state.items.set(tempID, tempModel),
           isCreatingItem: true,
         };
       }
       case actions.CREATE_SUCCESS: {
-        const { results } = action;
-        const item: T = {
-          ...action.item as any,
+        const { diff, tempID, results } = action;
+        const newModel: T = {
+          ...diff as any,
           id: results.id,
           created: moment(results.created),
           updated: moment(results.created),
+          isFetching: false,
         };
         return {
           ...state,
-          items: state.items.delete(action.tempID).set(item.id, item),
+          items: state.items.delete(tempID).set(newModel.id, newModel),
           isCreatingItem: false,
         };
       }
@@ -59,38 +65,54 @@ export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState
       }
       // Read
       case actions.LIST_REQUEST: {
-        return { ...state, isFetchingItems: true };
+        return {
+          ...state,
+          isFetchingItems: true,
+        };
       }
       case actions.LIST_RECEIVE: {
-        return { ...state, items: createItemMap<T>(action.results), isFetchingItems: false };
+        const items = OrderedMap<number, T>(
+          Seq(action.results as any[]).map(row => [row.id, createItemFromJson(row)])
+        );
+        return {
+          ...state,
+          items,
+          isFetchingItems: false,
+        };
       }
       case actions.LIST_ERROR: {
-        return { ...state, isFetchingItems: false };
+        return {
+          ...state,
+          isFetchingItems: false,
+        };
       }
       // Update
       case actions.UPDATE_REQUEST: {
         return {
           ...state,
-          items: state.items.set(action.item.id, { ...action.item as any, isFetching: true }),
+          items: state.items.update(action.id, item => ({ ...item as any, isFetching: true })),
           isUpdatingItem: true,
         };
       }
       case actions.UPDATE_SUCCESS: {
-        const item: T = {
-          ...action.oldItem as any,
-          ...action.item as any,
-          updated: moment(action.results.updated),
+        const { id, diff, results } = action;
+        const oldModel = state.items.get(id);
+        const newModel: T = {
+          ...oldModel as any,
+          ...diff as any,
+          updated: moment(results.updated),
+          isFetching: false,
         };
         return {
           ...state,
-          items: state.items.set(item.id, item),
+          items: state.items.set(id, newModel),
           isUpdatingItem: false,
         };
       }
       case actions.UPDATE_ERROR: {
         return {
           ...state,
-          items: state.items.set(action.item.id, action.oldItem),
+          items: state.items.update(action.id, item => ({ ...item as any, isFetching: false })),
           isUpdatingItem: false,
         };
       }
@@ -98,21 +120,21 @@ export const makeReducer = <T extends CrudItem>(name: string): Reducer<CrudState
       case actions.DELETE_REQUEST: {
         return {
           ...state,
-          items: state.items.set(action.item.id, { ...action.item as any, isFetching: true }),
+          items: state.items.update(action.id, item => ({ ...item as any, isFetching: true })),
           isDeletingItem: true,
         };
       }
       case actions.DELETE_SUCCESS: {
         return {
           ...state,
-          items: state.items.delete(action.item.id),
+          items: state.items.delete(action.id),
           isDeletingItem: false,
         };
       }
       case actions.DELETE_ERROR: {
         return {
           ...state,
-          items: state.items.set(action.item.id, action.item),
+          items: state.items.update(action.id, item => ({ ...item as any, isFetching: false })),
           isDeletingItem: false,
         };
       }

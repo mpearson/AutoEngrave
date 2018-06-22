@@ -1,5 +1,6 @@
 import * as actions from "./actions";
 import { Job, DesignTask } from "./types";
+import { Set } from "immutable";
 
 export type WorkspaceState = {
   readonly templateID: number;
@@ -7,6 +8,8 @@ export type WorkspaceState = {
   readonly activeJob: Job;
   readonly globalDesignSettings: DesignTask;
   readonly hoverTaskIndex: number;
+  readonly selectedTasks: Set<number>;
+  readonly lastSelectedTask: number;
 };
 
 const defaultState: WorkspaceState = {
@@ -15,6 +18,8 @@ const defaultState: WorkspaceState = {
   activeJob: null,
   globalDesignSettings: null,
   hoverTaskIndex: null,
+  selectedTasks: Set(),
+  lastSelectedTask: null,
 };
 
 export const workspaceReducer = (state = defaultState, action: actions.WorkspaceAction): WorkspaceState => {
@@ -31,7 +36,12 @@ export const workspaceReducer = (state = defaultState, action: actions.Workspace
     case actions.HOVER_ACTIVE_JOB: {
       return { ...state, hoverTaskIndex: action.taskIndex };
     }
-    default:
+    case actions.SET_TASK_SELECTION: {
+      const { selectedTasks, taskIndex } = action;
+      return { ...state, selectedTasks, lastSelectedTask: taskIndex };
+    }
+    default: {
       return state;
+    }
   }
 };
