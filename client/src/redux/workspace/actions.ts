@@ -152,3 +152,13 @@ export const selectTasks = (taskIndex: number, ctrl: boolean, shift: boolean): A
     });
   };
 };
+
+export const moveTasks = (sourceIndices: number[], destIndex: number): AsyncAction<void> => {
+  return (dispatch, getState) => {
+    const job = getState().workspace.activeJob;
+    const tasks = [...job.tasks];
+    // TODO: all the things
+
+    dispatch({ type: SET_ACTIVE_JOB, job: { ...job, tasks } });
+  };
+};
