@@ -46,7 +46,7 @@ export class RasterTaskEditor extends React.Component<TaskEditorProps<RasterTask
     const disabled = model === null || model.readonly;
 
     return (
-      <div className="task-card">
+      <div className="task-editor">
         <div title="Power" className="power parameter">
           <i className="fas fa-bolt" />
           <NumericInput

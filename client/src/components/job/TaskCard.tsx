@@ -45,7 +45,7 @@ export class RasterTaskCard extends React.Component<TaskCardProps<RasterTask>> {
 
     return (
       <div
-        onClick={onClick}
+        onMouseDown={onClick}
         className={classList.join(" ")}
         onMouseOver={onMouseOver}
         onMouseOut={onMouseOut}
