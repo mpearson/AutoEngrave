@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import * as actions from "../../redux/workspace/actions";
 import { TaskCard } from "./TaskCard";
 import { TaskEditor } from "./TaskEditor";
+import { createSelector } from "reselect";
 
 interface StateProps {
   activeJob: Job;
@@ -16,6 +17,7 @@ interface StateProps {
   hoverTaskIndex: number;
   selectedTasks: Set<number>;
   catalog: OrderedMap<number, Design>;
+  sharedTaskSettings: MachineTask;
 }
 
 interface DispatchProps {
@@ -103,6 +105,29 @@ export class JobPanel extends React.Component<JobPanelProps> {
   }
 }
 
+const getSharedTaskSettings = createSelector(
+  (state: RootState) => state.workspace.activeJob,
+  (state: RootState) => state.workspace.selectedTasks,
+  (job, selectedTasks) => {
+    if (job === null || selectedTasks.isEmpty())
+      return null;
+
+    let sharedTask: MachineTask = null;
+
+    selectedTasks.forEach(taskIndex => {
+      const task = job.tasks[taskIndex];
+      if (sharedTask === null || sharedTask.type === task.type) {
+
+      }
+      // if (task.type === "gcode") {
+      // }
+
+
+    });
+
+    return sharedTask;
+  }
+);
 
 const mapStateToProps = (state: RootState): StateProps => ({
   activeJob: state.workspace.activeJob,
@@ -110,6 +135,7 @@ const mapStateToProps = (state: RootState): StateProps => ({
   hoverTaskIndex: state.workspace.hoverTaskIndex,
   selectedTasks: state.workspace.selectedTasks,
   catalog: state.catalog.items,
+  sharedTaskSettings: getSharedTaskSettings(state),
 });
 
 const mapDispatchToProps = {

@@ -35,7 +35,9 @@ def findEdges(img):
     return np.diff(padded, axis=1) != 0
 
 '''
-Generates laser commands in the form of (laserOn, X, Y) tuples with raw pixel coordinates
+Generates laser commands in the form of (command, laserOn, X, Y) tuples with raw pixel coordinates
+command is either G0 or G1
+laserOn means set laser power to non-zero
 '''
 def engravePixels(img, overscan=None, bidirectional=True):
     edges = findEdges(img)
@@ -53,17 +55,17 @@ def engravePixels(img, overscan=None, bidirectional=True):
 
         # start overscan
         if overscan is not None:
-            yield (False, offsets[0] - overscan, y)
+            yield ("G0", False, offsets[0] - overscan, y)
 
         # actually engrave the row
         laserOn = False
         for x in offsets:
-            yield (laserOn, x, y)
+            yield ("G1", laserOn, x, y)
             laserOn = not laserOn
 
         # end overscan
         if overscan is not None:
-            yield (False, offsets[-1] + overscan, y)
+            yield ("G1", False, offsets[-1] + overscan, y)
 
         if bidirectional:
             reverse = not reverse
@@ -77,8 +79,8 @@ def engrave(img, unitsPerPixel, originX=0, originY=0, overscan=None, bidirection
     if overscan is not None:
         overscan /= unitsPerPixel
 
-    for move in engravePixels(img, overscan=overscan):
-        laserOn, x, y = move
+    for move in engravePixels(img, overscan=overscan, bidirectional=bidirectional):
+        command, laserOn, x, y = move
         x = (x * unitsPerPixel) + originX
         y = (y * unitsPerPixel) + originY
-        yield (laserOn, x, y)
+        yield (command, laserOn, x, y)

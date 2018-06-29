@@ -64,6 +64,8 @@ class MachineProfile(SQLiteModel):
     accelerationY = peewee.FloatField()
     accelerationZ = peewee.FloatField()
 
+    defaultFeedRate = peewee.FloatField()
+
 
 class MaterialProfile(SQLiteModel):
     name = peewee.CharField()
