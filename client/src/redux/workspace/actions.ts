@@ -118,40 +118,10 @@ export const hoverActiveJobTask = (taskIndex: number): WorkspaceAction => ({
   taskIndex,
 });
 
-export const selectTasks = (taskIndex: number, ctrl: boolean, shift: boolean): AsyncAction<void> => {
-  return (dispatch, getState) => {
-    const state = getState().workspace;
-    const { selectedTasks, lastSelectedTask } = state;
-
-    let newSet: Set<number>;
-
-    if (shift) {
-      const start = lastSelectedTask === null ? taskIndex : Math.min(taskIndex, lastSelectedTask);
-      const end = lastSelectedTask === null ? taskIndex : Math.max(taskIndex, lastSelectedTask);
-      let indices: number[] = [];
-      for (let i = start; i <= end; i++) {
-        indices.push(i);
-        newSet = Set(indices);
-      }
-      taskIndex = lastSelectedTask;
-    } else if (ctrl) {
-      if (selectedTasks.has(taskIndex)) {
-        newSet = selectedTasks.remove(taskIndex);
-        taskIndex = null;
-      } else {
-        newSet = selectedTasks.add(taskIndex);
-      }
-    } else {
-      newSet = Set([taskIndex]);
-    }
-
-    dispatch({
-      type: SET_TASK_SELECTION,
-      selectedTasks: newSet,
-      taskIndex,
-    });
-  };
-};
+export const setTaskSelection = (selectedTasks: Set<number>): WorkspaceAction => ({
+    type: SET_TASK_SELECTION,
+    selectedTasks,
+});
 
 export const moveTasks = (sourceIndices: number[], destIndex: number): AsyncAction<void> => {
   return (dispatch, getState) => {

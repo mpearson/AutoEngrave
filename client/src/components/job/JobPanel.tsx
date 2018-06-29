@@ -23,40 +23,85 @@ interface DispatchProps {
   updateTask: (index: number, task: MachineTask) => any;
   removeTask: (index: number) => any;
   hoverTask: (index: number) => any;
-  selectTasks: (taskIndex: number, ctrl: boolean, shift: boolean) => any;
+  setTaskSelection: (selection: Set<number>) => any;
 }
 
 type JobPanelProps = StateProps & DispatchProps;
 
-export const JobPanel: React.SFC<JobPanelProps> = props => {
-  const { activeJob, hoverTaskIndex, selectedTasks, removeTask, hoverTask, selectTasks } = props;
-  let globalTaskCard: JSX.Element = null;
-  let taskCards: JSX.Element[] = null;
-  if (activeJob) {
-    taskCards = activeJob.tasks.map((task, index) => (
-      <TaskCard
-        model={task}
-        key={index}
-        onDelete={() => removeTask(index)}
-        onMouseOver={() => hoverTask(index)}
-        onMouseOut={() => hoverTask(null)}
-        onClick={e => selectTasks(index, e.ctrlKey, e.shiftKey)}
-        highlight={index === hoverTaskIndex}
-        selected={selectedTasks.has(index)}
-      />
-    ));
+export class JobPanel extends React.Component<JobPanelProps> {
+  // keep track of the previous item clicked, for selecting ranges
+  private lastSelectedIndex: number = null;
+
+  private onClickEmpty = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.target === e.currentTarget && !(e.shiftKey || e.ctrlKey)) {
+      this.lastSelectedIndex = null;
+      this.props.setTaskSelection(Set());
+    }
   }
 
-  return (
-    <div className="job-panel">
-      <TaskEditor model={null} onUpdate={() => null} />
-      <section className="scrollable">
-        {globalTaskCard}
-        {taskCards}
-      </section>
-    </div>
-  );
-};
+  private onClickTask = (taskIndex: number, e: React.MouseEvent<HTMLElement>) => {
+    const { selectedTasks, setTaskSelection } = this.props;
+
+    let newSet: Set<number>;
+
+    if (e.shiftKey) {
+      // range selection from lastSelectedIndex to taskIndex
+      // (or just the current item if lastSelectedIndex is null)
+      // min/max ensures that start is always before end
+      const start = this.lastSelectedIndex === null ? taskIndex : Math.min(taskIndex, this.lastSelectedIndex);
+      const end = this.lastSelectedIndex === null ? taskIndex : Math.max(taskIndex, this.lastSelectedIndex);
+      let indices: number[] = [];
+      for (let i = start; i <= end; i++)
+        indices.push(i);
+      // if CTRL is down, keep previous selection, otherwise ignore it
+      newSet = e.ctrlKey ? selectedTasks.union(indices) : Set(indices);
+    } else if (e.ctrlKey) {
+      // adding/subtracting an individual item
+      if (selectedTasks.has(taskIndex)) {
+        newSet = selectedTasks.remove(taskIndex);
+      } else {
+        newSet = selectedTasks.add(taskIndex);
+      }
+      this.lastSelectedIndex = taskIndex;
+    } else {
+      // select an individual item, clearing the previous selection
+      newSet = Set([taskIndex]);
+      this.lastSelectedIndex = taskIndex;
+    }
+
+    setTaskSelection(newSet);
+  }
+
+  public render() {
+    const { activeJob, hoverTaskIndex, selectedTasks, removeTask, hoverTask } = this.props;
+    let globalTaskCard: JSX.Element = null;
+    let taskCards: JSX.Element[] = null;
+    if (activeJob) {
+      taskCards = activeJob.tasks.map((task, index) => (
+        <TaskCard
+          model={task}
+          key={index}
+          onDelete={() => removeTask(index)}
+          onMouseOver={() => hoverTask(index)}
+          onMouseOut={() => hoverTask(null)}
+          onClick={e => this.onClickTask(index, e)}
+          highlight={index === hoverTaskIndex}
+          selected={selectedTasks.has(index)}
+        />
+      ));
+    }
+
+    return (
+      <div className="job-panel">
+        <TaskEditor model={null} onUpdate={() => null} />
+        <section className="scrollable" onClick={this.onClickEmpty}>
+          {globalTaskCard}
+          {taskCards}
+        </section>
+      </div>
+    );
+  }
+}
 
 
 const mapStateToProps = (state: RootState): StateProps => ({
@@ -73,7 +118,7 @@ const mapDispatchToProps = {
   updateTask: actions.updateActiveJobTask,
   removeTask: actions.removeActiveJobTask,
   hoverTask: actions.hoverActiveJobTask,
-  selectTasks: actions.selectTasks,
+  setTaskSelection: actions.setTaskSelection,
 };
 
 export const JobPanelConnected = connect(mapStateToProps, mapDispatchToProps)(JobPanel);

@@ -9,7 +9,6 @@ export type WorkspaceState = {
   readonly globalDesignSettings: DesignTask;
   readonly hoverTaskIndex: number;
   readonly selectedTasks: Set<number>;
-  readonly lastSelectedTask: number;
 };
 
 const defaultState: WorkspaceState = {
@@ -19,7 +18,6 @@ const defaultState: WorkspaceState = {
   globalDesignSettings: null,
   hoverTaskIndex: null,
   selectedTasks: Set(),
-  lastSelectedTask: null,
 };
 
 export const workspaceReducer = (state = defaultState, action: actions.WorkspaceAction): WorkspaceState => {
@@ -37,8 +35,7 @@ export const workspaceReducer = (state = defaultState, action: actions.Workspace
       return { ...state, hoverTaskIndex: action.taskIndex };
     }
     case actions.SET_TASK_SELECTION: {
-      const { selectedTasks, taskIndex } = action;
-      return { ...state, selectedTasks, lastSelectedTask: taskIndex };
+      return { ...state, selectedTasks: action.selectedTasks };
     }
     default: {
       return state;
