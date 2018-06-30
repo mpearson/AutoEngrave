@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import * as actions from "../../redux/workspace/actions";
 import { TaskCard } from "./TaskCard";
 import { TaskEditor } from "./TaskEditor";
-import { createSelector } from "reselect";
+import { getSharedTaskSettings } from "../../redux/workspace/utils";
 
 interface StateProps {
   activeJob: Job;
@@ -74,8 +74,19 @@ export class JobPanel extends React.Component<JobPanelProps> {
     setTaskSelection(newSet);
   }
 
+  private onUpdateTasks = (model: MachineTask) => {
+    const { updateTask, selectedTasks } = this.props;
+    selectedTasks.forEach(taskIndex => {
+      updateTask(taskIndex, model);
+      // task = activeJob.tasks[taskIndex]
+    // for (const task of activeJob.tasks) {
+
+
+    });
+  }
+
   public render() {
-    const { activeJob, hoverTaskIndex, selectedTasks, removeTask, hoverTask } = this.props;
+    const { activeJob, hoverTaskIndex, selectedTasks, removeTask, hoverTask, sharedTaskSettings } = this.props;
     let globalTaskCard: JSX.Element = null;
     let taskCards: JSX.Element[] = null;
     if (activeJob) {
@@ -95,7 +106,7 @@ export class JobPanel extends React.Component<JobPanelProps> {
 
     return (
       <div className="job-panel">
-        <TaskEditor model={null} onUpdate={() => null} />
+        <TaskEditor model={sharedTaskSettings} onUpdate={this.onUpdateTasks} />
         <section className="scrollable" onClick={this.onClickEmpty}>
           {globalTaskCard}
           {taskCards}
@@ -104,30 +115,6 @@ export class JobPanel extends React.Component<JobPanelProps> {
     );
   }
 }
-
-const getSharedTaskSettings = createSelector(
-  (state: RootState) => state.workspace.activeJob,
-  (state: RootState) => state.workspace.selectedTasks,
-  (job, selectedTasks) => {
-    if (job === null || selectedTasks.isEmpty())
-      return null;
-
-    let sharedTask: MachineTask = null;
-
-    selectedTasks.forEach(taskIndex => {
-      const task = job.tasks[taskIndex];
-      if (sharedTask === null || sharedTask.type === task.type) {
-
-      }
-      // if (task.type === "gcode") {
-      // }
-
-
-    });
-
-    return sharedTask;
-  }
-);
 
 const mapStateToProps = (state: RootState): StateProps => ({
   activeJob: state.workspace.activeJob,
