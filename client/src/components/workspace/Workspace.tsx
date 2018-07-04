@@ -92,7 +92,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = ({
   onDropDesign: actions.addDesignToTemplate,
-  hoverTask: actions.hoverActiveJobTask,
+  hoverTask: actions.hoverTask,
 });
 
 

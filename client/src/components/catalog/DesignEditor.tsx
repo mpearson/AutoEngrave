@@ -36,11 +36,6 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
     });
   }
 
-  private onDelete = () => {
-    if (window.confirm("Oh?"))
-      this.props.onDelete();
-  }
-
   public componentDidMount() {
     window.addEventListener("keydown", this.onEscape);
   }
@@ -50,7 +45,7 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
   }
 
   public render() {
-    const { onSave, onCancel } = this.props;
+    const { onSave, onCancel, onDelete } = this.props;
     const { design } = this.state;
 
     const mmWidth = pixelsToMillimeters(design.width, design.dpi).toFixed(2);
@@ -62,7 +57,7 @@ export class DesignEditor extends React.Component<DesignEditorProps, DesignEdito
           <button onClick={() => onSave(design)} className="blue">Save</button>
           <button onClick={() => onCancel()}>Cancel</button>
           <div className="spacer" />
-          <button onClick={this.onDelete} className="red fas fa-trash-alt" title="Delete, duh" />
+          <button onClick={() => onDelete()} className="red fas fa-trash-alt" title="Delete, duh" />
         </header>
         <section className="design-details scrollable">
           <dl>

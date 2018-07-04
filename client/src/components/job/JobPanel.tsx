@@ -23,7 +23,7 @@ interface StateProps {
 interface DispatchProps {
   // updateJob: (job: Job) => void;
   updateTask: (index: number, task: MachineTask) => any;
-  removeTask: (index: number) => any;
+  deleteTask: (index: number) => any;
   hoverTask: (index: number) => any;
   setTaskSelection: (selection: Set<number>) => any;
 }
@@ -86,7 +86,7 @@ export class JobPanel extends React.Component<JobPanelProps> {
   }
 
   public render() {
-    const { activeJob, hoverTaskIndex, selectedTasks, removeTask, hoverTask, sharedTaskSettings } = this.props;
+    const { activeJob, hoverTaskIndex, selectedTasks, deleteTask, hoverTask, sharedTaskSettings } = this.props;
     let globalTaskCard: JSX.Element = null;
     let taskCards: JSX.Element[] = null;
     if (activeJob) {
@@ -94,7 +94,7 @@ export class JobPanel extends React.Component<JobPanelProps> {
         <TaskCard
           model={task}
           key={index}
-          onDelete={() => removeTask(index)}
+          onDelete={() => deleteTask(index)}
           onMouseOver={() => hoverTask(index)}
           onMouseOut={() => hoverTask(null)}
           onClick={e => this.onClickTask(index, e)}
@@ -128,9 +128,9 @@ const mapStateToProps = (state: RootState): StateProps => ({
 const mapDispatchToProps = {
   // onDropDesign: addDesignToTemplate,
   // updateJob: (job: Job) => { dispatch({ type: SET_ACTIVE_JOB, job }); },
-  updateTask: actions.updateActiveJobTask,
-  removeTask: actions.removeActiveJobTask,
-  hoverTask: actions.hoverActiveJobTask,
+  updateTask: actions.updateTask,
+  deleteTask: actions.deleteTask,
+  hoverTask: actions.hoverTask,
   setTaskSelection: actions.setTaskSelection,
 };
 

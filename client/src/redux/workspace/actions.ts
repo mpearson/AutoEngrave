@@ -8,14 +8,18 @@ import { Set } from "immutable";
 export const SELECT_TEMPLATE = "workspace/SELECT_TEMPLATE";
 export const SELECT_MACHINE = "workspace/SELECT_MACHINE";
 export const SET_ACTIVE_JOB = "workspace/SET_ACTIVE_JOB";
-export const HOVER_ACTIVE_JOB = "workspace/HOVER_ACTIVE_JOB";
+export const HOVER_TASK = "workspace/HOVER_TASK";
 export const SET_TASK_SELECTION = "workspace/SET_TASK_SELECTION";
+export const APPEND_NEW_TASK = "workspace/APPEND_NEW_TASK";
+export const UPDATE_TASK = "workspace/UPDATE_TASK";
+export const DELETE_TASK = "workspace/DELETE_TASK";
 
 export interface WorkspaceAction extends APIAction {
   template?: Template;
   templateID?: number;
   machineID?: number;
   job?: Job;
+  task?: MachineTask;
   taskIndex?: number;
   selectedTasks?: Set<number>;
 }
@@ -23,19 +27,27 @@ export interface WorkspaceAction extends APIAction {
 export const addDesignToTemplate = (id: number, slotIndex?: number): AsyncAction<void> => {
   return (dispatch, getState) => {
     const state = getState();
-    const { templateID, activeJob } = state.workspace;
+    const { templateID } = state.workspace;
     const design = state.catalog.items.get(id);
     const template = state.templates.items.get(templateID);
-    const newJob = getNewJob(activeJob);
+    if (template === undefined)
+      return;
+
+      // create a new active job if one is not set.
+      // this needs to be moved though. there should simply always be an active job
+    let { activeJob } = state.workspace;
+    if (activeJob === null) {
+      activeJob = getNewJob();
+      dispatch({ type: SET_ACTIVE_JOB, job: activeJob });
+    }
 
     if (slotIndex === undefined) {
-      slotIndex = findNextAvailableSlot(template, newJob);
+      slotIndex = findNextAvailableSlot(template, activeJob);
       if (slotIndex === null)
         return;
     }
 
     const slot = template.slots[slotIndex];
-
     const width = pixelsToMillimeters(design.width, design.dpi);
     const height = pixelsToMillimeters(design.height, design.dpi);
 
@@ -48,29 +60,15 @@ export const addDesignToTemplate = (id: number, slotIndex?: number): AsyncAction
       width,
       height,
       dpi: 400,
-      power: 100,
-      speed: 100,
+      power: 50,
+      speed: 15,
     };
 
-    const existingSlot = newJob.tasks.findIndex(task => task.type !== "gcode" && task.slotIndex === slotIndex);
+    const existingSlot = activeJob.tasks.findIndex(task => task.type !== "gcode" && task.slotIndex === slotIndex);
     if (existingSlot !== -1)
-      newJob.tasks[existingSlot] = newTask;
+      dispatch(updateTask(existingSlot, newTask));
     else
-      newJob.tasks.push(newTask);
-
-    // let existingTask = false;
-    // for (const group of newJob.groups) {
-    //   const taskIndex = group.tasks.findIndex(task => task.type !== "gcode" && task.slotIndex === slotIndex);
-    //   if (taskIndex !== -1) {
-    //     existingTask = true;
-    //     group.tasks[taskIndex] = newTask;
-    //     break;
-    //   }
-    // }
-    // if (!existingTask)
-    //   newJob.groups[0].tasks.push(newTask);
-
-    dispatch({ type: SET_ACTIVE_JOB, job: newJob });
+      dispatch(appendTask(newTask));
   };
 };
 
@@ -94,27 +92,24 @@ export const generateGCode = (): AsyncAction => {
 //   });
 // };
 
-export const updateActiveJobTask = (index: number, task: MachineTask): AsyncAction<void> => {
-  return (dispatch, getState) => {
-    const job = getState().workspace.activeJob;
-    const tasks = [...job.tasks];
-    tasks[index] = task;
+export const appendTask = (task: MachineTask): WorkspaceAction => ({
+  type: APPEND_NEW_TASK,
+  task,
+});
 
-    dispatch({ type: SET_ACTIVE_JOB, job: { ...job, tasks } });
-  };
-};
+export const updateTask = (taskIndex: number, task: MachineTask): WorkspaceAction => ({
+  type: UPDATE_TASK,
+  taskIndex,
+  task,
+});
 
-export const removeActiveJobTask = (index: number): AsyncAction<void> => {
-  return (dispatch, getState) => {
-    const job = getState().workspace.activeJob;
-    const tasks = job.tasks.filter((task, i) => i !== index);
+export const deleteTask = (taskIndex: number): WorkspaceAction => ({
+  type: DELETE_TASK,
+  taskIndex,
+});
 
-    dispatch({ type: SET_ACTIVE_JOB, job: { ...job, tasks } });
-  };
-};
-
-export const hoverActiveJobTask = (taskIndex: number): WorkspaceAction => ({
-  type: HOVER_ACTIVE_JOB,
+export const hoverTask = (taskIndex: number): WorkspaceAction => ({
+  type: HOVER_TASK,
   taskIndex,
 });
 

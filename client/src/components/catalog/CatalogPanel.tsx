@@ -1,3 +1,5 @@
+import "./catalog.less";
+
 import * as React from "react";
 import { RootState } from "../../redux/types";
 import { connect } from "react-redux";
@@ -8,11 +10,14 @@ import { DesignCatalog } from "./DesignCatalog";
 import { DesignEditor } from "./DesignEditor";
 import * as actions from "../../redux/catalog/actions";
 import { addDesignToTemplate } from "../../redux/workspace/actions";
+import { Job, DesignTask } from "../../redux/workspace/types";
 import * as _ from "lodash";
 
-import "./catalog.less";
+interface StateProps extends CatalogState {
+  activeJob: Job;
+}
 
-export interface CatalogPanelProps extends CatalogState {
+interface DispatchProps {
   createDesign: CreateActionCreator<Design>;
   updateDesign: UpdateActionCreator<Design>;
   deleteDesign: DeleteActionCreator<Design>;
@@ -20,12 +25,14 @@ export interface CatalogPanelProps extends CatalogState {
   addToWorkspace: (id: number, slotIndex?: number) => any;
 }
 
+type CombinedProps = StateProps & DispatchProps;
+
 export interface CatalogPanelState {
   editingID: number;
 }
 
-export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPanelState> {
-  constructor(props: CatalogPanelProps) {
+export class CatalogPanel extends React.Component<CombinedProps, CatalogPanelState> {
+  constructor(props: CombinedProps) {
     super(props);
     this.state = {
       editingID: null,
@@ -50,13 +57,29 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
     this.setState({ editingID: null });
   }
 
-  private onDelete = () => {
-    this.props.deleteDesign(this.state.editingID);
-    this.closeEditDialog();
+  private checkDesignInUse = (designID: number) => {
+    const { activeJob } = this.props;
+    for (const task of activeJob.tasks) {
+      if ((task as DesignTask).designID === designID)
+        return true;
+    }
+    return false;
   }
 
+  private confirmDelete = (designID: number) => {
+    if (this.checkDesignInUse(designID))
+      alert("Can't remove while design is being used");
+    else if (confirm("Oh?")) {
+      this.props.deleteDesign(designID);
+    }
+  }
+
+  private confirmDeleteSelected = () => this.confirmDelete(this.props.selectedID);
+
+  private confirmDeleteEditing = () => this.confirmDelete(this.state.editingID);
+
   public render() {
-    const { items, selectedID, addToWorkspace, deleteDesign, selectDesign } = this.props;
+    const { items, selectedID, addToWorkspace, selectDesign } = this.props;
     const editingModel = items.get(this.state.editingID);
     // const classList: string[] = [];
     // if (dragHover)
@@ -67,7 +90,7 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
           design={editingModel}
           onSave={this.onSave}
           onCancel={this.closeEditDialog}
-          onDelete={this.onDelete}
+          onDelete={this.confirmDeleteEditing}
         />
       );
     } else {
@@ -78,7 +101,7 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
           onSelect={selectDesign}
           onAdd={addToWorkspace}
           onEdit={this.openEditDialog}
-          onDelete={deleteDesign}
+          onDelete={this.confirmDeleteSelected}
           onUpload={this.onSave}
         />
       );
@@ -87,7 +110,10 @@ export class CatalogPanel extends React.Component<CatalogPanelProps, CatalogPane
 
 }
 
-const mapStateToProps = (state: RootState) => state.catalog;
+const mapStateToProps = (state: RootState) => ({
+  ...state.catalog,
+  activeJob: state.workspace.activeJob,
+});
 
 // const mapDispatchToProps = (dispatch: Dispatch<RootState>) => ({
 //   createDesign: (design: Design) => { dispatch(actions.createDesign(design)); },

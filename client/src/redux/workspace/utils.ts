@@ -1,6 +1,5 @@
 import { Template } from "../templates/types";
 import { Job, DesignTask, MachineTask } from "./types";
-import { cloneDeep } from "lodash";
 import { Seq } from "immutable";
 import { createSelector } from "reselect";
 import { RootState } from "../types";
@@ -8,13 +7,9 @@ import { RootState } from "../types";
  * Deep clones the provided job, or creates a new one if it is null.
  * @param activeJob
  */
-export const getNewJob = (activeJob: Job): Job => {
-  if (activeJob)
-    return cloneDeep(activeJob);
-
-  return {
-    name: "Untitled Job",
-    tasks: [],
+export const getNewJob = (): Job => ({
+  name: "Untitled Job",
+  tasks: [],
     // groups: [{
     //   name: "Group 1",
     //   globalSettings: {
@@ -24,8 +19,7 @@ export const getNewJob = (activeJob: Job): Job => {
     //   },
     //   tasks: [],
     // }],
-  };
-};
+});
 
 export const findNextAvailableSlot = (template: Template, job: Job): number => {
   // const occupiedSlots = Seq(job.groups)
