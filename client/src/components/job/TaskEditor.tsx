@@ -12,7 +12,7 @@ import { CommandListInput } from "../CommandListInput";
 
 export interface TaskEditorProps<T extends MachineTask = MachineTask> {
   model: T;
-  onUpdate: (model: T) => void;
+  onUpdate: (diff: Partial<T>) => void;
 }
 
 export const DeleteButton: React.SFC<{onClick: () => void}> = props => (
@@ -37,8 +37,8 @@ export const TaskEditor: React.SFC<TaskEditorProps> = props => {
 
 export class RasterTaskEditor extends React.Component<TaskEditorProps<RasterTask>> {
   private onChange = (field: keyof RasterTask, value: number) => {
-    const {model, onUpdate} = this.props;
-    onUpdate({...model, [field]: value});
+    const {onUpdate} = this.props;
+    onUpdate({[field]: value});
   }
 
   public render() {

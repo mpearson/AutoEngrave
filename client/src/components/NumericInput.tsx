@@ -30,7 +30,7 @@ export class NumericInput extends React.Component<NumericInputProps, NumericInpu
   public static getDerivedStateFromProps(props: NumericInputProps): NumericInputState {
     const {value} = props;
     return {
-      stagedValue: value === null ? "" : String(value),
+      stagedValue: value === null ? "---" : String(value),
       isValid: true,
     };
   }
@@ -56,6 +56,8 @@ export class NumericInput extends React.Component<NumericInputProps, NumericInpu
 
   private onWheel: React.WheelEventHandler<HTMLInputElement> = e => {
     const {value, onChange, min, max, increment} = this.props;
+    if (value === null)
+      return;
     if (e.deltaY < 0 && value + increment <= max)
       onChange(value + increment);
     else if (e.deltaY > 0 && value - increment >= min)

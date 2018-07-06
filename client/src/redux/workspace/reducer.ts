@@ -1,5 +1,5 @@
 import * as actions from "./actions";
-import { Job, DesignTask } from "./types";
+import { Job, DesignTask, MachineTask } from "./types";
 import { Set } from "immutable";
 
 export type WorkspaceState = {
@@ -39,14 +39,25 @@ export const workspaceReducer = (state = defaultState, action: actions.Workspace
     }
     case actions.APPEND_NEW_TASK: {
       const { activeJob } = state;
-      const { task } = action;
-      return { ...state, activeJob: { ...activeJob, tasks: [...activeJob.tasks, task] } };
+      const newTask = action.diff as MachineTask;
+      return { ...state, activeJob: { ...activeJob, tasks: [...activeJob.tasks, newTask] } };
     }
     case actions.UPDATE_TASK: {
       const { activeJob } = state;
-      const { taskIndex, task } = action;
+      const { taskIndex, diff } = action;
       const tasks = [...activeJob.tasks];
-      tasks[taskIndex] = task;
+      const newTask = { ...tasks[taskIndex], ...diff } as MachineTask;
+      tasks[taskIndex] = newTask;
+      return { ...state, activeJob: { ...activeJob, tasks } };
+    }
+    case actions.UPDATE_SELECTED_TASKS: {
+      const { activeJob, selectedTasks } = state;
+      const tasks = activeJob.tasks.map((task, index) => {
+        if (selectedTasks.has(index))
+          return { ...task, ...action.diff } as MachineTask;
+        else
+          return task;
+      });
       return { ...state, activeJob: { ...activeJob, tasks } };
     }
     case actions.DELETE_TASK: {

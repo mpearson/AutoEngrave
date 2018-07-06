@@ -12,6 +12,7 @@ export const HOVER_TASK = "workspace/HOVER_TASK";
 export const SET_TASK_SELECTION = "workspace/SET_TASK_SELECTION";
 export const APPEND_NEW_TASK = "workspace/APPEND_NEW_TASK";
 export const UPDATE_TASK = "workspace/UPDATE_TASK";
+export const UPDATE_SELECTED_TASKS = "workspace/UPDATE_SELECTED_TASKS";
 export const DELETE_TASK = "workspace/DELETE_TASK";
 
 export interface WorkspaceAction extends APIAction {
@@ -19,7 +20,7 @@ export interface WorkspaceAction extends APIAction {
   templateID?: number;
   machineID?: number;
   job?: Job;
-  task?: MachineTask;
+  diff?: Partial<MachineTask>;
   taskIndex?: number;
   selectedTasks?: Set<number>;
 }
@@ -92,15 +93,20 @@ export const generateGCode = (): AsyncAction => {
 //   });
 // };
 
-export const appendTask = (task: MachineTask): WorkspaceAction => ({
+export const appendTask = (diff: MachineTask): WorkspaceAction => ({
   type: APPEND_NEW_TASK,
-  task,
+  diff,
 });
 
-export const updateTask = (taskIndex: number, task: MachineTask): WorkspaceAction => ({
+export const updateTask = (taskIndex: number, diff: Partial<MachineTask>): WorkspaceAction => ({
   type: UPDATE_TASK,
   taskIndex,
-  task,
+  diff,
+});
+
+export const updateSelectedTasks = (diff: Partial<MachineTask>): WorkspaceAction => ({
+  type: UPDATE_SELECTED_TASKS,
+  diff,
 });
 
 export const deleteTask = (taskIndex: number): WorkspaceAction => ({

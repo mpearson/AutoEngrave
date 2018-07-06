@@ -21,8 +21,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  // updateJob: (job: Job) => void;
-  updateTask: (index: number, task: MachineTask) => any;
+  updateSelectedTasks: (diff: Partial<MachineTask>) => any;
   deleteTask: (index: number) => any;
   hoverTask: (index: number) => any;
   setTaskSelection: (selection: Set<number>) => any;
@@ -74,19 +73,11 @@ export class JobPanel extends React.Component<JobPanelProps> {
     setTaskSelection(newSet);
   }
 
-  private onUpdateTasks = (model: MachineTask) => {
-    const { updateTask, selectedTasks } = this.props;
-    selectedTasks.forEach(taskIndex => {
-      updateTask(taskIndex, model);
-      // task = activeJob.tasks[taskIndex]
-    // for (const task of activeJob.tasks) {
-
-
-    });
-  }
-
   public render() {
-    const { activeJob, hoverTaskIndex, selectedTasks, deleteTask, hoverTask, sharedTaskSettings } = this.props;
+    const {
+      activeJob, hoverTaskIndex, selectedTasks, updateSelectedTasks, deleteTask, hoverTask,
+      sharedTaskSettings
+    } = this.props;
     let globalTaskCard: JSX.Element = null;
     let taskCards: JSX.Element[] = null;
     if (activeJob) {
@@ -106,7 +97,7 @@ export class JobPanel extends React.Component<JobPanelProps> {
 
     return (
       <div className="job-panel">
-        <TaskEditor model={sharedTaskSettings} onUpdate={this.onUpdateTasks} />
+        <TaskEditor model={sharedTaskSettings} onUpdate={updateSelectedTasks} />
         <section className="scrollable" onClick={this.onClickEmpty}>
           {globalTaskCard}
           {taskCards}
@@ -128,7 +119,7 @@ const mapStateToProps = (state: RootState): StateProps => ({
 const mapDispatchToProps = {
   // onDropDesign: addDesignToTemplate,
   // updateJob: (job: Job) => { dispatch({ type: SET_ACTIVE_JOB, job }); },
-  updateTask: actions.updateTask,
+  updateSelectedTasks: actions.updateSelectedTasks,
   deleteTask: actions.deleteTask,
   hoverTask: actions.hoverTask,
   setTaskSelection: actions.setTaskSelection,
