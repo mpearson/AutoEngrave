@@ -1,8 +1,10 @@
 import { Template } from "../templates/types";
-import { Job, DesignTask, MachineTask } from "./types";
+import { Job, DesignTask, MachineTask, RasterTask } from "./types";
 import { Seq } from "immutable";
 import { createSelector } from "reselect";
 import { RootState } from "../types";
+import { clone } from "lodash";
+
 /**
  * Deep clones the provided job, or creates a new one if it is null.
  * @param activeJob
@@ -34,6 +36,9 @@ export const findNextAvailableSlot = (template: Template, job: Job): number => {
   return null;
 };
 
+const vectorTaskFields: Array<keyof RasterTask> = ["speed", "power"];
+const rasterTaskFields: Array<keyof RasterTask> = ["speed", "power", "dpi"];
+
 export const getSharedTaskSettings = createSelector(
   (state: RootState) => state.workspace.activeJob,
   (state: RootState) => state.workspace.selectedTasks,
@@ -42,29 +47,29 @@ export const getSharedTaskSettings = createSelector(
       return null;
 
     const tasks = selectedTasks.toArray().map(index => job.tasks[index]);
-    const type = tasks[0].type;
-
-    // editing multiple gcode tasks is unsupported
-    if (type === "gcode") {
-      if (tasks.length === 1)
-        return tasks[0];
-      else
-        return null;
+    let sharedTask: MachineTask = clone(tasks[0]);
+    let keys;
+    switch (sharedTask.type) {
+      case "gcode":
+        // editing multiple gcode tasks is unsupported
+        return tasks.length === 1 ? tasks[0] : null;
+      case "vector":
+        keys = vectorTaskFields;
+        break;
+      case "raster":
+        keys = rasterTaskFields;
+        break;
     }
 
-    let sharedTask: MachineTask = null;
-
     for (const task of tasks) {
-      if (task.type !== type)
+      if (task.type === sharedTask.type) {
+        for (const key of keys) {
+          if (sharedTask[key] !== task[key])
+            sharedTask[key] = null;
+        }
+      } else {
         return null;
-
-      if (sharedTask === null || sharedTask.type === task.type) {
-
       }
-      // if (task.type === "gcode") {
-      // }
-
-
     }
 
     return sharedTask;
