@@ -1,0 +1,63 @@
+@import "../../../variables.less";
+
+.task-card {
+  cursor: pointer;
+  border: @panel-border;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px;
+  margin-bottom: 2px;
+  user-select: none;
+
+  background-color: @panel-background;
+
+  &.selected {
+    border-color: @button-blue-border;
+    background-color: @dark-blue-background;
+  }
+
+  &.highlight, &:hover {
+    background-color: lighten(@panel-background, 5%);
+    &.selected { background-color: lighten(@dark-blue-background, 5%); }
+  }
+
+  .parameter {
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    // margin-right: 20px;
+    padding: 0 5px;
+
+    // &:hover { background: fade(white, 10%); }
+
+    i {
+      margin-right: 10px;
+      // visibility: hidden;
+    }
+
+    &.power i { color: #ffbe00; }
+    &.speed i { color: #64ff33; }
+
+    // &:hover i { visibility: visible; }
+    // & > * { pointer-events: none; }
+
+    small {
+      font-size: 11px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+  }
+
+  .delete-button {
+    margin-left: auto;
+    // visibility: hidden;
+    border: none;
+    background: none;
+    opacity: 0.5;
+    &:hover { opacity: 1; }
+  }
+  // &:hover .delete-button { visibility: visible; }
+}

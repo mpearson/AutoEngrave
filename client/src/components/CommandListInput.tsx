@@ -9,7 +9,7 @@ export interface CommandListInputProps {
 
 export class CommandListInput extends React.Component<CommandListInputProps> {
   private onChange: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
-    const value = e.target.value.trim().replace("\r", "").split("\n");
+    const value = e.target.value.trimLeft().replace("\r", "").split("\n");
     this.props.onChange(value);
   }
 

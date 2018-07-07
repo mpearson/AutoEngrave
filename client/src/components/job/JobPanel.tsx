@@ -7,8 +7,8 @@ import { OrderedMap, Set } from "immutable";
 import { Design } from "../../redux/catalog/types";
 import { connect } from "react-redux";
 import * as actions from "../../redux/workspace/actions";
-import { TaskCard } from "./TaskCard";
-import { TaskEditor } from "./TaskEditor";
+import { TaskCard } from "./tasks/TaskCard";
+import { TaskEditor } from "./tasks/TaskEditor";
 import { getSharedTaskSettings } from "../../redux/workspace/utils";
 
 interface StateProps {
@@ -25,6 +25,7 @@ interface DispatchProps {
   deleteTask: (index: number) => any;
   hoverTask: (index: number) => any;
   setTaskSelection: (selection: Set<number>) => any;
+  appendTask: (diff: MachineTask) => any;
 }
 
 type JobPanelProps = StateProps & DispatchProps;
@@ -73,6 +74,13 @@ export class JobPanel extends React.Component<JobPanelProps> {
     setTaskSelection(newSet);
   }
 
+  private appendGCodeTask = () => {
+    this.props.appendTask({
+      type: "gcode",
+      commands: [],
+    });
+  }
+
   public render() {
     const {
       activeJob, hoverTaskIndex, selectedTasks, updateSelectedTasks, deleteTask, hoverTask,
@@ -98,14 +106,21 @@ export class JobPanel extends React.Component<JobPanelProps> {
     return (
       <div className="job-panel">
         <TaskEditor model={sharedTaskSettings} onUpdate={updateSelectedTasks} />
-        <section className="scrollable" onClick={this.onClickEmpty}>
+        <section className="task-list scrollable" onClick={this.onClickEmpty}>
           {globalTaskCard}
           {taskCards}
+        </section>
+        <section className="task-actions">
+          <GCodeTaskButton onClick={this.appendGCodeTask} />
         </section>
       </div>
     );
   }
 }
+
+export const GCodeTaskButton: React.SFC<{onClick: () => void}> = props => (
+  <button className="blue fas fa-plus" onClick={props.onClick} title="Add G-Code task" />
+);
 
 const mapStateToProps = (state: RootState): StateProps => ({
   activeJob: state.workspace.activeJob,
@@ -123,6 +138,7 @@ const mapDispatchToProps = {
   deleteTask: actions.deleteTask,
   hoverTask: actions.hoverTask,
   setTaskSelection: actions.setTaskSelection,
+  appendTask: actions.appendTask,
 };
 
 export const JobPanelConnected = connect(mapStateToProps, mapDispatchToProps)(JobPanel);

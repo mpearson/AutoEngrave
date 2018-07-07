@@ -1,6 +1,7 @@
 import * as actions from "./actions";
 import { Job, DesignTask, MachineTask } from "./types";
 import { Set } from "immutable";
+import { getNewJob, appendNewTask } from "./utils";
 
 export type WorkspaceState = {
   readonly templateID: number;
@@ -14,7 +15,7 @@ export type WorkspaceState = {
 const defaultState: WorkspaceState = {
   templateID: null,
   machineID: null,
-  activeJob: null,
+  activeJob: getNewJob(),
   globalDesignSettings: null,
   hoverTaskIndex: null,
   selectedTasks: Set(),
@@ -39,8 +40,8 @@ export const workspaceReducer = (state = defaultState, action: actions.Workspace
     }
     case actions.APPEND_NEW_TASK: {
       const { activeJob } = state;
-      const newTask = action.diff as MachineTask;
-      return { ...state, activeJob: { ...activeJob, tasks: [...activeJob.tasks, newTask] } };
+      const tasks = appendNewTask(activeJob.tasks, action.diff as MachineTask);
+      return { ...state, activeJob: { ...activeJob, tasks } };
     }
     case actions.UPDATE_TASK: {
       const { activeJob } = state;

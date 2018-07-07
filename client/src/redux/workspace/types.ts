@@ -14,9 +14,12 @@ export interface Job {
 
 export type MachineTaskType = "gcode" | "vector" | "raster";
 
+export type MachineTaskPin = "start" | "end";
+
 export interface MachineTaskBase {
   type: MachineTaskType;
   readonly?: boolean;
+  pin?: MachineTaskPin;
 }
 
 export interface GCodeTask extends MachineTaskBase {

@@ -11,21 +11,21 @@ import { clone } from "lodash";
  */
 export const getNewJob = (): Job => ({
   name: "Untitled Job",
-  tasks: [],
-    // groups: [{
-    //   name: "Group 1",
-    //   globalSettings: {
-    //     power: 100,
-    //     speed: 100,
-    //     dpi: 400,
-    //   },
-    //   tasks: [],
-    // }],
+  tasks: [
+    {
+      type: "gcode",
+      commands: ["; startup", "G21", "G90", "M106.1", "M106.2", "M106.3", "M106.4", "G4 P2000", "M3"],
+      pin: "start",
+    },
+    {
+      type: "gcode",
+      commands: ["; shutdown", "G0", "M5", "M107.2", "M107.3", "M107.4", "G0 X0 Y0", "G4 P2000", "M107.1"],
+      pin: "end",
+    },
+  ],
 });
 
-export const findNextAvailableSlot = (template: Template, job: Job): number => {
-  // const occupiedSlots = Seq(job.groups)
-  //   .flatMap(group => group.tasks)
+export const findNextTemplateSlot = (template: Template, job: Job): number => {
   const occupiedSlots = Seq(job.tasks)
     .map(task => (task as DesignTask).slotIndex)
     .toSet();
@@ -34,6 +34,23 @@ export const findNextAvailableSlot = (template: Template, job: Job): number => {
     if (!occupiedSlots.has(i))
       return i;
   return null;
+};
+
+/**
+ * @returns index closest to the end where a new task can be inserted.
+ * Loops backwards through @param tasks until we find one that isn't pinned to the end.
+ */
+export const findNextTaskSlot = (tasks: MachineTask[]) => {
+  for (let i = tasks.length - 1; i >= 0; i--) {
+    if (tasks[i].pin !== "end")
+      return i + 1;
+  }
+  return 0;
+};
+
+export const appendNewTask = (tasks: MachineTask[], newTask: MachineTask) => {
+  const index = findNextTaskSlot(tasks);
+  return [...tasks.slice(0, index), newTask, ...tasks.slice(index)];
 };
 
 const vectorTaskFields: Array<keyof RasterTask> = ["speed", "power"];

@@ -2,7 +2,7 @@ import { APIAction, AsyncAction } from "./../types";
 import { Template } from "../templates/types";
 import { Job, RasterTask, MachineTask } from "./types";
 import { pixelsToMillimeters } from "../catalog/utils";
-import { getNewJob, findNextAvailableSlot } from "./utils";
+import { findNextTemplateSlot } from "./utils";
 import { Set } from "immutable";
 
 export const SELECT_TEMPLATE = "workspace/SELECT_TEMPLATE";
@@ -28,22 +28,14 @@ export interface WorkspaceAction extends APIAction {
 export const addDesignToTemplate = (id: number, slotIndex?: number): AsyncAction<void> => {
   return (dispatch, getState) => {
     const state = getState();
-    const { templateID } = state.workspace;
+    const { templateID, activeJob } = state.workspace;
     const design = state.catalog.items.get(id);
     const template = state.templates.items.get(templateID);
     if (template === undefined)
       return;
 
-      // create a new active job if one is not set.
-      // this needs to be moved though. there should simply always be an active job
-    let { activeJob } = state.workspace;
-    if (activeJob === null) {
-      activeJob = getNewJob();
-      dispatch({ type: SET_ACTIVE_JOB, job: activeJob });
-    }
-
     if (slotIndex === undefined) {
-      slotIndex = findNextAvailableSlot(template, activeJob);
+      slotIndex = findNextTemplateSlot(template, activeJob);
       if (slotIndex === null)
         return;
     }

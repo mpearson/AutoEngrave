@@ -1,7 +1,7 @@
-import * as React from "react";
-import { MachineTask, GCodeTask, RasterTask } from "../../redux/workspace/types";
+import "./task-card.less";
 
-import "./job.less";
+import * as React from "react";
+import { MachineTask, GCodeTask, RasterTask } from "../../../redux/workspace/types";
 
 export interface TaskCardProps<T extends MachineTask = MachineTask> {
   model: T;
@@ -84,6 +84,7 @@ export const GCodeTaskCard: React.SFC<TaskCardProps<GCodeTask>> = props => {
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
     >
+      <i className="fas fa-code" />
       <span>{commands.length > 0 ? commands[0] : "[empty]"}</span>
       {readonly ? null : <DeleteButton onClick={onDelete} />}
     </div>
