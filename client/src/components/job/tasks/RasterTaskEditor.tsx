@@ -34,7 +34,7 @@ export class RasterTaskEditor extends React.Component<TaskEditorProps<RasterTask
             disabled={disabled}
             min={0}
             max={100}
-            increment={0.1}
+            increment={1}
           />
         </div>
         <div title="DPI" className="dpi parameter">
