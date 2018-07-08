@@ -20,6 +20,7 @@ export class RasterTaskCard extends React.Component<TaskCardProps<RasterTask>> {
         onMouseOver={onMouseOver}
         onMouseOut={onMouseOut}
       >
+        <i className="fas fa-image" />
         <div title="Power" className="power parameter">
           <i className="fas fa-bolt" />
           <span>{model.power}</span>
@@ -29,7 +30,8 @@ export class RasterTaskCard extends React.Component<TaskCardProps<RasterTask>> {
           <span>{model.speed}</span>
         </div>
         <div title="DPI" className="dpi parameter">
-          <small>DPI</small>
+          {/* <small>DPI</small> */}
+          <i className="fas fa-bars" />
           <span>{model.dpi}</span>
         </div>
         {readonly ? null : <DeleteButton onClick={onDelete} />}

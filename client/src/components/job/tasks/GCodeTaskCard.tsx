@@ -28,7 +28,7 @@ export const GCodeTaskCard: React.SFC<TaskCardProps<GCodeTask>> = props => {
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
     >
-      <i className="fas fa-code" />
+      <i className="fas fa-align-left" />
       <span>{commands.length > 0 ? commands[0] : "[empty]"}</span>
       {readonly ? null : <DeleteButton onClick={onDelete} />}
     </div>

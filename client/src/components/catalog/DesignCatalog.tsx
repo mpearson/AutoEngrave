@@ -91,7 +91,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
         <button
           key="delete"
           onClick={() => onDelete(selectedID)}
-          className="red fas fa-trash-alt"
+          className="red fas fa-times"
           title="Delete, duh"
         />
       ];
