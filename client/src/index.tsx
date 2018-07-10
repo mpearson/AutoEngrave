@@ -30,7 +30,7 @@ store.dispatch(getPorts()).then(() => store.dispatch(getConnectionStatus()));
 store.dispatch(listMaterialProfiles());
 store.dispatch(listDesigns());
 
-const defaultMachine: Machine = {
+const defaultMachine1: Machine = {
   name: "Full Spectrum",
   description: "",
   leftRightAxis: "X",
@@ -51,13 +51,40 @@ const defaultMachine: Machine = {
   accelerationZ: 0,
 };
 
+const defaultMachine2: Machine = {
+  name: "Diode Laser",
+  description: "",
+  leftRightAxis: "X",
+  frontBackAxis: "Y",
+  verticalAxis: "Z",
+  rasterScanAxis: "X",
+  offsetLeft: 0,
+  offsetRight: 398,
+  offsetBack: 0,
+  offsetFront: 338,
+  offsetBottom: 20,
+  offsetTop: 0,
+  maxVelocityX: 0,
+  maxVelocityY: 0,
+  maxVelocityZ: 0,
+  accelerationX: 0,
+  accelerationY: 0,
+  accelerationZ: 0,
+};
+
 store.dispatch({
   type: MACHINES_PREFIX + "/" + CREATE_SUCCESS,
-  diff: defaultMachine,
+  diff: defaultMachine1,
   results: { id: 1000 },
 });
 
-const defaultTemplate: Template = {
+store.dispatch({
+  type: MACHINES_PREFIX + "/" + CREATE_SUCCESS,
+  diff: defaultMachine2,
+  results: { id: 1001 },
+});
+
+const defaultTemplate1: Template = {
   name: "Coasters - 8x",
   notes: "",
   slots: [
@@ -70,13 +97,35 @@ const defaultTemplate: Template = {
     { x: 244, y: 147, width: 102, height: 102 },
     { x: 356, y: 147, width: 102, height: 102 },
   ],
+};
+
+const defaultTemplate2: Template = {
+  name: "Coasters - 9x",
+  notes: "",
+  slots: [
+    { x: 9,     y: 9,   width: 102, height: 102 },
+    { x: 119,   y: 9,   width: 102, height: 102 },
+    { x: 229,   y: 9,   width: 102, height: 102 },
+    { x: 9,     y: 119, width: 102, height: 102 },
+    { x: 119,   y: 119, width: 102, height: 102 },
+    { x: 229,   y: 119, width: 102, height: 102 },
+    { x: 9,     y: 229, width: 102, height: 102 },
+    { x: 119,   y: 229, width: 102, height: 102 },
+    { x: 229,   y: 229, width: 102, height: 102 },
+  ],
 
 };
 
 store.dispatch({
   type: TEMPLATES_PREFIX + "/" + CREATE_SUCCESS,
-  diff: defaultTemplate,
+  diff: defaultTemplate1,
   results: { id: 1000 },
 });
-store.dispatch({ type: SELECT_MACHINE, machineID: 1000 });
-store.dispatch({ type: SELECT_TEMPLATE, templateID: 1000 });
+
+store.dispatch({
+  type: TEMPLATES_PREFIX + "/" + CREATE_SUCCESS,
+  diff: defaultTemplate2,
+  results: { id: 1001 },
+});
+store.dispatch({ type: SELECT_MACHINE, machineID: 1001 });
+store.dispatch({ type: SELECT_TEMPLATE, templateID: 1001 });

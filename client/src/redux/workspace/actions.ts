@@ -52,9 +52,9 @@ export const addDesignToTemplate = (id: number, slotIndex?: number): AsyncAction
       y: slot.y + 0.5 * (slot.height - height),
       width,
       height,
-      dpi: 400,
-      power: 50,
-      speed: 15,
+      dpi: 300,
+      power: 100,
+      speed: 14,
     };
 
     const existingSlot = activeJob.tasks.findIndex(task => task.type !== "gcode" && task.slotIndex === slotIndex);
