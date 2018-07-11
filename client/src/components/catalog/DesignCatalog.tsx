@@ -5,6 +5,7 @@ import { ConnectDropTarget, DropTargetSpec, DropTargetCollector, DropTarget } fr
 import { NativeTypes } from "react-dnd-html5-backend";
 import { uploadDesigns } from "../../redux/catalog/utils";
 import { OrderedMap } from "immutable";
+import { QuickAddDialog } from "./QuickAddDialog";
 
 export interface DesignCatalogProps {
   items: OrderedMap<number, Design>;
@@ -17,7 +18,7 @@ export interface DesignCatalogProps {
 }
 
 export interface DesignCatalogState {
-  editingDesign: Design;
+  quickAddInput: string;
 }
 
 interface FileDragInfo {
@@ -54,7 +55,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
   constructor(props: CombinedProps) {
     super(props);
     this.state = {
-      editingDesign: null,
+      quickAddInput: null,
     };
   }
 
@@ -64,9 +65,22 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
     uploadDesigns(this.fileInput.files, this.props.onUpload);
   }
 
+  private onChangeQuickInput = (quickAddInput: string) => this.setState({ quickAddInput });
+
+  private submitQuickInput = () => {
+    const count = parseInt(this.state.quickAddInput, 10);
+    for (let i = 0; i < count; i++)
+      this.props.onAdd(this.props.selectedID);
+
+    this.clearQuickInput();
+  }
+
+  private clearQuickInput = () => this.setState({ quickAddInput: null });
+
   public render() {
     const { items, onSelect, onAdd, onEdit, onDelete, selectedID } = this.props;
     const { isOver, canDrop, connectDropTarget } = this.props;
+    const { quickAddInput } = this.state;
     const classList = ["panel", "catalog-panel", "design-catalog"];
     if (canDrop) {
       classList.push("dnd-can-drop");
@@ -125,6 +139,13 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
         <section className="catalog-items scrollable">
           {thumbnails}
         </section>
+        <QuickAddDialog
+          value={quickAddInput}
+          onChange={this.onChangeQuickInput}
+          onSubmit={this.submitQuickInput}
+          onCancel={this.clearQuickInput}
+          disabled={selectedID === null}
+        />
       </div>
     );
   }
