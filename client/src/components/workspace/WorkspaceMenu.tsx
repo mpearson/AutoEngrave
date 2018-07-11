@@ -4,6 +4,7 @@ import { Dispatch, connect } from "react-redux";
 import { Template } from "../../redux/templates/types";
 import { CrudState } from "../../redux/CRUD/types";
 import { SELECT_TEMPLATE, SET_ACTIVE_JOB, generateGCode } from "../../redux/workspace/actions";
+import { getNewJob } from "../../redux/workspace/utils";
 
 export interface WorkspaceMenuProps extends CrudState<Template> {
   selected: number;
@@ -36,7 +37,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => ({
   selectTemplate: (templateID: number) => { dispatch({ type: SELECT_TEMPLATE, templateID }); },
-  resetTemplate: () => { dispatch({ type: SET_ACTIVE_JOB, job: null }); },
+  resetTemplate: () => { dispatch({ type: SET_ACTIVE_JOB, job: getNewJob() }); },
   generateGCode: () => { dispatch(generateGCode()); },
 });
 
