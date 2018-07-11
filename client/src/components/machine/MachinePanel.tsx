@@ -1,6 +1,6 @@
 import * as React from "react";
-import { RootState } from "../../redux/types";
-import { Dispatch, connect } from "react-redux";
+import { RootState, RootDispatch } from "../../redux/types";
+import { connect } from "react-redux";
 import { CrudState } from "../../redux/CRUD/types";
 import { Machine } from "../../redux/settings/types";
 import { SELECT_MACHINE } from "../../redux/workspace/actions";
@@ -31,7 +31,7 @@ const mapStateToProps = (state: RootState) => ({
   selected: state.workspace.machineID,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => ({
+const mapDispatchToProps = (dispatch: RootDispatch) => ({
   selectMachine: (machineID: number) => { dispatch({ type: SELECT_MACHINE, machineID }); },
 });
 

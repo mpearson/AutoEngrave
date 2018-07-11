@@ -1,5 +1,6 @@
 import * as actions from "./actions";
 import { ConsoleEntry } from "./types";
+import { AnyAction, Reducer } from "redux";
 
 export type ConsoleState = {
   readonly entries: ConsoleEntry[];
@@ -11,7 +12,10 @@ const defaultState: ConsoleState = {
   entries: [],
 };
 
-export const consoleReducer = (state = defaultState, action: actions.ConsoleAction) => {
+export const consoleReducer: Reducer<ConsoleState, AnyAction> = (
+  state = defaultState,
+  action: actions.ConsoleAction
+) => {
   switch (action.type) {
     case actions.ADD_CONSOLE_ENTRY: {
       return {

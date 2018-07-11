@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Dispatch, connect } from "react-redux";
-import { RootState } from "../../redux/types";
+import { connect } from "react-redux";
+import { RootState, RootDispatch } from "../../redux/types";
 import { ConsoleState } from "../../redux/console/reducer";
 import * as actions from "../../redux/console/actions";
 import { ConsoleInput } from "./ConsoleInput";
@@ -42,7 +42,7 @@ const mapStateToProps = (state: RootState) => ({
   connectionState: state.connection.state,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => ({
+const mapDispatchToProps = (dispatch: RootDispatch) => ({
   sendCommand: (command: string) => dispatch(actions.sendCommand(command)),
 });
 

@@ -1,6 +1,6 @@
 import * as React from "react";
-import { RootState } from "../../redux/types";
-import { Dispatch, connect } from "react-redux";
+import { RootState, RootDispatch } from "../../redux/types";
+import { connect } from "react-redux";
 import { Template } from "../../redux/templates/types";
 import { CrudState } from "../../redux/CRUD/types";
 import { SELECT_TEMPLATE, SET_ACTIVE_JOB, generateGCode } from "../../redux/workspace/actions";
@@ -35,7 +35,7 @@ const mapStateToProps = (state: RootState) => ({
   selected: state.workspace.templateID,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => ({
+const mapDispatchToProps = (dispatch: RootDispatch) => ({
   selectTemplate: (templateID: number) => { dispatch({ type: SELECT_TEMPLATE, templateID }); },
   resetTemplate: () => { dispatch({ type: SET_ACTIVE_JOB, job: getNewJob() }); },
   generateGCode: () => { dispatch(generateGCode()); },

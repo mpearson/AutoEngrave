@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Dispatch, connect } from "react-redux";
-import { RootState } from "../../redux/types";
+import { connect } from "react-redux";
+import { RootState, RootDispatch } from "../../redux/types";
 import { ConnectionState } from "../../redux/connection/reducer";
 import * as actions from "../../redux/connection/actions";
 import { ComPort, baudrates, PortState } from "../../redux/connection/types";
@@ -47,7 +47,7 @@ export const ConnectionPanel: React.SFC<ConnectionPanelProps> = props => {
 
 const mapStateToProps = (state: RootState) => state.connection;
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => ({
+const mapDispatchToProps = (dispatch: RootDispatch): DispatchProps => ({
   scanComPorts: () => dispatch(actions.getPorts()).catch(() => null),
   onConnect: () => dispatch(actions.openConnection()).catch(() => null),
   onDisconnect: () => dispatch(actions.closeConnection()).catch(() => null),

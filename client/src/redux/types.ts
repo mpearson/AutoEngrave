@@ -1,6 +1,6 @@
 import { ConsoleState } from "./console/reducer";
-import { ThunkAction } from "redux-thunk";
-import { Action } from "redux";
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
+import { Action, AnyAction, Store } from "redux";
 import { ConnectionState } from "./connection/reducer";
 import { SettingsState } from "./settings/reducer";
 import { CrudState } from "./CRUD/types";
@@ -17,11 +17,17 @@ export interface RootState {
   workspace: WorkspaceState;
 }
 
-export type AsyncAction<T = any> = ThunkAction<T, RootState, void>;
-export type AsyncPromiseAction<T = any> = ThunkAction<Promise<T>, RootState, void>;
+export type AsyncAction<T = any> = ThunkAction<T, RootState, void, AnyAction>;
+export type AsyncPromiseAction<T = any> = ThunkAction<Promise<T>, RootState, void, AnyAction>;
 
 export interface APIAction extends Action {
   error?: string;
   response?: Response;
   results?: any;
+}
+
+export type RootDispatch = ThunkDispatch<RootState, void, AnyAction>;
+
+export interface RootStore extends Store<RootState, AnyAction> {
+  dispatch: RootDispatch;
 }

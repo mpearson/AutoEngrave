@@ -1,5 +1,4 @@
-import { Dispatch } from "react-redux";
-import { RootState, AsyncAction } from "../redux/types";
+import { AsyncAction, RootDispatch } from "../redux/types";
 
 export type RequestAction = (actionParams?: any) => AsyncAction;
 export type SuccessAction = (results: any, response?: Response, actionParams?: any) => AsyncAction;
@@ -24,7 +23,7 @@ const jsonHeaders = {
  * Fancy API wrapper which dispatches the specified request/sucess/error actions,
  * along with response data and optional action params.
  */
-export const callAPI = (dispatch: Dispatch<RootState>, config: APICallConfig) => {
+export const callAPI = (dispatch: RootDispatch, config: APICallConfig) => {
   const actionParams = config.actionParams || {};
   const { onRequest, onSuccess, onError } = config;
 

@@ -1,5 +1,5 @@
 import { Design, CATALOG_PREFIX } from "./types";
-import { Reducer } from "redux";
+import { Reducer, AnyAction } from "redux";
 import { makeReducer, getDefaultCrudState } from "../CRUD/reducer";
 import { CrudState, CrudAction } from "../CRUD/types";
 import * as actions from "./actions";
@@ -15,7 +15,7 @@ export const getDefaultState = (): CatalogState => ({
   selectedID: null,
 });
 
-export const catalogReducer: Reducer<CatalogState> = (
+export const catalogReducer: Reducer<CatalogState, AnyAction> = (
   state = getDefaultState(),
   action: CrudAction<Design>
 ): CatalogState => {
