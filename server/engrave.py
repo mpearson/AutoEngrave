@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 import numpy as np
-import cv2
 
 '''
 Generates a binary image with 1 for horizontal edges and 0 elsehwere
@@ -30,7 +29,7 @@ def findEdges(img):
     # converting from uint8 to int8 creates an image where black = 1 and white = -1
     normalized = img.astype(np.int8)
     # add 1px to the left and right edges so the diff is the same width as the original
-    padded = cv2.copyMakeBorder(normalized, 0, 0, 1, 1, cv2.BORDER_CONSTANT, value=0)
+    padded =  np.pad(normalized, ((0, 0), (1, 1)), mode="constant", constant_values=0)
 
     return np.diff(padded, axis=1) != 0
 

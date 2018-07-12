@@ -1,6 +1,5 @@
 flask
 numpy
-opencv-python
 cairosvg
 pyserial
 sqlite3
