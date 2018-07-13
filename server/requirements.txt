@@ -2,5 +2,4 @@ flask
 numpy
 cairosvg
 pyserial
-sqlite3
 peewee
