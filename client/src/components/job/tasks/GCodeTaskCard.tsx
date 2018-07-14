@@ -1,16 +1,6 @@
 import * as React from "react";
-import { MachineTask, GCodeTask } from "../../../redux/workspace/types";
-import { DeleteButton } from "./TaskCard";
-
-export interface TaskCardProps<T extends MachineTask = MachineTask> {
-  model: T;
-  onDelete: () => void;
-  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
-  onMouseOver?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  onMouseOut?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  selected?: boolean;
-  highlight?: boolean;
-}
+import { GCodeTask } from "../../../redux/workspace/types";
+import { DeleteButton, TaskCardProps } from "./TaskCard";
 
 export const GCodeTaskCard: React.SFC<TaskCardProps<GCodeTask>> = props => {
   const {onClick, onDelete, onMouseOver, onMouseOut, highlight, selected } = props;
@@ -34,4 +24,3 @@ export const GCodeTaskCard: React.SFC<TaskCardProps<GCodeTask>> = props => {
     </div>
   );
 };
-

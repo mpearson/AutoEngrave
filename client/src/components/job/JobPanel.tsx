@@ -1,10 +1,9 @@
 import "./job.less";
 
 import * as React from "react";
-import { Job, MachineTask, DesignTask } from "../../redux/workspace/types";
+import { Job, MachineTask } from "../../redux/workspace/types";
 import { RootState } from "../../redux/types";
-import { OrderedMap, Set } from "immutable";
-import { Design } from "../../redux/catalog/types";
+import { Set } from "immutable";
 import { connect } from "react-redux";
 import * as actions from "../../redux/workspace/actions";
 import { TaskCard } from "./tasks/TaskCard";
@@ -13,10 +12,8 @@ import { getSharedTaskSettings } from "../../redux/workspace/utils";
 
 interface StateProps {
   activeJob: Job;
-  globalDesignSettings: DesignTask;
   hoverTaskIndex: number;
   selectedTasks: Set<number>;
-  catalog: OrderedMap<number, Design>;
   sharedTaskSettings: MachineTask;
 }
 
@@ -83,8 +80,8 @@ export class JobPanel extends React.Component<JobPanelProps> {
 
   public render() {
     const {
-      activeJob, hoverTaskIndex, selectedTasks, updateSelectedTasks, deleteTask, hoverTask,
-      sharedTaskSettings
+      activeJob, hoverTaskIndex, selectedTasks, updateSelectedTasks,
+      deleteTask, hoverTask, sharedTaskSettings
     } = this.props;
     let globalTaskCard: JSX.Element = null;
     let taskCards: JSX.Element[] = null;
@@ -124,10 +121,8 @@ export const GCodeTaskButton: React.SFC<{onClick: () => void}> = props => (
 
 const mapStateToProps = (state: RootState): StateProps => ({
   activeJob: state.workspace.activeJob,
-  globalDesignSettings: state.workspace.globalDesignSettings,
   hoverTaskIndex: state.workspace.hoverTaskIndex,
   selectedTasks: state.workspace.selectedTasks,
-  catalog: state.catalog.items,
   sharedTaskSettings: getSharedTaskSettings(state),
 });
 
