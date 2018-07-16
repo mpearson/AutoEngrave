@@ -22,7 +22,7 @@ interface DispatchProps {
   updateDesign: UpdateActionCreator<Design>;
   deleteDesign: DeleteActionCreator<Design>;
   selectDesign: (id: number) => CrudAction<Design>;
-  addToWorkspace: (id: number, slotIndex?: number) => any;
+  addToWorkspace: (id: number, count?: number) => any;
 }
 
 type CombinedProps = StateProps & DispatchProps;

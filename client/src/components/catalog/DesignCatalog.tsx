@@ -11,7 +11,7 @@ export interface DesignCatalogProps {
   items: OrderedMap<number, Design>;
   selectedID: number;
   onSelect: (id: number) => void;
-  onAdd: (id: number) => void;
+  onAdd: (id: number, count?: number) => void;
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
   onUpload: (design: Design) => void;
@@ -69,9 +69,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
 
   private submitQuickInput = () => {
     const count = parseInt(this.state.quickAddInput, 10);
-    for (let i = 0; i < count; i++)
-      this.props.onAdd(this.props.selectedID);
-
+    this.props.onAdd(this.props.selectedID, count);
     this.clearQuickInput();
   }
 

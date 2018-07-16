@@ -1,8 +1,7 @@
 import { APIAction, AsyncAction } from "./../types";
 import { Template } from "../templates/types";
-import { Job, RasterTask, MachineTask } from "./types";
-import { pixelsToMillimeters } from "../catalog/utils";
-import { findNextTemplateSlot } from "./utils";
+import { Job, MachineTask, DesignTask } from "./types";
+import { createTemplateRasterTask, getOccupiedSlots } from "./utils";
 import { Set } from "immutable";
 
 export const SELECT_TEMPLATE = "workspace/SELECT_TEMPLATE";
@@ -25,7 +24,11 @@ export interface WorkspaceAction extends APIAction {
   selectedTasks?: Set<number>;
 }
 
-export const addDesignToTemplate = (id: number, slotIndex?: number): AsyncAction<void> => {
+/**
+ * Add the specified design to the active job at @param slotIndex.
+ * If the slot is already occupied, and replace the existing task.
+ */
+export const updateTemplateSlot = (id: number, slotIndex: number): AsyncAction<void> => {
   return (dispatch, getState) => {
     const state = getState();
     const { templateID, activeJob } = state.workspace;
@@ -34,34 +37,38 @@ export const addDesignToTemplate = (id: number, slotIndex?: number): AsyncAction
     if (template === undefined)
       return;
 
-    if (slotIndex === undefined) {
-      slotIndex = findNextTemplateSlot(template, activeJob);
-      if (slotIndex === null)
-        return;
-    }
+    const newTask = createTemplateRasterTask(template.slots[slotIndex], design);
 
-    const slot = template.slots[slotIndex];
-    const width = pixelsToMillimeters(design.width, design.dpi);
-    const height = pixelsToMillimeters(design.height, design.dpi);
-
-    let newTask: RasterTask = {
-      type: "raster",
-      designID: design.id,
-      slotIndex,
-      x: slot.x + 0.5 * (slot.width - width),
-      y: slot.y + 0.5 * (slot.height - height),
-      width,
-      height,
-      dpi: 300,
-      power: 100,
-      speed: 14,
-    };
-
-    const existingSlot = activeJob.tasks.findIndex(task => task.type !== "gcode" && task.slotIndex === slotIndex);
+    const existingSlot = activeJob.tasks.findIndex(task => (task as DesignTask).slotIndex === slotIndex);
     if (existingSlot !== -1)
       dispatch(updateTask(existingSlot, newTask));
     else
       dispatch(appendTask(newTask));
+  };
+};
+
+/**
+ * Adds @param count copies of the design to the first empty slots found in the active job.
+ * If there are not enough slots, add as many as we can.
+ */
+export const addDesignToTemplate = (id: number, count = 1): AsyncAction<void> => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { templateID, activeJob } = state.workspace;
+    const design = state.catalog.items.get(id);
+    const template = state.templates.items.get(templateID);
+    if (template === undefined)
+      return;
+
+    const occupiedSlots = getOccupiedSlots(activeJob);
+    const slotCount = template.slots.length;
+    for (let index = 0; count > 0 && index < slotCount; index++) {
+      if (!occupiedSlots.has(index)) {
+        count--;
+        const newTask = createTemplateRasterTask(template.slots[index], design);
+        dispatch(appendTask(newTask));
+      }
+    }
   };
 };
 

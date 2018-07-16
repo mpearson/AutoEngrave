@@ -9,6 +9,7 @@ export interface Template extends CrudItem {
 }
 
 export interface TemplateSlot {
+  index: number;
   x: number;
   y: number;
   width: number;

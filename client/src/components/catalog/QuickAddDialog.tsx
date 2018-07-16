@@ -30,7 +30,7 @@ export class QuickAddDialog extends React.PureComponent<QuickAddDialogProps> {
       onSubmit();
     } else if (e.key === "Escape") {
       onCancel();
-    } else if (/\d/.test(e.key)) {
+    } else if (/^\d$/.test(e.key)) {
       onChange((value || "") + e.key);
     } else if (e.key === "Backspace") {
       if (value !== null && value.length < 2)

@@ -19,7 +19,7 @@ export class RasterTaskCardComponent extends React.Component<CombinedProps> {
     const {readonly} = model;
     const design = catalog.get(model.designID);
 
-    const classList = ["task-card"];
+    const classList = ["task-card", "raster-task"];
     if (highlight)
       classList.push("highlight");
     if (selected)
@@ -35,8 +35,9 @@ export class RasterTaskCardComponent extends React.Component<CombinedProps> {
         <header>
           <i className="fas fa-image" />
           {design.name}
+          {readonly ? null : <DeleteButton onClick={onDelete} />}
         </header>
-        <section>
+        <div className="details">
           <div title="Power" className="power parameter">
             <i className="fas fa-bolt" />
             <span>{model.power}</span>
@@ -50,8 +51,7 @@ export class RasterTaskCardComponent extends React.Component<CombinedProps> {
             <i className="fas fa-bars" />
             <span>{model.dpi}</span>
           </div>
-          {readonly ? null : <DeleteButton onClick={onDelete} />}
-        </section>
+        </div>
       </div>
     );
   }

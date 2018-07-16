@@ -5,7 +5,7 @@ import { DeleteButton, TaskCardProps } from "./TaskCard";
 export const GCodeTaskCard: React.SFC<TaskCardProps<GCodeTask>> = props => {
   const {onClick, onDelete, onMouseOver, onMouseOut, highlight, selected } = props;
   const {commands, readonly} = props.model;
-  const classList = ["task-card"];
+  const classList = ["task-card", "gcode-task"];
   if (highlight)
     classList.push("highlight");
   if (selected)
@@ -18,9 +18,13 @@ export const GCodeTaskCard: React.SFC<TaskCardProps<GCodeTask>> = props => {
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
     >
-      <i className="fas fa-align-left" />
-      <span>{commands.length > 0 ? commands[0] : "[empty]"}</span>
-      {readonly ? null : <DeleteButton onClick={onDelete} />}
+      <header>
+        <i className="fas fa-align-left" />
+        {readonly ? null : <DeleteButton onClick={onDelete} />}
+      </header>
+      <div className="details">
+        <span>{commands.length > 0 ? commands[0] : "[empty]"}</span>
+      </div>
     </div>
   );
 };

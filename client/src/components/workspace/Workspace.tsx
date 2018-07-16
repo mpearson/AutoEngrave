@@ -91,7 +91,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = ({
-  onDropDesign: actions.addDesignToTemplate,
+  onDropDesign: actions.updateTemplateSlot,
   hoverTask: actions.hoverTask,
 });
 

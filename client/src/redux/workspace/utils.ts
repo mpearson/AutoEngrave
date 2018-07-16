@@ -1,9 +1,11 @@
-import { Template } from "../templates/types";
+import { TemplateSlot } from "../templates/types";
 import { Job, DesignTask, MachineTask, RasterTask } from "./types";
 import { Seq } from "immutable";
 import { createSelector } from "reselect";
 import { RootState } from "../types";
 import { clone } from "lodash";
+import { pixelsToMillimeters } from "../catalog/utils";
+import { Design } from "../catalog/types";
 
 /**
  * Deep clones the provided job, or creates a new one if it is null.
@@ -25,16 +27,7 @@ export const getNewJob = (): Job => ({
   ],
 });
 
-export const findNextTemplateSlot = (template: Template, job: Job): number => {
-  const occupiedSlots = Seq(job.tasks)
-    .map(task => (task as DesignTask).slotIndex)
-    .toSet();
-
-  for (let i = 0; i < template.slots.length; i++)
-    if (!occupiedSlots.has(i))
-      return i;
-  return null;
-};
+export const getOccupiedSlots = (job: Job) => Seq(job.tasks).map(task => (task as DesignTask).slotIndex).toSet();
 
 /**
  * @returns index closest to the end where a new task can be inserted.
@@ -46,6 +39,24 @@ export const findNextTaskSlot = (tasks: MachineTask[]) => {
       return i + 1;
   }
   return 0;
+};
+
+export const createTemplateRasterTask = (slot: TemplateSlot, design: Design): RasterTask => {
+  const width = pixelsToMillimeters(design.width, design.dpi);
+  const height = pixelsToMillimeters(design.height, design.dpi);
+
+  return {
+    type: "raster",
+    designID: design.id,
+    slotIndex: slot.index,
+    x: slot.x + 0.5 * (slot.width - width),
+    y: slot.y + 0.5 * (slot.height - height),
+    width,
+    height,
+    dpi: 300,
+    power: 100,
+    speed: 14,
+  };
 };
 
 export const appendNewTask = (tasks: MachineTask[], newTask: MachineTask) => {
