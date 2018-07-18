@@ -26,6 +26,7 @@ export class QuickAddDialog extends React.PureComponent<QuickAddDialogProps> {
     if (disabled)
       return;
 
+    let capture = true;
     if (e.key === "Enter") {
       onSubmit();
     } else if (e.key === "Escape") {
@@ -37,7 +38,12 @@ export class QuickAddDialog extends React.PureComponent<QuickAddDialogProps> {
         onCancel();
       else
         onChange(value.slice(0, -1));
+    } else {
+      capture = false;
     }
+
+    if (capture)
+      e.preventDefault();
   }
 
   public render() {
