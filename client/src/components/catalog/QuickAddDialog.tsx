@@ -26,6 +26,12 @@ export class QuickAddDialog extends React.PureComponent<QuickAddDialogProps> {
     if (disabled)
       return;
 
+    // if something is focused, and it's not a button,
+    // then it's probably a text field so we need to just chill
+    const focused = document.activeElement;
+    if (!(focused === null || focused.tagName === "BODY" || focused.tagName === "BUTTON"))
+      return;
+
     let capture = true;
     if (e.key === "Enter") {
       onSubmit();
@@ -33,7 +39,7 @@ export class QuickAddDialog extends React.PureComponent<QuickAddDialogProps> {
       onCancel();
     } else if (/^\d$/.test(e.key)) {
       onChange((value || "") + e.key);
-    } else if (e.key === "Backspace") {
+    } else if (value && e.key === "Backspace") {
       if (value !== null && value.length < 2)
         onCancel();
       else
