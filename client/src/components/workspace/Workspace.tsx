@@ -29,10 +29,8 @@ type CombinedProps = StateProps & DispatchProps;
 
 interface WorkspaceComponentState {
   isPanning: boolean;
-  offsetX: number;
-  offsetY: number;
-  zoomX: number;
-  zoomY: number;
+  translateX: number;
+  translateY: number;
   zoom: number;
 }
 
@@ -44,11 +42,9 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
 
     this.state = {
       isPanning: false,
-      offsetX: 0,
-      offsetY: 0,
-      zoomX: 50,
-      zoomY: 50,
-      zoom: 1,
+      translateX: 0.0,
+      translateY: 0.0,
+      zoom: 1.0,
     };
   }
 
@@ -57,14 +53,14 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
   private panStartOffsetY: number = null;
 
   private startPanning = (e: React.PointerEvent<HTMLElement>) => {
-    // we're only interested in regular clicks and middle clicks
+    // we're only interested in regular clicks and maybe middle clicks
     if (e.button === 0 || e.button === 1) {
       e.persist();
       e.stopPropagation();
       e.preventDefault();
       this.panStartEvent = e;
-      this.panStartOffsetX = this.state.offsetX;
-      this.panStartOffsetY = this.state.offsetY;
+      this.panStartOffsetX = this.state.translateX;
+      this.panStartOffsetY = this.state.translateY;
       e.currentTarget.setPointerCapture(e.pointerId);
       this.setState({ isPanning: true });
     }
@@ -72,8 +68,8 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
 
   private onMouseMove = (e: React.PointerEvent<HTMLElement>) => {
     this.setState({
-      offsetX: this.panStartOffsetX + e.screenX - this.panStartEvent.screenX,
-      offsetY: this.panStartOffsetY + e.screenY - this.panStartEvent.screenY,
+      translateX: this.panStartOffsetX + e.screenX - this.panStartEvent.screenX,
+      translateY: this.panStartOffsetY + e.screenY - this.panStartEvent.screenY,
     });
   }
 
@@ -85,35 +81,57 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
     this.panStartOffsetY = null;
   }
 
-  private cancelPanning = () => {
-    this.setState({
-      offsetX: this.panStartOffsetX,
-      offsetY: this.panStartOffsetY,
-    });
+  private getNewZoom = (e: React.WheelEvent<HTMLElement>) => {
+    let { zoom } = this.state;
+    // this test is equivalent to "zoom in XOR invertZoom"
+    if (e.deltaY < 0 !== this.props.invertZoom)
+      zoom *= ZOOM_FACTOR;
+    else
+      zoom /= ZOOM_FACTOR;
+
+    // ain't no floating point errors gonna make this shit blurry
+    if (Math.abs(1.0 - zoom) < 0.001)
+      return 1.0;
+    return zoom;
   }
 
   private onZoom = (e: React.WheelEvent<HTMLElement>) => {
     if (e.deltaY !== 0) {
-      let { zoom, offsetX, offsetY } = this.state;
+      const { zoom, translateX, translateY } = this.state;
+      const newZoom = this.getNewZoom(e);
 
-      // this is equivalent to "zoom in XOR invertZoom"
-      if (e.deltaY < 0 !== this.props.invertZoom)
-        zoom *= ZOOM_FACTOR;
-      else
-        zoom /= ZOOM_FACTOR;
-
-      // snap to 100%
-      if (Math.abs(1.0 - zoom) < 0.1)
-        zoom = 1.0;
+      // the viewport projection looks like this:
+      //    v = wz + t
+      //    v' = w'z' + t'
+      // where:
+      //    v = location of mouse relative to workspace viewport,
+      //    w = location of mouse in workspace coordinates,
+      //    z = zoom factor,
+      //    t = workspace translation
+      //
+      // first we need to solve for w:
+      //    w = (v - t) / z
+      //
+      // next, we want to keep the workspace coordinate under the mouse fixed:
+      //    v = v'
+      //    w = w'
+      //
+      // solving for t' we get:
+      //    t' = v - wz'
 
       const elementOffset = e.currentTarget.getBoundingClientRect();
 
-      const zoomX = e.clientX - elementOffset.left - offsetX;
-      const zoomY = e.clientY - elementOffset.top - offsetY;
-      // console.log(e.nativeEvent);
+      const vx = e.clientX - elementOffset.left;
+      const vy = e.clientY - elementOffset.top;
 
-      this.setState({ zoom, zoomX, zoomY });
-      console.log(`${zoomX}, ${zoomY}`);
+      const wx = (vx - translateX) / zoom;
+      const wy = (vy - translateY) / zoom;
+
+      this.setState({
+        zoom: newZoom,
+        translateX: Math.round(vx - (wx * newZoom)),
+        translateY: Math.round(vy - (wy * newZoom)),
+      });
     }
   }
 
@@ -121,7 +139,7 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
     const { activeJob, catalog, hoverTaskIndex, hoverTask } = this.props;
     const tasks = activeJob ? activeJob.tasks : [];
     return tasks.reduce<JSX.Element[]>((items, task, index) => {
-      if (task.type !== "gcode")
+      if (task.type !== "gcode") {
         items.push(
           <WorkspaceItem
             task={task}
@@ -132,6 +150,7 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
             onMouseOut={() => hoverTask(null)}
           />
         );
+      }
       return items;
     }, []);
   }
@@ -151,16 +170,11 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
     });
   }
 
-  private getZoomStyle = (): React.CSSProperties => {
-    const { zoom, zoomX, zoomY } = this.state;
+  private getTransformStyle = (): React.CSSProperties => {
+    const { zoom, translateX, translateY } = this.state;
     return {
-      transform: `scale(${zoom})`,
-      transformOrigin: `${zoomX}px ${zoomY}px`,
+      transform: `translate(${translateX}px, ${translateY}px) scale(${zoom}) `,
     };
-  }
-
-  private getTranslateStyle = (): React.CSSProperties => {
-    return { transform: `translate(${this.state.offsetX}px, ${this.state.offsetY}px)` };
   }
 
   public render() {
@@ -182,20 +196,17 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
     return (
       <div className="panel workspace-panel">
         <WorkspaceMenuConnected />
-          <div
-            className={wrapperClassList.join(" ")}
-            onPointerDownCapture={this.startPanning}
-            onPointerMoveCapture={isPanning ? this.onMouseMove : undefined}
-            onPointerUpCapture={isPanning ? this.stopPanning : undefined}
-            onPointerCancelCapture={this.cancelPanning}
-            onWheelCapture={this.onZoom}
-          >
-            <div className="machine-bed-translate" style={this.getTranslateStyle()}>
-              <div className="machine-bed-zoom" style={this.getZoomStyle()}>
-              <div className="machine-bed" style={machineBedStyle}>
-                {this.renderTaskItems()}
-                {this.renderTemplateSlots()}
-              </div>
+        <div
+          className={wrapperClassList.join(" ")}
+          onPointerDownCapture={this.startPanning}
+          onPointerMoveCapture={isPanning ? this.onMouseMove : undefined}
+          onPointerUpCapture={isPanning ? this.stopPanning : undefined}
+          onWheelCapture={isPanning ? undefined : this.onZoom}
+        >
+          <div className="machine-bed-transform" style={this.getTransformStyle()}>
+            <div className="machine-bed" style={machineBedStyle}>
+              {this.renderTaskItems()}
+              {this.renderTemplateSlots()}
             </div>
           </div>
         </div>

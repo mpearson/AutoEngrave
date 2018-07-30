@@ -9,25 +9,21 @@
     &.panning { cursor: move; }
   }
 
-  .machine-bed-translate, .machine-bed-zoom {
+  .machine-bed-transform {
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    transform-origin: 0 0;
+    transform: scale(1) translate(0, 0);
+    transition: transform 250ms ease-out;
   }
 
-  .machine-bed-translate {
-    transform-origin: 0px 0px;
-    transform: translate(0, 0);
-  }
-  .machine-bed-zoom {
-    transform-origin: 50% 50%;
-    transform: translate(0, 0);
-    transition: transform 250ms ease-out;
+  .panning .machine-bed-transform {
+    transition: none;
   }
 
   .machine-bed {
     border: 1px dashed #f5d005;
     position: relative;
-    margin: 10px;
 
     .template-slot {
       position: absolute;
