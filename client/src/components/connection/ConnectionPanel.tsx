@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { RootState, RootDispatch } from "../../redux/types";
-import { ConnectionState } from "../../redux/connection/reducer";
+import { ConnectionState } from "../../redux/connection/types";
 import * as actions from "../../redux/connection/actions";
 import { ComPort, baudrates, PortState } from "../../redux/connection/types";
 import { ConnectButton } from "./ConnectButton";

@@ -13,7 +13,7 @@ export const GCodeTaskCard: React.SFC<TaskCardProps<GCodeTask>> = props => {
 
   return (
     <div
-      onClick={onClick}
+      onMouseDown={onClick}
       className={classList.join(" ")}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}

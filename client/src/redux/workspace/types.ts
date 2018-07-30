@@ -1,3 +1,13 @@
+import { Set } from "../../../node_modules/immutable";
+
+export interface WorkspaceState {
+  readonly templateID: number;
+  readonly machineID: number;
+  readonly activeJob: Job;
+  readonly hoverTaskIndex: number;
+  readonly selectedTasks: Set<number>;
+}
+
 export interface Job {
   id?: number;
   name: string;

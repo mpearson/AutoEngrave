@@ -2,6 +2,28 @@
 
 .panel.workspace-panel {
   flex: 1 0 auto;
+
+  .machine-bed-wrapper {
+    flex: 1 1 auto;
+    overflow: hidden;
+    &.panning { cursor: move; }
+  }
+
+  .machine-bed-translate, .machine-bed-zoom {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .machine-bed-translate {
+    transform-origin: 0px 0px;
+    transform: translate(0, 0);
+  }
+  .machine-bed-zoom {
+    transform-origin: 50% 50%;
+    transform: translate(0, 0);
+    transition: transform 250ms ease-out;
+  }
+
   .machine-bed {
     border: 1px dashed #f5d005;
     position: relative;

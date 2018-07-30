@@ -1,3 +1,17 @@
+import * as moment from "moment";
+
+export interface ConnectionState {
+  readonly ports: ComPort[];
+  readonly port: ComPort;
+  readonly baudrate: string;
+  readonly isFetchingPorts: boolean;
+  readonly state: PortState;
+  readonly connectedTime: moment.Moment;
+  readonly isConnecting: boolean;
+  readonly isDisconnecting: boolean;
+  readonly isFetchingStatus: boolean;
+}
+
 export type ComPort = string;
 // export type ConsoleEntryType = "command" | "error" | "response";
 

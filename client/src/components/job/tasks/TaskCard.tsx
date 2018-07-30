@@ -4,6 +4,7 @@ import * as React from "react";
 import { MachineTask } from "../../../redux/workspace/types";
 import { GCodeTaskCard } from "./GCodeTaskCard";
 import { RasterTaskCard } from "./RasterTaskCard";
+import { DragSource, DragSourceCollector, ConnectDragSource, DragSourceSpec } from "react-dnd";
 
 export interface TaskCardProps<T extends MachineTask = MachineTask> {
   model: T;
@@ -15,6 +16,8 @@ export interface TaskCardProps<T extends MachineTask = MachineTask> {
   highlight?: boolean;
 }
 
+type CombinedProps = TaskCardProps & DragSourceProps;
+
 export const DeleteButton: React.SFC<{onClick: () => void}> = props => (
   <button
     key="delete"
@@ -24,13 +27,58 @@ export const DeleteButton: React.SFC<{onClick: () => void}> = props => (
   />
 );
 
-export const TaskCard: React.SFC<TaskCardProps> = props => {
-  const { model } = props;
+export const TaskCard: React.SFC<CombinedProps> = props => {
+  const { model, connectDragSource } = props;
   if (model.type === "gcode") {
-    return <GCodeTaskCard {...props as any} />;
+    return connectDragSource(
+      <div>
+        <GCodeTaskCard {...props as any} />
+      </div>
+    );
   } else if (model.type === "raster") {
-    return <RasterTaskCard {...props as any} />;
+    return connectDragSource(
+      <div>
+        <RasterTaskCard {...props as any} />
+      </div>
+    );
   } else {
     return null;
   }
 };
+
+/** Properties injected by the DragSourceConnector */
+interface DragSourceProps {
+  isDragging: boolean;
+  connectDragSource: ConnectDragSource;
+}
+
+/** Config object for DragSource */
+const dragSourceSpec: DragSourceSpec<TaskCardProps> = {
+  canDrag(props, monitor) {
+    return true;
+  },
+  beginDrag(props, monitor, component: any): MachineTask {
+    // if (props.onBeginDrag) {
+    //   props.onBeginDrag();
+    // }
+
+    return props.model;
+  },
+  // endDrag(props) {
+  //   if (props.onEndDrag) {
+  //     props.onEndDrag();
+  //   }
+  // }
+};
+
+/** Calculate properties to be injected into DesignThumbnail */
+const dragSourceCollector: DragSourceCollector = (connect, monitor) => {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  };
+};
+
+const dragSourceWrapper = DragSource("task", dragSourceSpec, dragSourceCollector);
+
+export const DraggableTaskCard = dragSourceWrapper(TaskCard as any);

@@ -16,7 +16,9 @@ export interface DesignThumbnailProps {
   onDrop?: () => void;
 }
 
-export class DesignThumbnail extends React.Component<DesignThumbnailProps & DragSourceProps> {
+type CombinedProps = DesignThumbnailProps & DragSourceProps;
+
+export class DesignThumbnail extends React.Component<CombinedProps> {
   private clickTimeout: number = null;
 
   private clearClickTimeout = () => {
@@ -63,7 +65,7 @@ export class DesignThumbnail extends React.Component<DesignThumbnailProps & Drag
 }
 
 /** Properties injected by the DragSourceConnector */
-export interface DragSourceProps {
+interface DragSourceProps {
   isDragging: boolean;
   connectDragSource: ConnectDragSource;
 }

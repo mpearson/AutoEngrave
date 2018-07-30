@@ -1,7 +1,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { RootState, RootDispatch } from "../../redux/types";
-import { ConsoleState } from "../../redux/console/reducer";
+import { ConsoleState } from "../../redux/console/types";
 import * as actions from "../../redux/console/actions";
 import { ConsoleInput } from "./ConsoleInput";
 import { PortState } from "../../redux/connection/types";

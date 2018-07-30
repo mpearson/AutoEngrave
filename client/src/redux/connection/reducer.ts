@@ -1,19 +1,7 @@
 import * as actions from "./actions";
 import { ConnectionAction }  from "./actions";
-import { ComPort, baudrates, PortState } from "./types";
+import { ConnectionState, baudrates, PortState } from "./types";
 import * as moment from "moment";
-
-export type ConnectionState = {
-  readonly ports: ComPort[];
-  readonly port: ComPort;
-  readonly baudrate: string;
-  readonly isFetchingPorts: boolean;
-  readonly state: PortState;
-  readonly connectedTime: moment.Moment;
-  readonly isConnecting: boolean;
-  readonly isDisconnecting: boolean;
-  readonly isFetchingStatus: boolean;
-};
 
 const defaultState: ConnectionState = {
   ports: [],

@@ -3,7 +3,7 @@ import "./catalog.less";
 import * as React from "react";
 import { RootState } from "../../redux/types";
 import { connect } from "react-redux";
-import { CatalogState } from "../../redux/catalog/reducer";
+import { CatalogState } from "../../redux/catalog/types";
 import { CreateActionCreator, UpdateActionCreator, DeleteActionCreator, CrudAction } from "../../redux/CRUD/types";
 import { Design } from "../../redux/catalog/types";
 import { DesignCatalog } from "./DesignCatalog";

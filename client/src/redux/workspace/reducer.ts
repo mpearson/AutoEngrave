@@ -1,15 +1,7 @@
 import * as actions from "./actions";
-import { Job, MachineTask } from "./types";
+import { MachineTask, WorkspaceState } from "./types";
 import { Set } from "immutable";
 import { getNewJob, appendNewTask } from "./utils";
-
-export type WorkspaceState = {
-  readonly templateID: number;
-  readonly machineID: number;
-  readonly activeJob: Job;
-  readonly hoverTaskIndex: number;
-  readonly selectedTasks: Set<number>;
-};
 
 const defaultState: WorkspaceState = {
   templateID: null,

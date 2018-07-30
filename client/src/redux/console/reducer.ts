@@ -1,11 +1,6 @@
 import * as actions from "./actions";
-import { ConsoleEntry } from "./types";
+import { ConsoleState } from "./types";
 import { AnyAction, Reducer } from "redux";
-
-export type ConsoleState = {
-  readonly entries: ConsoleEntry[];
-  readonly sendFetching: boolean;
-};
 
 const defaultState: ConsoleState = {
   sendFetching: false,

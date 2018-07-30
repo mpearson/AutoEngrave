@@ -6,7 +6,7 @@ import { RootState } from "../../redux/types";
 import { Set } from "immutable";
 import { connect } from "react-redux";
 import * as actions from "../../redux/workspace/actions";
-import { TaskCard } from "./tasks/TaskCard";
+import { DraggableTaskCard } from "./tasks/TaskCard";
 import { TaskEditor } from "./tasks/TaskEditor";
 import { getSharedTaskSettings } from "../../redux/workspace/utils";
 
@@ -87,7 +87,7 @@ export class JobPanel extends React.Component<JobPanelProps> {
     let taskCards: JSX.Element[] = null;
     if (activeJob) {
       taskCards = activeJob.tasks.map((task, index) => (
-        <TaskCard
+        <DraggableTaskCard
           model={task}
           key={index}
           onDelete={() => deleteTask(index)}

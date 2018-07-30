@@ -1,12 +1,12 @@
-import { ConsoleState } from "./console/reducer";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { Action, AnyAction, Store } from "redux";
-import { ConnectionState } from "./connection/reducer";
-import { SettingsState } from "./settings/reducer";
+import { ConsoleState } from "./console/types";
+import { ConnectionState } from "./connection/types";
+import { SettingsState } from "./settings/types";
 import { CrudState } from "./CRUD/types";
 import { Template } from "./templates/types";
-import { WorkspaceState } from "./workspace/reducer";
-import { CatalogState } from "./catalog/reducer";
+import { WorkspaceState } from "./workspace/types";
+import { CatalogState } from "./catalog/types";
 
 export interface RootState {
   catalog: CatalogState;
