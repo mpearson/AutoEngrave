@@ -40,6 +40,7 @@ interface WorkspaceComponentState {
 }
 
 const ZOOM_FACTOR = Math.sqrt(2);
+const ZOOM_FACTOR_SLOW = Math.sqrt(ZOOM_FACTOR);
 const DEFAULT_PADDING = 10;
 
 export class Workspace extends React.Component<CombinedProps, WorkspaceComponentState> {
@@ -87,13 +88,15 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
     this.panStartOffsetY = null;
   }
 
-  private getNewZoom = (e: React.WheelEvent<HTMLElement>) => {
+  private getNextZoom = (zoomIn: boolean) => {
     let { zoom } = this.state;
-    // this test is equivalent to "zoom in XOR invertZoom"
-    if (e.deltaY < 0 !== this.props.invertZoom)
-      zoom *= ZOOM_FACTOR;
-    else
-      zoom /= ZOOM_FACTOR;
+
+    if (zoomIn) {
+      // zoom in slower if we're going below 100%
+      zoom *= (zoom >= 1 ? ZOOM_FACTOR : ZOOM_FACTOR_SLOW);
+    } else {
+      zoom /= (zoom > 1 ? ZOOM_FACTOR : ZOOM_FACTOR_SLOW);
+    }
 
     // ain't no floating point errors gonna make this shit blurry
     if (Math.abs(1.0 - zoom) < 0.001)
@@ -104,7 +107,9 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
   private onMouseWheel = (e: React.WheelEvent<HTMLElement>) => {
     if (e.deltaY !== 0) {
       const { zoom, translateX, translateY } = this.state;
-      const newZoom = this.getNewZoom(e);
+
+      // this test is equivalent to "zoomIn XOR invertZoom"
+      const newZoom = this.getNextZoom(e.deltaY < 0 !== this.props.invertZoom);
 
       // the projection from workspace coords to viewport coords looks like this:
       //      v = wz + t
@@ -138,9 +143,9 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
     }
   }
 
-  private onZoomIn = () => this.setState({ zoom: this.state.zoom * ZOOM_FACTOR });
+  private onZoomIn = () => this.setState({ zoom: this.getNextZoom(true) });
 
-  private onZoomOut = () => this.setState({ zoom: this.state.zoom / ZOOM_FACTOR });
+  private onZoomOut = () => this.setState({ zoom: this.getNextZoom(false) });
 
   private onZoomReset = () => {
     this.setState({
