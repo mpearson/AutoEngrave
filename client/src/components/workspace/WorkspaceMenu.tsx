@@ -24,8 +24,8 @@ export const WorkspaceMenu: React.SFC<WorkspaceMenuProps> = props => {
         {items.valueSeq().map(t => <option value={t.id} key={t.id}>{t.name}</option>)}
       </select>
       <div className="spacer" />
-      <button className="button" onClick={props.resetTemplate}>Clear</button>
-      <button className="button blue" onClick={props.generateGCode}>Generate G-Code</button>
+      <button onClick={props.resetTemplate}>Clear</button>
+      <button className="blue" onClick={props.generateGCode}>Generate G-Code</button>
     </header>
   );
 };

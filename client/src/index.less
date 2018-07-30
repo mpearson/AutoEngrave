@@ -66,6 +66,20 @@ button.red {
   }
 }
 
+.button-group {
+  button {
+    border-radius: 0;
+    border-right-width: 0;
+  }
+  button:first-child {
+    border-radius: 2px 0 0 2px;
+  }
+  button:last-child {
+    border-radius: 0 2px 2px 0;
+    border-right-width: 1px;
+  }
+}
+
 input.simple-input {
   color: white;
   background: fade(white, 10%);

@@ -103,3 +103,9 @@ export const getSharedTaskSettings = createSelector(
     return sharedTask;
   }
 );
+
+export const getActiveMachine = createSelector(
+  (state: RootState) => state.settings.machines.items,
+  (state: RootState) => state.workspace.machineID,
+  (machines, machineID) => machines.get(machineID)
+);

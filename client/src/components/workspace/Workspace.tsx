@@ -8,16 +8,21 @@ import { Machine } from "../../redux/settings/types";
 import { Template } from "../../redux/templates/types";
 import { WorkspaceMenuConnected } from "./WorkspaceMenu";
 import { TemplateDropZone } from "./TemplateDropZone";
-import { WorkspaceState } from "../../redux/workspace/types";
+import { Job } from "../../redux/workspace/types";
 import * as actions from "../../redux/workspace/actions";
 import { Design } from "../../redux/catalog/types";
 import { WorkspaceItem } from "./WorkspaceItem";
+import { getActiveMachine } from "../../redux/workspace/utils";
+import { getActiveTemplate } from "../../redux/templates/utils";
 
-interface StateProps extends WorkspaceState {
-  machines: OrderedMap<number, Machine>;
-  templates: OrderedMap<number, Template>;
+interface StateProps {
+  activeJob: Job;
+  hoverTaskIndex: number;
+  machine: Machine;
+  template: Template;
   catalog: OrderedMap<number, Design>;
   invertZoom: boolean;
+
 }
 
 interface DispatchProps {
@@ -34,7 +39,8 @@ interface WorkspaceComponentState {
   zoom: number;
 }
 
-const ZOOM_FACTOR = 1.5;
+const ZOOM_FACTOR = Math.sqrt(2);
+const DEFAULT_PADDING = 10;
 
 export class Workspace extends React.Component<CombinedProps, WorkspaceComponentState> {
   constructor(props: CombinedProps) {
@@ -42,9 +48,9 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
 
     this.state = {
       isPanning: false,
-      translateX: 0.0,
-      translateY: 0.0,
-      zoom: 1.0,
+      translateX: DEFAULT_PADDING,
+      translateY: DEFAULT_PADDING,
+      zoom: 1,
     };
   }
 
@@ -95,44 +101,53 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
     return zoom;
   }
 
-  private onZoom = (e: React.WheelEvent<HTMLElement>) => {
+  private onMouseWheel = (e: React.WheelEvent<HTMLElement>) => {
     if (e.deltaY !== 0) {
       const { zoom, translateX, translateY } = this.state;
       const newZoom = this.getNewZoom(e);
 
-      // the viewport projection looks like this:
-      //    v = wz + t
-      //    v' = w'z' + t'
-      // where:
-      //    v = location of mouse relative to workspace viewport,
-      //    w = location of mouse in workspace coordinates,
-      //    z = zoom factor,
-      //    t = workspace translation
-      //
-      // first we need to solve for w:
-      //    w = (v - t) / z
-      //
-      // next, we want to keep the workspace coordinate under the mouse fixed:
-      //    v = v'
-      //    w = w'
-      //
-      // solving for t' we get:
-      //    t' = v - wz'
+      // the projection from workspace coords to viewport coords looks like this:
+      //      v = wz + t
+      // and the inverse is:
+      //      w = (v - t) / z
+      // when zooming, we want to keep the workspace coordinate under the mouse fixed:
+      //      v = v' and w = w'
+      // solving for t' gives:
+      //      t' = v - wz'
 
+      // location of workspace viewport in client viewport coordinates
       const elementOffset = e.currentTarget.getBoundingClientRect();
 
+      // location of mouse relative to workspace viewport
       const vx = e.clientX - elementOffset.left;
       const vy = e.clientY - elementOffset.top;
 
+      // convert viewport coordinates to workspace coordinates
       const wx = (vx - translateX) / zoom;
       const wy = (vy - translateY) / zoom;
 
+      // calculate new translation
+      const newTranslateX = Math.round(vx - (wx * newZoom));
+      const newTranslateY = Math.round(vy - (wy * newZoom));
+
       this.setState({
         zoom: newZoom,
-        translateX: Math.round(vx - (wx * newZoom)),
-        translateY: Math.round(vy - (wy * newZoom)),
+        translateX: newTranslateX,
+        translateY: newTranslateY,
       });
     }
+  }
+
+  private onZoomIn = () => this.setState({ zoom: this.state.zoom * ZOOM_FACTOR });
+
+  private onZoomOut = () => this.setState({ zoom: this.state.zoom / ZOOM_FACTOR });
+
+  private onZoomReset = () => {
+    this.setState({
+      zoom: 1.0,
+      translateX: DEFAULT_PADDING,
+      translateY: DEFAULT_PADDING,
+    });
   }
 
   private renderTaskItems(): JSX.Element[] {
@@ -156,8 +171,7 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
   }
 
   private renderTemplateSlots(): JSX.Element[] {
-    const { templates, templateID, onDropDesign } = this.props;
-    const template = templates.get(templateID);
+    const { template, onDropDesign } = this.props;
     const slots = template ? template.slots : [];
     return slots.map((slot, index) => {
       return (
@@ -178,9 +192,9 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
   }
 
   public render() {
-    const { machines, machineID } = this.props;
-    const { isPanning } = this.state;
-    const machine = machines.get(machineID);
+    const { machine } = this.props;
+    const { isPanning, zoom } = this.state;
+
     if (!machine)
       return null;
 
@@ -201,7 +215,7 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
           onPointerDownCapture={this.startPanning}
           onPointerMoveCapture={isPanning ? this.onMouseMove : undefined}
           onPointerUpCapture={isPanning ? this.stopPanning : undefined}
-          onWheelCapture={isPanning ? undefined : this.onZoom}
+          onWheelCapture={isPanning ? undefined : this.onMouseWheel}
         >
           <div className="machine-bed-transform" style={this.getTransformStyle()}>
             <div className="machine-bed" style={machineBedStyle}>
@@ -210,15 +224,24 @@ export class Workspace extends React.Component<CombinedProps, WorkspaceComponent
             </div>
           </div>
         </div>
+        <div className="zoom-buttons">
+          <div className="button-group">
+            <button className="fas fa-plus" title="Zoom in" onClick={this.onZoomIn} />
+            <button className="fas fa-minus" title="Zoom out" onClick={this.onZoomOut} />
+            <button className="fas fa-expand" title="Reset zoom" onClick={this.onZoomReset} />
+          </div>
+          <div className="zoom-indicator">{Math.round(zoom * 100) + "%"}</div>
+        </div>
       </div>
     );
   }
 }
 
 const mapStateToProps = (state: RootState) => ({
-  ...state.workspace,
-  machines: state.settings.machines.items,
-  templates: state.templates.items,
+  activeJob: state.workspace.activeJob,
+  hoverTaskIndex: state.workspace.hoverTaskIndex,
+  machine: getActiveMachine(state),
+  template: getActiveTemplate(state),
   catalog: state.catalog.items,
   invertZoom: false, // TODO: make it real (state.settings.preferences.invertZoom)
 });
