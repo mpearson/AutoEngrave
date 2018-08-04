@@ -3,23 +3,7 @@
 .panel.workspace-panel {
   flex: 1 0 auto;
 
-  .machine-bed-wrapper {
-    flex: 1 1 auto;
-    overflow: hidden;
-    &.panning { cursor: move; }
-  }
-
-  .machine-bed-transform {
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transform-origin: 0 0;
-    transform: scale(1) translate(0, 0);
-    transition: transform 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .panning .machine-bed-transform {
-    transition: none;
-  }
+  .zoom-area { flex: 1 1 auto; }
 
   .machine-bed {
     border: 1px dashed #f5d005;
@@ -50,27 +34,16 @@
   }
 
   .zoom-buttons {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
     .flex-row();
     align-items: center;
-
-
+    padding: 10px;
+    background: @panel-background;
+    border-top: @panel-border;
 
     .button-group { margin-right: 5px; }
     button {
       height: 24px;
       font-size: 10px;
-    }
-    .zoom-indicator {
-      height: 22px;
-      border: 1px solid grey;
-      background: black;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      padding: 0 5px;
     }
   }
 
