@@ -2,12 +2,12 @@ import "./zoom-area.less";
 
 import * as React from "react";
 
-const ZOOM_FACTOR = Math.sqrt(2);
-const ZOOM_FACTOR_SLOW = Math.sqrt(ZOOM_FACTOR);
-const DEFAULT_PADDING = 10;
+const DEFAULT_ZOOM_FACTOR = Math.pow(2, 0.25); // Math.sqrt(2);
 
 export interface ZoomAreaProps {
   invertZoom?: boolean;
+  constrainContent?: boolean;
+  zoomFactor?: number;
 }
 
 interface ZoomAreaState {
@@ -23,19 +23,28 @@ export class ZoomArea extends React.Component<ZoomAreaProps, ZoomAreaState> {
 
     this.state = {
       isPanning: false,
-      translateX: DEFAULT_PADDING,
-      translateY: DEFAULT_PADDING,
+      translateX: 0,
+      translateY: 0,
       zoom: 1,
     };
   }
 
   static defaultProps = {
     invertZoom: false,
+    constrainContent: false,
+    zoomFactor: DEFAULT_ZOOM_FACTOR,
   };
 
   private panStartEvent: React.PointerEvent<HTMLElement> = null;
   private panStartOffsetX: number = null;
   private panStartOffsetY: number = null;
+
+  private zoomAreaWidth: number = null;
+  private zoomAreaHeight: number = null;
+  private contentWidth: number = null;
+  private contentHeight: number = null;
+
+  private zoomTransform = React.createRef<HTMLDivElement>();
 
   private startPanning = (e: React.PointerEvent<HTMLElement>) => {
     // we're only interested in regular clicks and maybe middle clicks
@@ -46,15 +55,37 @@ export class ZoomArea extends React.Component<ZoomAreaProps, ZoomAreaState> {
       this.panStartEvent = e;
       this.panStartOffsetX = this.state.translateX;
       this.panStartOffsetY = this.state.translateY;
+      this.zoomAreaWidth = e.currentTarget.clientWidth;
+      this.zoomAreaHeight = e.currentTarget.clientHeight;
+      this.contentWidth = this.zoomTransform.current.clientWidth * this.state.zoom;
+      this.contentHeight = this.zoomTransform.current.clientHeight * this.state.zoom;
+
       e.currentTarget.setPointerCapture(e.pointerId);
       this.setState({ isPanning: true });
     }
   }
 
+  private constrainTranslateX = (x: number) => {
+    if (this.props.constrainContent)
+      return Math.min(0, Math.max(x, this.zoomAreaWidth - this.contentWidth));
+    else
+      return x;
+  }
+
+  private constrainTranslateY = (y: number) => {
+    if (this.props.constrainContent)
+      return Math.min(0, Math.max(y, this.zoomAreaHeight - this.contentHeight));
+    else
+      return y;
+  }
+
   private onMouseMove = (e: React.PointerEvent<HTMLElement>) => {
+    const translateX = this.panStartOffsetX + e.screenX - this.panStartEvent.screenX;
+    const translateY = this.panStartOffsetY + e.screenY - this.panStartEvent.screenY;
+
     this.setState({
-      translateX: this.panStartOffsetX + e.screenX - this.panStartEvent.screenX,
-      translateY: this.panStartOffsetY + e.screenY - this.panStartEvent.screenY,
+      translateX: this.constrainTranslateX(translateX),
+      translateY: this.constrainTranslateY(translateY),
     });
   }
 
@@ -64,16 +95,21 @@ export class ZoomArea extends React.Component<ZoomAreaProps, ZoomAreaState> {
     this.panStartEvent = null;
     this.panStartOffsetX = null;
     this.panStartOffsetY = null;
+    this.zoomAreaWidth = null;
+    this.zoomAreaHeight = null;
+    this.contentWidth = null;
+    this.contentHeight = null;
   }
 
   private getNextZoom = (zoomIn: boolean) => {
+    const { zoomFactor } = this.props;
     let { zoom } = this.state;
 
     if (zoomIn) {
       // zoom in slower if we're going below 100%
-      zoom *= (zoom >= 1 ? ZOOM_FACTOR : ZOOM_FACTOR_SLOW);
+      zoom *= (zoom >= 1 ? zoomFactor : Math.sqrt(zoomFactor));
     } else {
-      zoom /= (zoom > 1 ? ZOOM_FACTOR : ZOOM_FACTOR_SLOW);
+      zoom /= (zoom > 1 ? zoomFactor : Math.sqrt(zoomFactor));
     }
 
     // ain't no floating point errors gonna make this shit blurry
@@ -88,6 +124,11 @@ export class ZoomArea extends React.Component<ZoomAreaProps, ZoomAreaState> {
 
       // this test is equivalent to "zoomIn XOR invertZoom"
       const newZoom = this.getNextZoom(e.deltaY < 0 !== this.props.invertZoom);
+
+      this.zoomAreaWidth = e.currentTarget.clientWidth;
+      this.zoomAreaHeight = e.currentTarget.clientHeight;
+      this.contentWidth = this.zoomTransform.current.clientWidth * newZoom;
+      this.contentHeight = this.zoomTransform.current.clientHeight * newZoom;
 
       // the projection from workspace coords to viewport coords looks like this:
       //      v = wz + t
@@ -115,8 +156,8 @@ export class ZoomArea extends React.Component<ZoomAreaProps, ZoomAreaState> {
 
       this.setState({
         zoom: newZoom,
-        translateX: newTranslateX,
-        translateY: newTranslateY,
+        translateX: this.constrainTranslateX(newTranslateX),
+        translateY: this.constrainTranslateY(newTranslateY),
       });
     }
   }
@@ -128,8 +169,8 @@ export class ZoomArea extends React.Component<ZoomAreaProps, ZoomAreaState> {
   public zoomReset = () => {
     this.setState({
       zoom: 1.0,
-      translateX: DEFAULT_PADDING,
-      translateY: DEFAULT_PADDING,
+      translateX: 0,
+      translateY: 0,
     });
   }
 
@@ -156,7 +197,7 @@ export class ZoomArea extends React.Component<ZoomAreaProps, ZoomAreaState> {
         onPointerUpCapture={isPanning ? this.stopPanning : undefined}
         onWheelCapture={isPanning ? undefined : this.onMouseWheel}
       >
-        <div className="zoom-area-transform" style={this.getTransformStyle()}>
+        <div className="zoom-area-transform" style={this.getTransformStyle()} ref={this.zoomTransform}>
           {children}
         </div>
       </div>

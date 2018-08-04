@@ -100,7 +100,7 @@ class Workspace extends React.Component<CombinedProps, WorkspaceState> {
     return (
       <div className="panel workspace-panel">
         <WorkspaceMenuConnected />
-        <ZoomArea ref={this.zoomArea}>
+        <ZoomArea constrainContent={true} ref={this.zoomArea}>
           <div className="machine-bed" style={machineBedStyle}>
             {this.renderTaskItems()}
             {this.renderTemplateSlots()}
