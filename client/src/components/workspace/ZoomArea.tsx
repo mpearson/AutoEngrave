@@ -8,6 +8,7 @@ export interface ZoomAreaProps {
   invertZoom?: boolean;
   constrainContent?: boolean;
   zoomFactor?: number;
+  className?: string;
 }
 
 interface ZoomAreaState {
@@ -71,10 +72,15 @@ export class ZoomArea extends React.Component<ZoomAreaProps, ZoomAreaState> {
   }
 
   private constrainTranslateX = (x: number, zoom: number) => {
-    if (this.props.constrainContent)
-      return Math.min(0, Math.max(x, this.zoomAreaWidth - this.contentWidth * zoom));
-    else
+    if (this.props.constrainContent) {
+      const width =  this.contentWidth * zoom;
+      const min = this.zoomAreaWidth - width;
+      const max = Math.max(0, min);
+      // const minX = this.props.lockUpperLeft
+      return Math.min(max, Math.max(x, min));
+    } else {
       return x;
+    }
   }
 
   private constrainTranslateY = (y: number, zoom: number) => {
@@ -194,12 +200,14 @@ export class ZoomArea extends React.Component<ZoomAreaProps, ZoomAreaState> {
   }
 
   public render() {
-    const { children } = this.props;
+    const { children, className } = this.props;
     const { isPanning } = this.state;
 
     const wrapperClassList = ["zoom-area"];
     if (isPanning)
       wrapperClassList.push("panning");
+    if (className)
+      wrapperClassList.push(className);
 
     return (
       <div
