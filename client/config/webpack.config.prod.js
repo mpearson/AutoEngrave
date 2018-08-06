@@ -67,7 +67,7 @@ module.exports = {
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
-    publicPath: publicPath
+    publicPath: "" // used to be "/" but I want relative paths
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -117,6 +117,7 @@ module.exports = {
           /\.(js|jsx)$/,
           /\.(ts|tsx)$/,
           /\.css$/,
+          /\.less$/,
           /\.json$/,
           /\.svg$/
         ],
@@ -147,31 +148,16 @@ module.exports = {
         }
       },
       {
-        test: /\.css$/,
-        loader: ["style-loader", "css-loader"]
-      },
-      {
-        test: /\.less$/,
-        use: [
-          {
-            loader: "style-loader"
-          },
-          {
-            loader: "css-loader"
-          },
-          {
-            loader: "less-loader",
-            // options: {
-            //   paths: [
-            //     path.resolve(__dirname, "node_modules")
-            //   ]
-            // }
-          }
-        ]
+        test: /\.(css|less)$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: ["css-loader", "less-loader"]
+        })
       }
     ]
   },
   plugins: [
+    new ExtractTextPlugin("static/css/style.css"),
     // Makes the public URL available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     // In production, it will be an empty string unless you specify "homepage"
