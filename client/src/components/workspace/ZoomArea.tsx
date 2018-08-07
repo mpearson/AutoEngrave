@@ -73,11 +73,13 @@ export class ZoomArea extends React.Component<ZoomAreaProps, ZoomAreaState> {
 
   private constrainTranslateX = (x: number, zoom: number) => {
     if (this.props.constrainContent) {
-      const width =  this.contentWidth * zoom;
-      const min = this.zoomAreaWidth - width;
-      const max = Math.max(0, min);
-      // const minX = this.props.lockUpperLeft
-      return Math.min(max, Math.max(x, min));
+      return Math.min(0, Math.max(x, this.zoomAreaWidth - this.contentWidth * zoom));
+
+      // // alternately, this version doesn't lock to the upper left when zoomed out all the way:
+      // const width =  this.contentWidth * zoom;
+      // const max = Math.max(0, this.zoomAreaWidth - width);
+      // const min = Math.min(0, this.zoomAreaWidth - width);
+      // return Math.min(max, Math.max(x, min));
     } else {
       return x;
     }
