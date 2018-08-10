@@ -1,4 +1,7 @@
 # setup uWSGI
+pipenv install uwsgi
+sudo mkdir -p /run/uwsgi
+sudo chown www-data:www-data /run/uwsgi
 sudo cp autoengrave.service /etc/systemd/system
 sudo systemctl enable autoengrave
 sudo systemctl start autoengrave

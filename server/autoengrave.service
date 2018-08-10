@@ -3,8 +3,7 @@ Description=uWSGI instance to serve AutoEngrave
 
 [Service]
 User=www-data
-ExecStartPre=-/usr/bin/bash -c 'mkdir -p /run/uwsgi; chown www-data /run/uwsgi'
-ExecStart=/usr/bin/bash -c 'cd /home/pi/AutoEngrave/server; pipenv run uwsgi --ini wsgi.ini'
+ExecStart=/bin/bash -c 'cd /home/pi/AutoEngrave/server; uwsgi -H /home/pi/.local/share/virtualenvs/server-ItEKEJxH -i wsgi.ini
 
 [Install]
 WantedBy=multi-user.target
