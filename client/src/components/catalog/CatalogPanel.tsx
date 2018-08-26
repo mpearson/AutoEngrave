@@ -1,8 +1,11 @@
 import "./catalog.less";
 
 import * as React from "react";
-import { RootState } from "../../redux/types";
 import { connect } from "react-redux";
+import * as _ from "lodash";
+import { createSelector } from "reselect";
+import { Iterable } from "immutable";
+import { RootState } from "../../redux/types";
 import { CatalogState } from "../../redux/catalog/types";
 import { CreateActionCreator, UpdateActionCreator, DeleteActionCreator, CrudAction } from "../../redux/CRUD/types";
 import { Design } from "../../redux/catalog/types";
@@ -11,10 +14,10 @@ import { DesignEditor } from "./DesignEditor";
 import * as actions from "../../redux/catalog/actions";
 import { addDesignToTemplate } from "../../redux/workspace/actions";
 import { Job, DesignTask } from "../../redux/workspace/types";
-import * as _ from "lodash";
 
 interface StateProps extends CatalogState {
   activeJob: Job;
+  sortedDesigns: Iterable.Indexed<Design>;
 }
 
 interface DispatchProps {
@@ -79,7 +82,7 @@ export class CatalogPanel extends React.Component<CombinedProps, CatalogPanelSta
   private confirmDeleteEditing = () => this.confirmDelete(this.state.editingID);
 
   public render() {
-    const { items, selectedID, addToWorkspace, selectDesign } = this.props;
+    const { items, sortedDesigns, selectedID, addToWorkspace, selectDesign } = this.props;
     const editingModel = items.get(this.state.editingID);
     // const classList: string[] = [];
     // if (dragHover)
@@ -96,7 +99,7 @@ export class CatalogPanel extends React.Component<CombinedProps, CatalogPanelSta
     } else {
       return (
         <DesignCatalog
-          items={items}
+          items={sortedDesigns}
           selectedID={selectedID}
           onSelect={selectDesign}
           onAdd={addToWorkspace}
@@ -110,8 +113,14 @@ export class CatalogPanel extends React.Component<CombinedProps, CatalogPanelSta
 
 }
 
+const sortDesignsByID = createSelector(
+  (state: RootState) => state.catalog.items,
+  (items) => items.sortBy((value, key) => key).reverse()
+);
+
 const mapStateToProps = (state: RootState) => ({
   ...state.catalog,
+  sortedDesigns: sortDesignsByID(state),
   activeJob: state.workspace.activeJob,
 });
 

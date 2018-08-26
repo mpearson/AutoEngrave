@@ -4,11 +4,11 @@ import { DraggableDesignThumbnail } from "./DesignThumbnail";
 import { ConnectDropTarget, DropTargetSpec, DropTargetCollector, DropTarget } from "react-dnd";
 import { NativeTypes } from "react-dnd-html5-backend";
 import { uploadDesigns } from "../../redux/catalog/utils";
-import { OrderedMap } from "immutable";
+import { Iterable } from "immutable";
 import { QuickAddDialog } from "./QuickAddDialog";
 
 export interface DesignCatalogProps {
-  items: OrderedMap<number, Design>;
+  items: Iterable.Indexed<Design>;
   selectedID: number;
   onSelect: (id: number) => void;
   onAdd: (id: number, count?: number) => void;
@@ -109,14 +109,14 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
       ];
     }
 
-    const thumbnails = items.toKeyedSeq().map((item, id) => (
+    const thumbnails = items.map(design => (
       <DraggableDesignThumbnail
-        key={id}
-        design={item}
+        key={design.id}
+        design={design}
         size={100}
-        selected={id === selectedID}
-        onClick={() => onSelect(id)}
-        onDoubleClick={() => onEdit(id)}
+        selected={design.id === selectedID}
+        onClick={() => onSelect(design.id)}
+        onDoubleClick={() => onEdit(design.id)}
       />
     )).toArray();
 
@@ -126,6 +126,8 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
         <header className="action-buttons">
           <input
             type="file"
+            accept="image/*"
+            multiple
             className="file-input"
             ref={elem => this.fileInput = elem}
             onChange={this.onSelectFile}
