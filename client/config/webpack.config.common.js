@@ -89,28 +89,36 @@ module.exports = {
   },
 
   module: {
-    // First, run the linter.
-    // It's important to do this before Babel processes the JS.
-    // rules: [
-    //   {
-    //     test: /\.(ts|tsx)$/,
-    //     loader: 'tslint',
-    //     include: paths.appSrc,
-    //   }
-    // ],
     rules: [
-      // Default loader: load all assets that are not handled
-      // by other loaders with the url loader.
-      // Note: This list needs to be updated with every change of extensions
-      // the other loaders match.
-      // E.g., when adding a loader for a new supported file extension,
-      // we need to add the supported extension to this loader too.
-      // Add one new line in `exclude` for each loader.
-      //
-      // "file" loader makes sure those assets end up in the `build` folder.
-      // When you `import` an asset, you get its filename.
-      // "url" loader works just like "file" loader but it also embeds
-      // assets smaller than specified size as data URLs to avoid requests.
+      {
+        test: /\.(ts|tsx)$/,
+        loader: 'tslint',
+        include: paths.appSrc,
+      },
+      {
+        test: /\.(ts|tsx)$/,
+        include: paths.appSrc,
+        loader: 'ts-loader',
+      },
+      {
+        test: /\.(less|css)$/,
+        use: [
+          { loader: "style-loader" },
+          { loader: "css-loader", options: { sourceMap: true } },
+          { loader: "less-loader", options: { sourceMap: true } }
+        ]
+      },
+      {
+        test: /\.json$/,
+        loader: 'json-loader'
+      },
+      {
+        test: /\.svg$/,
+        loader: 'file-loader',
+        query: {
+          name: 'static/media/[name].[hash:8].[ext]'
+        }
+      },
       {
         exclude: [
           /\.html$/,
@@ -127,29 +135,6 @@ module.exports = {
           name: 'static/media/[name].[hash:8].[ext]'
         }
       },
-      {
-        test: /\.(ts|tsx)$/,
-        include: paths.appSrc,
-        loader: 'ts-loader',
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
-      },
-      {
-        test: /\.svg$/,
-        loader: 'file-loader',
-        query: {
-          name: 'static/media/[name].[hash:8].[ext]'
-        }
-      },
-      {
-        test: /\.(css|less)$/,
-        use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: ["css-loader", "less-loader"]
-        })
-      }
     ]
   },
   plugins: [

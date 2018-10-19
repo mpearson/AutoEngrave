@@ -65,62 +65,25 @@ module.exports = {
 
   module: {
     rules: [
-      // Compile .tsx?
       {
         test: /\.(ts|tsx)$/,
         include: paths.appSrc,
         loader: ["ts-loader"],
       },
-      // "postcss" loader applies autoprefixer to our CSS.
-      // "css" loader resolves paths in CSS and adds assets as dependencies.
-      // "style" loader turns CSS into JS modules that inject <style> tags.
-      // In production, we use a plugin to extract that CSS to a file, but
-      // in development "style" loader enables hot editing of CSS.
-
-      // JSON is not enabled by default in Webpack but both Node and Browserify
-      // allow it implicitly so we also enable it.
       {
         test: /\.json$/,
         loader: ["json-loader"]
       },
-      // "file" loader for svg
       {
         test: /\.svg$/,
         loader: ["ts-loader!svg-react"],
       },
       {
-        test: /\.css$/,
-        loader: ["style-loader", "css-loader"]
-      },
-      {
-        test: /\.less$/,
+        test: /\.(less|css)$/,
         use: [
-          // {
-          //   loader: "file-loader"
-          // },
-          // {
-          //   loader: "extract-loader"
-          // },
-          {
-            loader: "style-loader"
-          },
-          {
-            loader: "css-loader",
-            options: {
-              sourceMap: true
-            }
-          },
-          {
-            loader: "less-loader",
-            options: {
-              sourceMap: true
-            }
-            // options: {
-            //   paths: [
-            //     path.resolve(__dirname, "node_modules")
-            //   ]
-            // }
-          }
+          { loader: "style-loader" },
+          { loader: "css-loader", options: { sourceMap: true } },
+          { loader: "less-loader", options: { sourceMap: true } }
         ]
       },
       {
@@ -134,10 +97,6 @@ module.exports = {
           /\.svg$/
         ],
         loader: ["file-loader"],
-        // query: {
-        //   limit: 10000,
-        //   name: "static/media/[name].[hash:8].[ext]"
-        // }
       },
     ]
   },
