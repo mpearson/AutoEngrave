@@ -1,18 +1,35 @@
 # AutoEngrave
 Web-based laser cutting and engraving platform.
 
-Requirements:
+# Requirements:
+
+## Back end
 - numpy
 - opencv-python
 - cairosvg
+- flask
+- SQLite
 
-Features coming soon to a repository near you:
-- web server with Flask, SQLite
+## Front end
+- nodejs
+- react/redux
+- typescript
+
+# Features
+- Design templates
+- Design library
+- Multi-task engravings
+- G-code export
 - serial port scanning/selection
+
+# Roadmap
 - G-code sending
 - job pause/resume/cancel
-- UI using either React or Bootstrap and jQuery
 - job queuing
 - template loading
-- cutting support
+- cutting/vectoring
 - pre/post g-code
+
+- tag search
+- bulk tag search (e.g. paste comma-separated tags)
+- make ignoring outlines optional
