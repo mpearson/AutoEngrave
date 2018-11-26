@@ -6,6 +6,7 @@ import { NativeTypes } from "react-dnd-html5-backend";
 import { uploadDesigns } from "../../redux/catalog/utils";
 import { Iterable } from "immutable";
 import { QuickAddDialog } from "./QuickAddDialog";
+import { QuickSearch } from '../QuickSearch';
 
 export interface DesignCatalogProps {
   items: Iterable.Indexed<Design>;
@@ -19,6 +20,7 @@ export interface DesignCatalogProps {
 
 export interface DesignCatalogState {
   quickAddInput: string;
+  quickSearch: string;
 }
 
 interface FileDragInfo {
@@ -56,6 +58,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
     super(props);
     this.state = {
       quickAddInput: null,
+      quickSearch: "",
     };
   }
 
@@ -65,20 +68,22 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
     uploadDesigns(this.fileInput.files, this.props.onUpload);
   }
 
-  private onChangeQuickInput = (quickAddInput: string) => this.setState({ quickAddInput });
+  private onChangeQuickAdd = (quickAddInput: string) => this.setState({ quickAddInput });
 
-  private submitQuickInput = () => {
+  private onChangeQuickSearch = (quickSearch: string) => this.setState({ quickSearch });
+
+  private submitQuickAdd = () => {
     const count = parseInt(this.state.quickAddInput, 10);
     this.props.onAdd(this.props.selectedID, count);
-    this.clearQuickInput();
+    this.cancelQuickAdd();
   }
 
-  private clearQuickInput = () => this.setState({ quickAddInput: null });
+  private cancelQuickAdd = () => this.setState({ quickAddInput: null });
 
   public render() {
     const { items, onSelect, onAdd, onEdit, onDelete, selectedID } = this.props;
     const { isOver, canDrop, connectDropTarget } = this.props;
-    const { quickAddInput } = this.state;
+    const { quickAddInput, quickSearch } = this.state;
     const classList = ["panel", "catalog-panel", "design-catalog"];
     if (canDrop) {
       classList.push("dnd-can-drop");
@@ -109,16 +114,19 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
       ];
     }
 
-    const thumbnails = items.map(design => (
-      <DraggableDesignThumbnail
-        key={design.id}
-        design={design}
-        size={100}
-        selected={design.id === selectedID}
-        onClick={() => onSelect(design.id)}
-        onDoubleClick={() => onEdit(design.id)}
-      />
-    )).toArray();
+    const thumbnails = items
+      .filter(design => design.name.toLowerCase().includes(quickSearch))
+      .map(design => (
+        <DraggableDesignThumbnail
+          key={design.id}
+          design={design}
+          size={100}
+          selected={design.id === selectedID}
+          onClick={() => onSelect(design.id)}
+          onDoubleClick={() => onEdit(design.id)}
+        />
+      ))
+      .toArray();
 
     return connectDropTarget(
       <div className={classList.join(" ")}>
@@ -136,14 +144,17 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
           <div className="spacer" />
           {actionButtons}
         </header>
+        <div className="quick-search">
+          <QuickSearch value={quickSearch} onChange={this.onChangeQuickSearch} />
+        </div>
         <section className="catalog-items scrollable">
           {thumbnails}
         </section>
         <QuickAddDialog
           value={quickAddInput}
-          onChange={this.onChangeQuickInput}
-          onSubmit={this.submitQuickInput}
-          onCancel={this.clearQuickInput}
+          onChange={this.onChangeQuickAdd}
+          onSubmit={this.submitQuickAdd}
+          onCancel={this.cancelQuickAdd}
           disabled={selectedID === null}
         />
       </div>
