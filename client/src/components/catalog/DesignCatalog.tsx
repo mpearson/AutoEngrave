@@ -6,7 +6,7 @@ import { NativeTypes } from "react-dnd-html5-backend";
 import { uploadDesigns } from "../../redux/catalog/utils";
 import { Iterable } from "immutable";
 import { QuickAddDialog } from "./QuickAddDialog";
-import { QuickSearch } from '../QuickSearch';
+import { QuickSearch } from "../QuickSearch";
 
 export interface DesignCatalogProps {
   items: Iterable.Indexed<Design>;

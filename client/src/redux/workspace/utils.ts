@@ -16,7 +16,7 @@ export const getNewJob = (): Job => ({
   tasks: [
     {
       type: "gcode",
-      commands: ["; startup", "G21", "G90", "M106.1", "M106.2", "M106.3", "M106.4", "G4 P2000", "M3"],
+      commands: ["; startup", "G21", "G90", "M106.1", "M106.2", "M106.3", "M106.4", "G4 P2000", "M3", "G4 P8000"],
       pin: "start",
     },
     {
