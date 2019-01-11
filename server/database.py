@@ -66,9 +66,13 @@ class MachineProfile(SQLiteModel):
 
     defaultFeedRate = peewee.FloatField()
 
+    defaultTemplate = peewee.ForeignKeyField(Template)
+
 
 class MaterialProfile(SQLiteModel):
     name = peewee.CharField()
+    power = peewee.FloatField()
+    speed = peewee.FloatField()
 
 
 class Template(SQLiteModel):
@@ -80,10 +84,14 @@ class Template(SQLiteModel):
 
 class TemplateSlot(SQLiteModel):
     template = peewee.ForeignKeyField(Template)
+    x = peewee.FloatField()
+    y = peewee.FloatField()
+    width = peewee.FloatField()
+    height = peewee.FloatField()
 
 
 def createTables():
-    for Model in (Design, MachineProfile, Template, TemplateSlot):
+    for Model in (Design, MachineProfile, MaterialProfile, Template, TemplateSlot):
         try:
             Model.create_table()
         except peewee.OperationalError:
