@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import * as _ from "lodash";
 import { createSelector } from "reselect";
 import { Iterable } from "immutable";
+
 import { RootState } from "../../redux/types";
 import { CatalogState } from "../../redux/catalog/types";
 import { CreateActionCreator, UpdateActionCreator, DeleteActionCreator, CrudAction } from "../../redux/CRUD/types";
@@ -124,19 +125,17 @@ const mapStateToProps = (state: RootState) => ({
   activeJob: state.workspace.activeJob,
 });
 
-// const mapDispatchToProps = (dispatch: Dispatch<RootState>) => ({
-//   createDesign: (design: Design) => { dispatch(actions.createDesign(design)); },
-//   updateDesign: (oldDesign: Design, design: Design) => { dispatch(actions.updateDesign(oldDesign, design)); },
-//   deleteDesign: (design: Design) => { dispatch(actions.deleteDesign(design)); },
+// const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+//   createDesign: (diff) => dispatch(actions.createDesign(diff)),
+//   updateDesign: (diff, id) => dispatch(actions.updateDesign(diff, id)),
+//   deleteDesign: (id) => dispatch(actions.deleteDesign(id)),
+//   selectDesign: (id) => dispatch(actions.selectDesign(id)),
+//   addToWorkspace: (id) => dispatch(addDesignToTemplate(id)),
 // });
 
 const mapDispatchToProps = {
-  createDesign: actions.createDesign,
-  updateDesign: actions.updateDesign,
-  deleteDesign: actions.deleteDesign,
-  selectDesign: actions.selectDesign,
+  ...actions,
   addToWorkspace: addDesignToTemplate,
 };
-
 
 export const CatalogPanelConnected = connect(mapStateToProps, mapDispatchToProps)(CatalogPanel);

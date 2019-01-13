@@ -31,7 +31,7 @@ def runDesignTask(task):
     # dpi = 80
     # mmPerPixel = width / design.width # 25.4 / dpi
     mmPerPixel = 25.4 / task["dpi"]
-    overscan = 10 # mm
+    overscan = 4 # mm
     x = task["x"]
     y = task["y"]
     targetWidth = task["width"]

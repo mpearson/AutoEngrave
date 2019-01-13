@@ -99,19 +99,35 @@ const defaultTemplate1: Template = {
   ],
 };
 
+// const defaultTemplate2: Template = {
+//   name: "Coasters - 9x (old)",
+//   notes: "",
+//   slots: [
+//     { index: 0, x: 9,     y: 9,   width: 102, height: 102 },
+//     { index: 1, x: 119,   y: 9,   width: 102, height: 102 },
+//     { index: 2, x: 229,   y: 9,   width: 102, height: 102 },
+//     { index: 3, x: 9,     y: 119, width: 102, height: 102 },
+//     { index: 4, x: 119,   y: 119, width: 102, height: 102 },
+//     { index: 5, x: 229,   y: 119, width: 102, height: 102 },
+//     { index: 6, x: 9,     y: 229, width: 102, height: 102 },
+//     { index: 7, x: 119,   y: 229, width: 102, height: 102 },
+//     { index: 8, x: 229,   y: 229, width: 102, height: 102 },
+//   ],
+// };
+
 const defaultTemplate2: Template = {
   name: "Coasters - 9x",
   notes: "",
   slots: [
-    { index: 0, x: 9,     y: 9,   width: 102, height: 102 },
-    { index: 1, x: 119,   y: 9,   width: 102, height: 102 },
-    { index: 2, x: 229,   y: 9,   width: 102, height: 102 },
-    { index: 3, x: 9,     y: 119, width: 102, height: 102 },
-    { index: 4, x: 119,   y: 119, width: 102, height: 102 },
-    { index: 5, x: 229,   y: 119, width: 102, height: 102 },
-    { index: 6, x: 9,     y: 229, width: 102, height: 102 },
-    { index: 7, x: 119,   y: 229, width: 102, height: 102 },
-    { index: 8, x: 229,   y: 229, width: 102, height: 102 },
+    { index: 0, x: 7,     y: 9,   width: 102, height: 102 },
+    { index: 1, x: 117,   y: 9,   width: 102, height: 102 },
+    { index: 2, x: 227,   y: 9,   width: 102, height: 102 },
+    { index: 3, x: 7,     y: 119, width: 102, height: 102 },
+    { index: 4, x: 117,   y: 119, width: 102, height: 102 },
+    { index: 5, x: 227,   y: 119, width: 102, height: 102 },
+    { index: 6, x: 7,     y: 229, width: 102, height: 102 },
+    { index: 7, x: 117,   y: 229, width: 102, height: 102 },
+    { index: 8, x: 227,   y: 229, width: 102, height: 102 },
   ],
 
 };
