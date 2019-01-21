@@ -1,13 +1,13 @@
 import { CrudItem, CrudState } from "../CRUD/types";
+import { LocalSettingsState } from "./local/types";
 
 export const MACHINES_PREFIX = "machines";
 export const MATERIALS_PREFIX = "materials";
-export const PREFERENCES_PREFIX = "preferences";
 
 export interface SettingsState {
   machines: CrudState<Machine>;
   materials: CrudState<Material>;
-  preferences: CrudState<UserPreferences>;
+  local: LocalSettingsState;
 }
 
 export type Axis = "X" | "Y" | "Z";
@@ -39,8 +39,4 @@ export interface Machine extends CrudItem {
 
 export interface Material extends CrudItem {
 
-}
-
-export interface UserPreferences extends CrudItem {
-  invertZoom: boolean;
 }

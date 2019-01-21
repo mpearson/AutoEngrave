@@ -66,3 +66,4 @@ export interface RasterTask extends DesignTask {
 
 
 export type MachineTask = GCodeTask | DesignTask;
+

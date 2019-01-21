@@ -1,6 +1,12 @@
+import "./index.less";
+import "./normalize.css";
+
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import { DragDropContextProvider } from "react-dnd";
+import HTML5Backend from "react-dnd-html5-backend";
+
 import { store } from "./store/index";
 import { MainPanel } from "./components/MainPanel";
 import { getConnectionStatus, getPorts } from "./redux/connection/actions";
@@ -10,11 +16,9 @@ import { MACHINES_PREFIX, Machine } from "./redux/settings/types";
 import { SELECT_MACHINE, SELECT_TEMPLATE } from "./redux/workspace/actions";
 import { CREATE_SUCCESS } from "./redux/CRUD/actions";
 import { listDesigns } from "./redux/catalog/actions";
-import { DragDropContextProvider } from "react-dnd";
-import HTML5Backend from "react-dnd-html5-backend";
 
-import "./index.less";
-import "./normalize.css";
+import { LocalStorageManager } from "./services/localstorage";
+import { setLocalSettings } from "./redux/settings/local/actions";
 
 export const app = ReactDOM.render(
   <Provider store={store}>
@@ -23,6 +27,13 @@ export const app = ReactDOM.render(
     </DragDropContextProvider>
   </Provider>,
   document.getElementById("root"),
+);
+
+export const localSettingsManager = new LocalStorageManager(
+  "localSettings",
+  store,
+  s => s.settings.local,
+  setLocalSettings
 );
 
 store.dispatch(getPorts()).then(() => store.dispatch(getConnectionStatus()));
