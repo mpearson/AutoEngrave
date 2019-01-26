@@ -1,47 +1,55 @@
 import { Store, AnyAction, Unsubscribe } from "redux";
+import { RootState } from "../redux/types";
 
-export class LocalStorageManager<S, T> {
-  private store: Store<S, any> = null;
+export class LocalStorageManager {
+  private store: Store<RootState> = null;
   private unsubscribe: Unsubscribe = null;
-  private getState: (state: S) => T = null;
-  private updateStateAction: (state: T) => AnyAction = null;
-  private key: string = null;
-  private lastState: T = null;
 
-  public constructor(
-    key: string,
-    store: Store<S>,
-    getState: (state: S) => T,
-    updateStateAction: (state: T) => AnyAction
-  ) {
-    this.key = key;
+  private subscriptions: Array<{
+    key: string;
+    getValue: (state: any) => any;
+    setValue: (value: any) => AnyAction;
+    lastValue: any;
+  }>;
+
+  public constructor(store: Store<any>) {
+    this.subscriptions = [];
     this.store = store;
-    this.getState = getState;
-    this.updateStateAction = updateStateAction;
-
-    this.lastState = this.load();
-
-    if (this.lastState === null) {
-      this.lastState = getState(this.store.getState());
-    } else {
-      this.store.dispatch(this.updateStateAction(this.lastState));
-    }
-
     this.unsubscribe = this.store.subscribe(this.onReduxUpdate);
-
     window.addEventListener("storage", this.onStorageEvent);
   }
 
-  private load(): T {
-    return JSON.parse(localStorage.getItem(this.key));
+  public registerKey = <T>(key: string, getValue: (state: RootState) => T, setValue: (value: T) => AnyAction) => {
+    this.subscriptions.push({
+      key,
+      getValue,
+      setValue,
+      lastValue: getValue(this.store.getState()),
+    });
   }
 
-  private save(settings: T) {
+  private load() {
+    for (const key of this.subscriptions) {
+      const {getValue, setValue} = this.subscriptions[key];
+      const value = JSON.parse(localStorage.getItem(key));
+      if (getValue(this.store) !== value)
+        this.store.dispatch(setValue(value));
+    }
+
+  }
+
+  private save() {
+
     localStorage.setItem(this.key, JSON.stringify(settings));
   }
 
+
+
   private onReduxUpdate = () => {
-    const newState = this.getState(this.store.getState());
+    // const newState = this.getState(this.store.getState());
+    const state = this.store.getState();
+
+    for (const key of Object.keys(this.subscriptions)) {
 
     if (newState !== this.lastState) {
       this.lastState = newState;
