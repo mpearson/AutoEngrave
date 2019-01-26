@@ -12,32 +12,6 @@ class SQLiteModel(peewee.Model):
         database = db
 
 
-class Design(SQLiteModel):
-    name = peewee.CharField()
-    description = peewee.CharField()
-    width = peewee.IntegerField()
-    height = peewee.IntegerField()
-    dpi = peewee.IntegerField()
-    filetype = peewee.CharField()
-    imageData = peewee.TextField()
-    created = peewee.DateTimeField(default=datetime.datetime.now)
-    updated = peewee.DateTimeField(default=datetime.datetime.now)
-
-    def serialize(self):
-        return dict(
-            id          = self.id,
-            name        = self.name,
-            description = self.description,
-            width       = self.width,
-            height      = self.height,
-            dpi         = self.dpi,
-            filetype    = self.filetype,
-            imageData   = self.imageData,
-            created     = self.created.isoformat(),
-            updated     = self.updated.isoformat(),
-        )
-
-
 class MachineProfile(SQLiteModel):
     name = peewee.CharField()
     description = peewee.CharField()
@@ -64,11 +38,13 @@ class MachineProfile(SQLiteModel):
     accelerationY = peewee.FloatField()
     accelerationZ = peewee.FloatField()
 
-    defaultFeedRate = peewee.FloatField()
+    # defaultFeedRate = peewee.FloatField()
 
 
 class MaterialProfile(SQLiteModel):
     name = peewee.CharField()
+    power = peewee.FloatField()
+    speed = peewee.FloatField()
 
 
 class Template(SQLiteModel):
@@ -80,15 +56,53 @@ class Template(SQLiteModel):
 
 class TemplateSlot(SQLiteModel):
     template = peewee.ForeignKeyField(Template)
+    x = peewee.FloatField()
+    y = peewee.FloatField()
+    width = peewee.FloatField()
+    height = peewee.FloatField()
+
+
+class Design(SQLiteModel):
+    name = peewee.CharField()
+    description = peewee.CharField()
+    width = peewee.IntegerField()
+    height = peewee.IntegerField()
+    dpi = peewee.IntegerField()
+    filetype = peewee.CharField()
+    imageData = peewee.TextField()
+    created = peewee.DateTimeField(default=datetime.datetime.now)
+    updated = peewee.DateTimeField(default=datetime.datetime.now)
+    # defaultMaterial = peewee.ForeignKeyField(MaterialProfile, null=True)
+
+    def serialize(self):
+        return dict(
+            id          = self.id,
+            name        = self.name,
+            description = self.description,
+            width       = self.width,
+            height      = self.height,
+            dpi         = self.dpi,
+            filetype    = self.filetype,
+            imageData   = self.imageData,
+            created     = self.created.isoformat(),
+            updated     = self.updated.isoformat(),
+        )
 
 
 def createTables():
-    for Model in (Design, MachineProfile, Template, TemplateSlot):
+    for Model in (
+        Design,
+        MachineProfile,
+        MaterialProfile,
+        Template,
+        TemplateSlot
+    ):
         try:
             Model.create_table()
         except peewee.OperationalError:
             print("%s table already exists!" % Model.__name__)
 
 
-if not os.path.isfile(databaseName):
+# if not os.path.isfile(databaseName):
+if True:
     createTables()

@@ -29,9 +29,9 @@ export const app = ReactDOM.render(
   document.getElementById("root"),
 );
 
-export const localSettingsManager = new LocalStorageManager(
+export const localSettingsManager = new LocalStorageManager(store);
+localSettingsManager.registerKey(
   "localSettings",
-  store,
   s => s.settings.local,
   setLocalSettings
 );
