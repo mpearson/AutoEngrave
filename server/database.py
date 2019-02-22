@@ -15,8 +15,8 @@ class SQLiteModel(peewee.Model):
 class MachineProfile(SQLiteModel):
     name = peewee.CharField()
     description = peewee.CharField()
-    created = peewee.DateTimeField()
-    updated = peewee.DateTimeField()
+    created = peewee.DateTimeField(default=datetime.datetime.now)
+    updated = peewee.DateTimeField(default=datetime.datetime.now)
 
     leftRightAxis = peewee.CharField()
     frontBackAxis = peewee.CharField()
@@ -45,13 +45,15 @@ class MaterialProfile(SQLiteModel):
     name = peewee.CharField()
     power = peewee.FloatField()
     speed = peewee.FloatField()
+    created = peewee.DateTimeField(default=datetime.datetime.now)
+    updated = peewee.DateTimeField(default=datetime.datetime.now)
 
 
 class Template(SQLiteModel):
     name = peewee.CharField()
     description = peewee.CharField()
-    created = peewee.DateTimeField()
-    updated = peewee.DateTimeField()
+    created = peewee.DateTimeField(default=datetime.datetime.now)
+    updated = peewee.DateTimeField(default=datetime.datetime.now)
 
 
 class TemplateSlot(SQLiteModel):
