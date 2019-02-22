@@ -52,7 +52,7 @@ export function loadImage(file: File) {
         filetype: file.type,
         dpi: 72, // how the balls do we detect this? look for friggin Inkscape SVG comments? yuck
       });
-      image.src = reader.result;
+      image.src = reader.result as string;
       // image.src = buildImageDataURL(file.type, reader.result);
     };
 

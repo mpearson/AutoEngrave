@@ -1,12 +1,15 @@
 import * as React from "react";
+import { defaultMemoize } from "reselect";
+import { NativeTypes } from "react-dnd-html5-backend";
+import { Iterable } from "immutable";
+
 import { Design } from "../../redux/catalog/types";
 import { DraggableDesignThumbnail } from "./DesignThumbnail";
 import { ConnectDropTarget, DropTargetSpec, DropTargetCollector, DropTarget } from "react-dnd";
-import { NativeTypes } from "react-dnd-html5-backend";
 import { uploadDesigns } from "../../redux/catalog/utils";
-import { Iterable } from "immutable";
 import { QuickAddDialog } from "./QuickAddDialog";
 import { QuickSearch } from "../QuickSearch";
+import { quickSearchDesigns } from "../../services/search";
 
 export interface DesignCatalogProps {
   items: Iterable.Indexed<Design>;
@@ -72,6 +75,8 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
 
   private onChangeQuickSearch = (quickSearch: string) => this.setState({ quickSearch });
 
+  private filterByQuickSearch = defaultMemoize(quickSearchDesigns);
+
   private submitQuickAdd = () => {
     const count = parseInt(this.state.quickAddInput, 10);
     this.props.onAdd(this.props.selectedID, count);
@@ -114,8 +119,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
       ];
     }
 
-    const thumbnails = items
-      .filter(design => design.name.toLowerCase().includes(quickSearch))
+    const thumbnails = this.filterByQuickSearch(items, quickSearch)
       .map(design => (
         <DraggableDesignThumbnail
           key={design.id}
