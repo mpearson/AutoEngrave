@@ -37,6 +37,7 @@ def jsonResponse(endpointFn):
 
         return body, status
 
+    wrappedFn.__name__ = endpointFn.__name__
     return wrappedFn
 
 

@@ -1,3 +1,5 @@
+sudo systemctl stop autoengrave.service
+
 sudo git reset --hard
 sudo git pull
 
@@ -6,3 +8,7 @@ sudo chmod -R 700 server
 
 sudo chown -R www-data:www-data client
 sudo chmod -R 700 client
+
+sudo sh -c "cd client; npm run build; cd .."
+
+sudo systemctl start autoengrave.service
