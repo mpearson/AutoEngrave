@@ -1,14 +1,12 @@
 [Unit]
 Description=uWSGI instance to serve AutoEngrave
+Requires=network.target
+After=network.target
 
 [Service]
 User=www-data
-ExecStart=/bin/bash -c '\
-    cd /home/pi/AutoEngrave/server; \
-    sudo mkdir -p /run/uwsgi; \
-    sudo chown www-data:www-data /run/uwsgi; \
-    uwsgi -H /home/pi/.local/share/virtualenvs/server-ItEKEJxH -i wsgi.ini \
-'
+WorkingDirectory=/home/pi/AutoEngrave/server/nginx
+ExecStart=/usr/local/bin/uwsgi -H /home/pi/.local/share/virtualenvs/server-ItEKEJxH -i wsgi.ini
 
 [Install]
 WantedBy=multi-user.target

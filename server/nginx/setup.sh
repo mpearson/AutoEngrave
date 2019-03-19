@@ -1,10 +1,11 @@
 # setup uWSGI
 pipenv install uwsgi
-sudo mkdir -p /run/uwsgi
-sudo chown www-data:www-data /run/uwsgi
 sudo cp autoengrave.service /etc/systemd/system
+sudo chmod 700 /etc/systemd/system/autoengrave.service
+sudo chown root /etc/systemd/system/autoengrave.service
 sudo systemctl enable autoengrave
 sudo systemctl start autoengrave
+sudo mkdir logs
 
 # setup nginx
 sudo rm -f /etc/nginx/sites-enabled/default
