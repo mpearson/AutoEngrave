@@ -16,7 +16,7 @@ def runDesignTask(task):
 
     # TODO: get this from the machine profile, obvs
     maxFeedRate = 30000
-    travelFeedRate = 0.25 * maxFeedRate
+    travelFeedRate = 0.2 * maxFeedRate
 
     design = Design.get_by_id(task["designID"])
     if design.filetype != "image/svg+xml":
