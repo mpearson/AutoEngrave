@@ -21,7 +21,7 @@ export const getNewJob = (): Job => ({
     },
     {
       type: "gcode",
-      commands: ["; shutdown", "G0", "M5", "M107.2", "M107.3", "M107.4", "G0 X0 Y0", "G4 P2000", "M107.1"],
+      commands: ["; shutdown", "G0", "M5", "M107.2", "M107.3", "M107.4", "G0 X0 Y0", "M18", "G4 P2000", "M107.1"],
       pin: "end",
     },
   ],
@@ -55,7 +55,7 @@ export const createTemplateRasterTask = (slot: TemplateSlot, design: Design): Ra
     height,
     dpi: 300,
     power: 100,
-    speed: 14,
+    speed: 19,
   };
 };
 
