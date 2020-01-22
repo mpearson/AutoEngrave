@@ -53,7 +53,7 @@ interface DragSourceProps {
 }
 
 /** Config object for DragSource */
-const dragSourceSpec: DragSourceSpec<TaskCardProps> = {
+const dragSourceSpec: DragSourceSpec<TaskCardProps, MachineTask> = {
   canDrag(props, monitor) {
     return true;
   },
@@ -72,7 +72,7 @@ const dragSourceSpec: DragSourceSpec<TaskCardProps> = {
 };
 
 /** Calculate properties to be injected into DesignThumbnail */
-const dragSourceCollector: DragSourceCollector = (connect, monitor) => {
+const dragSourceCollector: DragSourceCollector<DragSourceProps, TaskCardProps> = (connect, monitor) => {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
@@ -81,4 +81,4 @@ const dragSourceCollector: DragSourceCollector = (connect, monitor) => {
 
 const dragSourceWrapper = DragSource("task", dragSourceSpec, dragSourceCollector);
 
-export const DraggableTaskCard = dragSourceWrapper(TaskCard as any);
+export const DraggableTaskCard = dragSourceWrapper(TaskCard);

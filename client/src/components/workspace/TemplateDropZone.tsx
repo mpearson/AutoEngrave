@@ -38,7 +38,7 @@ const dropTargetSpec: DropTargetSpec<TemplateDropZoneProps> = {
 };
 
 // calculate properties to be injected into WorkspaceDropZone
-const dropTargetCollector: DropTargetCollector = (connector, monitor) => {
+const dropTargetCollector: DropTargetCollector<DropTargetProps, TemplateDropZoneProps> = (connector, monitor) => {
   return {
     connectDropTarget: connector.dropTarget(),
     isOver: monitor.isOver(),

@@ -4,7 +4,7 @@ import "./normalize.css";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { DragDropContextProvider } from "react-dnd";
+import { DndProvider } from 'react-dnd'
 import HTML5Backend from "react-dnd-html5-backend";
 
 import { store } from "./store/index";
@@ -22,9 +22,9 @@ import { setLocalSettings } from "./redux/settings/local/actions";
 
 export const app = ReactDOM.render(
   <Provider store={store}>
-    <DragDropContextProvider backend={HTML5Backend}>
+    <DndProvider backend={HTML5Backend}>
       <MainPanel />
-    </DragDropContextProvider>
+    </DndProvider>
   </Provider>,
   document.getElementById("root"),
 );

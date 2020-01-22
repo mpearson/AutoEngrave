@@ -93,7 +93,7 @@ export const getSharedTaskSettings = createSelector(
       if (task.type === sharedTask.type) {
         for (const key of keys) {
           if (sharedTask[key] !== task[key])
-            sharedTask[key] = null;
+            (sharedTask[key] as any) = null;
         }
       } else {
         return null;

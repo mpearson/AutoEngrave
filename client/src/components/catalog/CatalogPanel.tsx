@@ -4,7 +4,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import * as _ from "lodash";
 import { createSelector } from "reselect";
-import { Iterable } from "immutable";
+import { Collection } from "immutable";
 
 import { RootState } from "../../redux/types";
 import { CatalogState } from "../../redux/catalog/types";
@@ -18,7 +18,7 @@ import { Job, DesignTask } from "../../redux/workspace/types";
 
 interface StateProps extends CatalogState {
   activeJob: Job;
-  sortedDesigns: Iterable.Indexed<Design>;
+  sortedDesigns: Collection.Indexed<Design>;
 }
 
 interface DispatchProps {
@@ -138,4 +138,4 @@ const mapDispatchToProps = {
   addToWorkspace: addDesignToTemplate,
 };
 
-export const CatalogPanelConnected = connect(mapStateToProps, mapDispatchToProps)(CatalogPanel);
+export const CatalogPanelConnected = connect(mapStateToProps, mapDispatchToProps)(CatalogPanel as any);

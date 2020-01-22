@@ -1,7 +1,7 @@
 import * as React from "react";
 import { defaultMemoize } from "reselect";
 import { NativeTypes } from "react-dnd-html5-backend";
-import { Iterable } from "immutable";
+import { Collection } from "immutable";
 
 import { Design } from "../../redux/catalog/types";
 import { DraggableDesignThumbnail } from "./DesignThumbnail";
@@ -12,7 +12,7 @@ import { QuickSearch } from "../QuickSearch";
 import { quickSearchDesigns } from "../../services/search";
 
 export interface DesignCatalogProps {
-  items: Iterable.Indexed<Design>;
+  items: Collection.Indexed<Design>;
   selectedID: number;
   onSelect: (id: number) => void;
   onAdd: (id: number, count?: number) => void;
@@ -48,7 +48,7 @@ const dropTargetSpec: DropTargetSpec<DesignCatalogProps> = {
 };
 
 // calculate properties to be injected into DesignCatalogComponent
-const dropTargetCollector: DropTargetCollector = (connector, monitor) => {
+const dropTargetCollector: DropTargetCollector<DropTargetProps, DesignCatalogProps> = (connector, monitor) => {
   return {
     connectDropTarget: connector.dropTarget(),
     isOver: monitor.isOver(),

@@ -71,11 +71,11 @@ interface DragSourceProps {
 }
 
 /** Config object for DragSource */
-const dragSourceSpec: DragSourceSpec<DesignThumbnailProps> = {
+const dragSourceSpec: DragSourceSpec<DesignThumbnailProps, Design> = {
   canDrag(props, monitor) {
     return true;
   },
-  beginDrag(props, monitor, component: DesignThumbnail): Design {
+  beginDrag(props, monitor, component: DesignThumbnail) {
     if (props.onBeginDrag) {
       props.onBeginDrag();
     }
@@ -90,7 +90,7 @@ const dragSourceSpec: DragSourceSpec<DesignThumbnailProps> = {
 };
 
 /** Calculate properties to be injected into DesignThumbnail */
-const dragSourceCollector: DragSourceCollector = (connect, monitor) => {
+const dragSourceCollector: DragSourceCollector<DragSourceProps, DesignThumbnailProps> = (connect, monitor) => {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
@@ -99,4 +99,4 @@ const dragSourceCollector: DragSourceCollector = (connect, monitor) => {
 
 const dragSourceWrapper = DragSource("design", dragSourceSpec, dragSourceCollector);
 
-export const DraggableDesignThumbnail = dragSourceWrapper(DesignThumbnail as any);
+export const DraggableDesignThumbnail = dragSourceWrapper(DesignThumbnail);
