@@ -60,6 +60,7 @@ def loadSVG(bytestring, outputDPI=72, inputDPI=72, ignoreStrokes=False, antialia
 
     img = np.frombuffer(surface.cairo.get_data(), np.uint8)
     img.shape = (surface.cairo.get_width(), surface.cairo.get_height(), 4)
+    print(img.shape)
 
     if monochrome:
         # only keep the alpha layer; no colors up in here!
