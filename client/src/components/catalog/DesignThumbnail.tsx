@@ -8,8 +8,8 @@ export interface DesignThumbnailProps {
   design: Design;
   size: number;
   selected?: boolean;
-  onClick?: () => void;
-  onDoubleClick?: () => void;
+  onClick?: (e?: React.MouseEvent) => void;
+  onDoubleClick?: (e?: React.MouseEvent) => void;
   onBeginDrag?: () => void;
   onEndDrag?: () => void;
   droppable?: boolean;
@@ -29,14 +29,17 @@ export class DesignThumbnail extends React.Component<CombinedProps> {
   /**
    * First click, fire onClick(). Second click, fire onDoubleClick() instead.
    */
-  private onClick = () => {
+  private onClick = (e: React.MouseEvent) => {
     const { onClick, onDoubleClick } = this.props;
     if (this.clickTimeout === null) {
-      this.clickTimeout = window.setTimeout(this.clearClickTimeout, 300);
-      onClick();
+      if (onDoubleClick)
+        this.clickTimeout = window.setTimeout(this.clearClickTimeout, 300);
+      if (onClick)
+        onClick(e);
     } else {
       this.clearClickTimeout();
-      onDoubleClick();
+      if (onDoubleClick)
+        onDoubleClick(e);
     }
   }
 

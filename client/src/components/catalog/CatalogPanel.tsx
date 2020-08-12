@@ -25,8 +25,8 @@ interface DispatchProps {
   createDesign: CreateActionCreator<Design>;
   updateDesign: UpdateActionCreator<Design>;
   deleteDesign: DeleteActionCreator<Design>;
-  selectDesign: (id: number) => CrudAction<Design>;
-  addToWorkspace: (id: number, count?: number) => any;
+  selectDesign: (id: number, ctrlKey: boolean) => CrudAction<Design>;
+  addToWorkspace: (ids: number[]) => any;
 }
 
 type CombinedProps = StateProps & DispatchProps;

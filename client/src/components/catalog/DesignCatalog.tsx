@@ -1,7 +1,7 @@
 import * as React from "react";
 import { defaultMemoize } from "reselect";
 import { NativeTypes } from "react-dnd-html5-backend";
-import { Collection } from "immutable";
+import { Collection, Set } from "immutable";
 
 import { Design } from "../../redux/catalog/types";
 import { DraggableDesignThumbnail } from "./DesignThumbnail";
@@ -13,9 +13,9 @@ import { quickSearchDesigns } from "../../services/search";
 
 export interface DesignCatalogProps {
   items: Collection.Indexed<Design>;
-  selectedID: number;
-  onSelect: (id: number) => void;
-  onAdd: (id: number, count?: number) => void;
+  selectedIDs: Set<number>;
+  onSelect: (id: number, ctrlKey: boolean) => void;
+  onAdd: (ids: Array<number>) => void;
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
   onUpload: (design: Design) => void;
@@ -79,14 +79,22 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
 
   private submitQuickAdd = () => {
     const count = parseInt(this.state.quickAddInput, 10);
-    this.props.onAdd(this.props.selectedID, count);
-    this.cancelQuickAdd();
+    const designIdList: number[] = [];
+    this.props.selectedIDs.forEach((id: number) => {
+      for (let i = 0; i < count; i++)
+        designIdList.push(id);
+    });
+
+    //   for (let
+    // const x = Repeat(this.props.selectedIDs, count).flatten().sort().toArray();
+    this.props.onAdd(designIdList);
+    this.closeQuickAdd();
   }
 
-  private cancelQuickAdd = () => this.setState({ quickAddInput: null });
+  private closeQuickAdd = () => this.setState({ quickAddInput: null });
 
   public render() {
-    const { items, onSelect, onAdd, onEdit, onDelete, selectedID } = this.props;
+    const { items, onSelect, onAdd, onEdit, onDelete, selectedIDs } = this.props;
     const { isOver, canDrop, connectDropTarget } = this.props;
     const { quickAddInput, quickSearch } = this.state;
     const classList = ["panel", "catalog-panel", "design-catalog"];
@@ -96,23 +104,25 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
         classList.push("dnd-hover");
     }
     let actionButtons: JSX.Element[];
-    if (selectedID !== null) {
+    if (!selectedIDs.isEmpty()) {
+      const editDisabled = selectedIDs.size === 1;
       actionButtons = [
         <button
           key="add"
-          onClick={() => onAdd(selectedID)}
+          onClick={() => onAdd(selectedIDs.toArray())}
           className="blue fas fa-plus"
           title="Add to the thing"
         />,
         <button
           key="edit"
-          onClick={() => onEdit(selectedID)}
+          onClick={editDisabled ? null : () => onEdit(selectedIDs.first())}
           className="blue fas fa-edit"
           title="Like, edit or whatever"
+          disabled={editDisabled}
         />,
         <button
           key="delete"
-          onClick={() => onDelete(selectedID)}
+          onClick={() => onDelete(selectedIDs.first())}
           className="red fas fa-times"
           title="Delete, duh"
         />
@@ -125,8 +135,8 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
           key={design.id}
           design={design}
           size={100}
-          selected={design.id === selectedID}
-          onClick={() => onSelect(design.id)}
+          selected={selectedIDs.has(design.id)}
+          onClick={e => onSelect(design.id, e.ctrlKey)}
           onDoubleClick={() => onEdit(design.id)}
         />
       ))
@@ -158,8 +168,8 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
           value={quickAddInput}
           onChange={this.onChangeQuickAdd}
           onSubmit={this.submitQuickAdd}
-          onCancel={this.cancelQuickAdd}
-          disabled={selectedID === null}
+          onCancel={this.closeQuickAdd}
+          disabled={selectedIDs.isEmpty()}
         />
       </div>
     );

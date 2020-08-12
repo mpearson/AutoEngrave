@@ -14,6 +14,8 @@ export interface APICallConfig {
   actionParams?: any;
 }
 
+const serverUrl = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000';
+
 const jsonHeaders = {
   "Accept": "application/json",
   "Content-Type": "application/json",
@@ -41,7 +43,7 @@ export const callAPI = (dispatch: RootDispatch, config: APICallConfig) => {
   if (config.data)
     options.body = JSON.stringify(config.data);
 
-  return fetch(`/api/${config.endpoint}`, options).then(
+  return fetch(`${serverUrl}/api/${config.endpoint}`, options).then(
     response => {
       if (response.status === 204) {
         // no content expected, ain't no JSON up in here
