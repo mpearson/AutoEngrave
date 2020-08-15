@@ -4,7 +4,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import * as _ from "lodash";
 import { createSelector } from "reselect";
-import { Collection } from "immutable";
+import { Collection, Set } from "immutable";
 
 import { RootState } from "../../redux/types";
 import { CatalogState } from "../../redux/catalog/types";
@@ -61,29 +61,30 @@ export class CatalogPanel extends React.Component<CombinedProps, CatalogPanelSta
     this.setState({ editingID: null });
   }
 
-  private checkDesignInUse = (designID: number) => {
+  private checkDesignInUse = (designIds: Set<number>) => {
     const { activeJob } = this.props;
+
     for (const task of activeJob.tasks) {
-      if ((task as DesignTask).designID === designID)
+      if (designIds.has((task as DesignTask).designID))
         return true;
     }
     return false;
   }
 
-  private confirmDelete = (designID: number) => {
-    if (this.checkDesignInUse(designID))
+  private confirmDelete = (designIds: Set<number>) => {
+    if (this.checkDesignInUse(designIds))
       alert("Can't remove while design is being used");
     else if (confirm("Oh?")) {
-      this.props.deleteDesign(designID);
+      designIds.forEach(this.props.deleteDesign);
     }
   }
 
-  private confirmDeleteSelected = () => this.confirmDelete(this.props.selectedID);
+  private confirmDeleteSelected = () => this.confirmDelete(this.props.selectedIds);
 
-  private confirmDeleteEditing = () => this.confirmDelete(this.state.editingID);
+  private confirmDeleteEditing = () => this.confirmDelete(Set([this.state.editingID]));
 
   public render() {
-    const { items, sortedDesigns, selectedID, addToWorkspace, selectDesign } = this.props;
+    const { items, sortedDesigns, selectedIds, addToWorkspace, selectDesign } = this.props;
     const editingModel = items.get(this.state.editingID);
     // const classList: string[] = [];
     // if (dragHover)
@@ -101,7 +102,7 @@ export class CatalogPanel extends React.Component<CombinedProps, CatalogPanelSta
       return (
         <DesignCatalog
           items={sortedDesigns}
-          selectedID={selectedID}
+          selectedIds={selectedIds}
           onSelect={selectDesign}
           onAdd={addToWorkspace}
           onEdit={this.openEditDialog}

@@ -13,7 +13,7 @@ import { quickSearchDesigns } from "../../services/search";
 
 export interface DesignCatalogProps {
   items: Collection.Indexed<Design>;
-  selectedIDs: Set<number>;
+  selectedIds: Set<number>;
   onSelect: (id: number, ctrlKey: boolean) => void;
   onAdd: (ids: Array<number>) => void;
   onEdit: (id: number) => void;
@@ -80,13 +80,13 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
   private submitQuickAdd = () => {
     const count = parseInt(this.state.quickAddInput, 10);
     const designIdList: number[] = [];
-    this.props.selectedIDs.forEach((id: number) => {
+    this.props.selectedIds.forEach((id: number) => {
       for (let i = 0; i < count; i++)
         designIdList.push(id);
     });
 
     //   for (let
-    // const x = Repeat(this.props.selectedIDs, count).flatten().sort().toArray();
+    // const x = Repeat(this.props.selectedIds, count).flatten().sort().toArray();
     this.props.onAdd(designIdList);
     this.closeQuickAdd();
   }
@@ -94,7 +94,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
   private closeQuickAdd = () => this.setState({ quickAddInput: null });
 
   public render() {
-    const { items, onSelect, onAdd, onEdit, onDelete, selectedIDs } = this.props;
+    const { items, onSelect, onAdd, onEdit, onDelete, selectedIds } = this.props;
     const { isOver, canDrop, connectDropTarget } = this.props;
     const { quickAddInput, quickSearch } = this.state;
     const classList = ["panel", "catalog-panel", "design-catalog"];
@@ -104,25 +104,25 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
         classList.push("dnd-hover");
     }
     let actionButtons: JSX.Element[];
-    if (!selectedIDs.isEmpty()) {
-      const editDisabled = selectedIDs.size === 1;
+    if (!selectedIds.isEmpty()) {
+      const editDisabled = selectedIds.size === 1;
       actionButtons = [
         <button
           key="add"
-          onClick={() => onAdd(selectedIDs.toArray())}
+          onClick={() => onAdd(selectedIds.toArray())}
           className="blue fas fa-plus"
           title="Add to the thing"
         />,
         <button
           key="edit"
-          onClick={editDisabled ? null : () => onEdit(selectedIDs.first())}
+          onClick={editDisabled ? null : () => onEdit(selectedIds.first())}
           className="blue fas fa-edit"
           title="Like, edit or whatever"
           disabled={editDisabled}
         />,
         <button
           key="delete"
-          onClick={() => onDelete(selectedIDs.first())}
+          onClick={() => onDelete(selectedIds.first())}
           className="red fas fa-times"
           title="Delete, duh"
         />
@@ -135,7 +135,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
           key={design.id}
           design={design}
           size={100}
-          selected={selectedIDs.has(design.id)}
+          selected={selectedIds.has(design.id)}
           onClick={e => onSelect(design.id, e.ctrlKey)}
           onDoubleClick={() => onEdit(design.id)}
         />
@@ -169,7 +169,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
           onChange={this.onChangeQuickAdd}
           onSubmit={this.submitQuickAdd}
           onCancel={this.closeQuickAdd}
-          disabled={selectedIDs.isEmpty()}
+          disabled={selectedIds.isEmpty()}
         />
       </div>
     );

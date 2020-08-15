@@ -1,6 +1,6 @@
-import { AsyncPromiseAction, APIAction } from "./../types";
+import { AsyncPromiseAction, RestApiAction } from "./../types";
 import { ComPort, ConnectionStatus } from "./types";
-import { callAPI } from "../../services/api";
+import { callRestApi } from "../../services/api";
 
 import { ADD_CONSOLE_ENTRY } from "../console/actions";
 
@@ -23,14 +23,14 @@ export const GET_STATUS_REQUEST = "connection/GET_STATUS_REQUEST";
 export const GET_STATUS_SUCCESS = "connection/GET_STATUS_SUCCESS";
 export const GET_STATUS_ERROR = "connection/GET_STATUS_ERROR";
 
-export interface ConnectionAction extends APIAction {
+export interface ConnectionAction extends RestApiAction {
   port?: ComPort;
   baudrate?: string;
   status?: ConnectionStatus;
 }
 
 export const getConnectionStatus = (): AsyncPromiseAction<ConnectionAction> => (dispatch, getState) => {
-  return callAPI(dispatch, {
+  return callRestApi(dispatch, {
     endpoint: "connection/status",
     method: "get",
     onRequest: GET_STATUS_REQUEST,
@@ -40,7 +40,7 @@ export const getConnectionStatus = (): AsyncPromiseAction<ConnectionAction> => (
 };
 
 export const getPorts = (): AsyncPromiseAction<ConnectionAction> => (dispatch, getState) => {
-  return callAPI(dispatch, {
+  return callRestApi(dispatch, {
     endpoint: "connection/scan",
     method: "get",
     onRequest: GET_PORTS_REQUEST,
@@ -52,7 +52,7 @@ export const getPorts = (): AsyncPromiseAction<ConnectionAction> => (dispatch, g
 export const openConnection = (): AsyncPromiseAction<ConnectionAction> => (dispatch, getState) => {
   const { port, baudrate } = getState().connection;
 
-  return callAPI(dispatch, {
+  return callRestApi(dispatch, {
     endpoint: "connection/open",
     method: "post",
     data: { port, baudrate },
@@ -69,7 +69,7 @@ export const openConnection = (): AsyncPromiseAction<ConnectionAction> => (dispa
 };
 
 export const closeConnection = (): AsyncPromiseAction<ConnectionAction> => (dispatch, getState) => {
-    return callAPI(dispatch, {
+    return callRestApi(dispatch, {
     endpoint: "connection/close",
     method: "post",
     onRequest: DISCONNECT_REQUEST,

@@ -1,5 +1,5 @@
 import { CrudItem, CreateActionCreator, ReadActionCreator, UpdateActionCreator, DeleteActionCreator } from "./types";
-import { callAPI } from "../../services/api";
+import { callRestApi } from "../../services/api";
 
 export const CREATE_REQUEST = "CREATE_REQUEST";
 export const CREATE_SUCCESS = "CREATE_SUCCESS";
@@ -25,7 +25,7 @@ export const makeCreate = <T extends CrudItem>(prefix: string, endpoint?: string
   prefix += "/";
   return (diff: Partial<T>) => {
     return (dispatch, getState) => {
-      return callAPI(dispatch, {
+      return callRestApi(dispatch, {
         endpoint,
         method: "post",
         data: diff,
@@ -43,7 +43,7 @@ export const makeList = <T extends CrudItem>(prefix: string, endpoint?: string):
   prefix += "/";
   return () => {
     return (dispatch, getState) => {
-      return callAPI(dispatch, {
+      return callRestApi(dispatch, {
         endpoint,
         method: "get",
         onRequest:  prefix + LIST_REQUEST,
@@ -59,7 +59,7 @@ export const makeUpdate = <T extends CrudItem>(prefix: string, endpoint?: string
   prefix += "/";
   return (id: number, diff: Partial<T>) => {
     return (dispatch, getState) => {
-      return callAPI(dispatch, {
+      return callRestApi(dispatch, {
         endpoint: `${endpoint}/${id}`,
         method: "put",
         data: diff,
@@ -77,7 +77,7 @@ export const makeDelete = <T extends CrudItem>(prefix: string, endpoint?: string
   prefix += "/";
   return (id: number) => {
     return (dispatch, getState) => {
-      return callAPI(dispatch, {
+      return callRestApi(dispatch, {
         endpoint: `${endpoint}/${id}`,
         method: "delete",
         actionParams: { id },

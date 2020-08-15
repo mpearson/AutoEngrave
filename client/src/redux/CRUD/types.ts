@@ -1,5 +1,5 @@
 import { OrderedMap } from "immutable";
-import { APIAction, AsyncPromiseAction } from "../types";
+import { RestApiAction, AsyncPromiseAction } from "../types";
 import { Moment } from "moment";
 
 export interface CrudItem {
@@ -17,15 +17,15 @@ export interface CrudState<T extends CrudItem> {
   readonly isDeletingItem: boolean;
 }
 
-export interface CrudAction<T extends CrudItem> extends APIAction {
+export interface CrudAction<T extends CrudItem> extends RestApiAction {
   id?: number;
   tempID?: number;
   diff?: Partial<T>;
 }
 
-type APIReturn<T> = AsyncPromiseAction<CrudAction<T>>;
+type RestApiReturn<T> = AsyncPromiseAction<CrudAction<T>>;
 
-export type CreateActionCreator<T extends CrudItem> = (diff: Partial<T>) => APIReturn<T>;
-export type ReadActionCreator<T extends CrudItem> = () => APIReturn<T>;
-export type UpdateActionCreator<T extends CrudItem> = (id: number, diff: Partial<T>) => APIReturn<T>;
-export type DeleteActionCreator<T extends CrudItem> = (id: number) => APIReturn<T>;
+export type CreateActionCreator<T extends CrudItem> = (diff: Partial<T>) => RestApiReturn<T>;
+export type ReadActionCreator<T extends CrudItem> = () => RestApiReturn<T>;
+export type UpdateActionCreator<T extends CrudItem> = (id: number, diff: Partial<T>) => RestApiReturn<T>;
+export type DeleteActionCreator<T extends CrudItem> = (id: number) => RestApiReturn<T>;

@@ -1,9 +1,14 @@
-import { CrudItem, CrudState } from "../CRUD/types";
+import { Set } from "immutable";
+import { CrudItem, CrudState, CrudAction } from "../CRUD/types";
 
 export const CATALOG_PREFIX = "catalog";
 
 export interface CatalogState extends CrudState<Design> {
-  selectedID: number;
+  selectedIds: Set<number>;
+}
+
+export interface CatalogAction extends CrudAction<Design> {
+  selectedIds?: Set<number>;
 }
 
 export interface Design extends CrudItem, ImageMetadata {

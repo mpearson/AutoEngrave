@@ -4,7 +4,7 @@ export type RequestAction = (actionParams?: any) => AsyncAction;
 export type SuccessAction = (results: any, response?: Response, actionParams?: any) => AsyncAction;
 export type ErrorAction = (error: any, response?: Response, actionParams?: any) => AsyncAction;
 
-export interface APICallConfig {
+export interface RestApiRequestConfig {
   endpoint: string;
   method?: string;
   data?: any;
@@ -25,7 +25,7 @@ const jsonHeaders = {
  * Fancy API wrapper which dispatches the specified request/sucess/error actions,
  * along with response data and optional action params.
  */
-export const callAPI = (dispatch: RootDispatch, config: APICallConfig) => {
+export const callRestApi = (dispatch: RootDispatch, config: RestApiRequestConfig) => {
   const actionParams = config.actionParams || {};
   const { onRequest, onSuccess, onError } = config;
 

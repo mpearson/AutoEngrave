@@ -1,4 +1,4 @@
-import { APIAction, AsyncAction } from "./../types";
+import { RestApiAction, AsyncAction } from "./../types";
 import { Template } from "../templates/types";
 import { Job, MachineTask, DesignTask } from "./types";
 import { createTemplateRasterTask, getOccupiedSlots } from "./utils";
@@ -14,7 +14,7 @@ export const UPDATE_TASK = "workspace/UPDATE_TASK";
 export const UPDATE_SELECTED_TASKS = "workspace/UPDATE_SELECTED_TASKS";
 export const DELETE_TASK = "workspace/DELETE_TASK";
 
-export interface WorkspaceAction extends APIAction {
+export interface WorkspaceAction extends RestApiAction {
   template?: Template;
   templateID?: number;
   machineID?: number;

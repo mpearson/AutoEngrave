@@ -1,26 +1,25 @@
-import { CatalogState, Design, CATALOG_PREFIX } from "./types";
 import { Reducer, AnyAction } from "redux";
+import { Set } from "immutable";
 import { makeReducer, getDefaultCrudState } from "../CRUD/reducer";
-import { CrudAction } from "../CRUD/types";
+import { CatalogState, Design, CATALOG_PREFIX, CatalogAction } from "./types";
 import * as actions from "./actions";
 
 export const baseReducer = makeReducer<Design>(CATALOG_PREFIX);
 
 export const getDefaultState = (): CatalogState => ({
   ...getDefaultCrudState<Design>(),
-  selectedID: null,
+  selectedIds: Set(),
 });
 
 export const catalogReducer: Reducer<CatalogState, AnyAction> = (
   state = getDefaultState(),
-  action: CrudAction<Design>
+  action: CatalogAction
 ): CatalogState => {
   switch (action.type) {
-    case actions.SELECT_DESIGN: {
-      const { id } = action;
+    case actions.SET_SELECTED_DESIGNS: {
       return {
         ...state,
-        selectedID: state.selectedID === id ? null : id,
+        selectedIds: action.selectedIds,
       };
     }
     default: {

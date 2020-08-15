@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 import numpy as np
-import cairosvg
+# import cairosvg
 
 def traverse(node, fn, root=True):
     fn(node, root)
@@ -40,35 +40,36 @@ def disableAntialiasing(node, root):
 loads an SVG file and renders it into a numpy array
 '''
 def loadSVG(bytestring, outputDPI=72, inputDPI=72, ignoreStrokes=False, antialiasing=True, monochrome=False):
-    tree = cairosvg.surface.Tree(bytestring=bytestring)
+    ...
+    # tree = cairosvg.surface.Tree(bytestring=bytestring)
 
-    if ignoreStrokes:
-        traverse(tree, removeStrokes)
-    if not antialiasing:
-        traverse(tree, disableAntialiasing)
+    # if ignoreStrokes:
+    #     traverse(tree, removeStrokes)
+    # if not antialiasing:
+    #     traverse(tree, disableAntialiasing)
 
-    # set the target bitmap DPI
-    scale = outputDPI / inputDPI
+    # # set the target bitmap DPI
+    # scale = outputDPI / inputDPI
 
-    surface = cairosvg.surface.PNGSurface(
-        tree,
-        None,           # no, I don't want to save a friggin PNG file you wanker
-        inputDPI,       # stupid library seems to completely ignore this, yet it's a required param
-        None,           # whatever
-        scale=scale     # finally something that actually works!
-    )
+    # surface = cairosvg.surface.PNGSurface(
+    #     tree,
+    #     None,           # no, I don't want to save a friggin PNG file you wanker
+    #     inputDPI,       # stupid library seems to completely ignore this, yet it's a required param
+    #     None,           # whatever
+    #     scale=scale     # finally something that actually works!
+    # )
 
-    img = np.frombuffer(surface.cairo.get_data(), np.uint8)
-    img.shape = (surface.cairo.get_width(), surface.cairo.get_height(), 4)
+    # img = np.frombuffer(surface.cairo.get_data(), np.uint8)
+    # img.shape = (surface.cairo.get_width(), surface.cairo.get_height(), 4)
 
-    if monochrome:
-        # only keep the alpha layer; no colors up in here!
-        # and we don't need to worry about any of that dark grey bullshit from illustrator
-        output = np.copy(img[:, :, 3])
-    else:
-        # full ARGB output
-        output = np.copy(img)
+    # if monochrome:
+    #     # only keep the alpha layer; no colors up in here!
+    #     # and we don't need to worry about any of that dark grey bullshit from illustrator
+    #     output = np.copy(img[:, :, 3])
+    # else:
+    #     # full ARGB output
+    #     output = np.copy(img)
 
-    surface.finish()
+    # surface.finish()
 
-    return output
+    # return output

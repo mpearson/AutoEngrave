@@ -20,7 +20,7 @@ export interface RootState {
 export type AsyncAction<T = any> = ThunkAction<T, RootState, void, AnyAction>;
 export type AsyncPromiseAction<T = any> = ThunkAction<Promise<T>, RootState, void, AnyAction>;
 
-export interface APIAction extends Action {
+export interface RestApiAction extends Action {
   error?: string;
   response?: Response;
   results?: any;
