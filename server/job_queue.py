@@ -57,7 +57,7 @@ def testRaster():
     import matplotlib.pyplot as plt
     import matplotlib.image as mpimg
 
-    # print(img.shape)
+    print('testRaster', img.shape)
     plt.imshow(img)
     plt.show()
     return

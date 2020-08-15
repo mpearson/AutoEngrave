@@ -23,6 +23,9 @@
 import numpy as np
 import cairosvg
 
+
+import cairocffi as cairo
+
 def traverse(node, fn, root=True):
     fn(node, root)
     for child in node.children:
@@ -55,12 +58,17 @@ def loadSVG(bytestring, outputDPI=72, inputDPI=72, ignoreStrokes=False, antialia
         None,           # no, I don't want to save a friggin PNG file you wanker
         inputDPI,       # stupid library seems to completely ignore this, yet it's a required param
         None,           # whatever
-        scale=scale     # finally something that actually works!
+        # outputWidth=,
+        # outputHeight=,
+        # scale=scale     # finally something that actually works!
     )
+
+    print('node_format: ')
+    print(cairosvg.helpers.node_format(surface, tree))
 
     img = np.frombuffer(surface.cairo.get_data(), np.uint8)
     img.shape = (surface.cairo.get_width(), surface.cairo.get_height(), 4)
-    print(img.shape)
+    print('loadSVG: ', img.shape)
 
     if monochrome:
         # only keep the alpha layer; no colors up in here!
