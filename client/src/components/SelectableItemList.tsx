@@ -2,18 +2,28 @@ import * as React from "react";
 import { Set } from "immutable";
 import { connect } from "react-redux";
 
+import { CrudItem } from "../redux/CRUD/types";
+
 
 interface SelectableItemProps {
+  item: CrudItem;
   itemId: number;
   onClick: (e: React.MouseEvent<HTMLElement>) => void;
   selected: boolean;
 }
 
+// interface SelectableEntr {
+//   id: number;
+//   selected: boolean;
+// }
 
-interface SelectableItemListProps {
+interface SelectableItemListProps<S extends SelectableItemProps> {
+  // items: List<any>;
+  ids: Iterable<number>;
   selectedIds: Set<number>;
   setSelectedIds: (selectedIds: Set<number>) => void;
   listItemConponent: React.ComponentClass<SelectableItemProps>;
+  className?: string;
 }
 
 export class SelectableItemList extends React.Component<SelectableItemListProps> {
@@ -85,14 +95,20 @@ export class SelectableItemList extends React.Component<SelectableItemListProps>
     //     />
     //   ));
     // }
-    const selectableItems = selectedIds.map(
+    // const selectableItems = selectedIds.map(
 
     return (
-      <div className="job-panel">
-        <TaskEditor model={sharedTaskSettings} onUpdate={updateSelectedTasks} />
+      <div className={className}>
+
         <section className="task-list scrollable" onClick={this.onClickEmpty}>
           {globalTaskCard}
           {taskCards}
+
+          {selectedIds.map(id => (
+
+
+
+          ))}
         </section>
         <section className="task-actions">
           <GCodeTaskButton onClick={this.appendGCodeTask} />
