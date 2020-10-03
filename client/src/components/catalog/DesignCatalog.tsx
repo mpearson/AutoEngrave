@@ -14,7 +14,7 @@ import { quickSearchDesigns } from "../../services/search";
 export interface DesignCatalogProps {
   items: Collection.Indexed<Design>;
   selectedIds: Set<number>;
-  onSelect: (id: number, ctrlKey: boolean) => void;
+  setSelectedIds: (ids: Set<number>) => void;
   onAdd: (ids: Array<number>) => void;
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
@@ -94,7 +94,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
   private closeQuickAdd = () => this.setState({ quickAddInput: null });
 
   public render() {
-    const { items, onSelect, onAdd, onEdit, onDelete, selectedIds } = this.props;
+    const { items, setSelectedIds, onAdd, onEdit, onDelete, selectedIds } = this.props;
     const { isOver, canDrop, connectDropTarget } = this.props;
     const { quickAddInput, quickSearch } = this.state;
     const classList = ["panel", "catalog-panel", "design-catalog"];
@@ -136,7 +136,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
           design={design}
           size={100}
           selected={selectedIds.has(design.id)}
-          onClick={e => onSelect(design.id, e.ctrlKey)}
+          onClick={e => setSelectedIds(Set<number>([design.id]))}
           onDoubleClick={() => onEdit(design.id)}
         />
       ))

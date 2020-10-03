@@ -25,7 +25,7 @@ interface DispatchProps {
   createDesign: CreateActionCreator<Design>;
   updateDesign: UpdateActionCreator<Design>;
   deleteDesign: DeleteActionCreator<Design>;
-  selectDesign: (id: number, ctrlKey: boolean) => CrudAction<Design>;
+  setSelectedIds: (ids: Set<number>) => CrudAction<Design>;
   addToWorkspace: (ids: number[]) => any;
 }
 
@@ -84,7 +84,7 @@ export class CatalogPanel extends React.Component<CombinedProps, CatalogPanelSta
   private confirmDeleteEditing = () => this.confirmDelete(Set([this.state.editingID]));
 
   public render() {
-    const { items, sortedDesigns, selectedIds, addToWorkspace, selectDesign } = this.props;
+    const { items, sortedDesigns, selectedIds, addToWorkspace, setSelectedIds } = this.props;
     const editingModel = items.get(this.state.editingID);
     // const classList: string[] = [];
     // if (dragHover)
@@ -103,7 +103,7 @@ export class CatalogPanel extends React.Component<CombinedProps, CatalogPanelSta
         <DesignCatalog
           items={sortedDesigns}
           selectedIds={selectedIds}
-          onSelect={selectDesign}
+          setSelectedIds={setSelectedIds}
           onAdd={addToWorkspace}
           onEdit={this.openEditDialog}
           onDelete={this.confirmDeleteSelected}
