@@ -6,7 +6,7 @@
     "importHelpers": true,
     "outDir": "build/dist",
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react",
