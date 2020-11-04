@@ -2,6 +2,8 @@ import { RestApiAction, AsyncAction } from "./../types";
 import { Template } from "../templates/types";
 import { Job, MachineTask, DesignTask } from "./types";
 import { createTemplateRasterTask, getOccupiedSlots } from "./utils";
+import { SERVER_URL } from '../../services/api';
+
 import { Set } from "immutable";
 
 export const SELECT_TEMPLATE = "workspace/SELECT_TEMPLATE";
@@ -76,7 +78,7 @@ export const addDesignToTemplate = (id: number, count = 1): AsyncAction<void> =>
 export const generateGCode = (): AsyncAction => {
   return (dispatch, getState) => {
     const job = getState().workspace.activeJob;
-    window.location.href = "/api/job/export?job=" + encodeURIComponent(JSON.stringify(job));
+    window.location.href = `${SERVER_URL}/api/job/export?job=` + encodeURIComponent(JSON.stringify(job));
   };
 };
 

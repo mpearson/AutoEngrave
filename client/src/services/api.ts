@@ -14,7 +14,7 @@ export interface RestApiRequestConfig {
   actionParams?: any;
 }
 
-const serverUrl = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000';
+export const SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000';
 
 const jsonHeaders = {
   "Accept": "application/json",
@@ -43,7 +43,7 @@ export const callRestApi = (dispatch: RootDispatch, config: RestApiRequestConfig
   if (config.data)
     options.body = JSON.stringify(config.data);
 
-  return fetch(`${serverUrl}/api/${config.endpoint}`, options).then(
+  return fetch(`${SERVER_URL}/api/${config.endpoint}`, options).then(
     response => {
       if (response.status === 204) {
         // no content expected, ain't no JSON up in here
