@@ -1,4 +1,5 @@
 from flask import Flask, send_from_directory, request, Response
+from flask_cors import CORS
 import os
 import json
 import math
@@ -13,7 +14,7 @@ from job_queue import export_gcode
 staticDir = os.path.join("..", "client", "build")
 
 app = Flask(__name__, static_folder=staticDir)
-
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # returns a JSON response based on the return value of the wrapped function, passing through any args received
 # if the inner function returns a tuple, it must look like (responseObject, statusCode)
@@ -127,7 +128,7 @@ def job_export_gcode():
 
 @app.route("/api/connection/scan", methods=["GET"])
 def connection_scan():
-    return getCOMPorts()
+    return {"results": getCOMPorts()}
 
 @app.route("/api/connection/open", methods=["POST"])
 def connection_open():
@@ -143,7 +144,7 @@ def connection_close():
 
 @app.route("/api/connection/status", methods=["GET"])
 def connection_status():
-    return connection.getStatus()
+    return {"results": connection.getStatus()}
 
 
 #-----------------------------------------------------------------------------#
@@ -255,5 +256,5 @@ def delete_design(designID):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port=5000)
     db.connect()

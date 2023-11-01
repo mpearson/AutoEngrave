@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const package = require('./package.json');
+const packageJson = require('./package.json');
 
 // variables
 const isProduction = process.argv.indexOf('-p') >= 0 || process.env.NODE_ENV === 'production';
@@ -19,14 +19,12 @@ module.exports = {
   },
   output: {
     path: outPath,
-    filename: isProduction ? '[contenthash].js' : '[hash].js',
-    chunkFilename: isProduction ? '[name].[contenthash].js' : '[name].[hash].js'
+    filename: isProduction ? '[contenthash].js' : '[id][fullhash].js',
+    chunkFilename: isProduction ? '[name].[contenthash].js' : '[name].[fullhash].js'
   },
-  target: 'web',
+  target: 'browserslist',
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json", ".jsx", ".less", ".css"],
-    // Fix webpack's default behavior to not load packages with jsnext:main module
-    // (jsnext:main directs not usually distributable es6 format, but es6 sources)
     mainFields: ['module', 'browser', 'main'],
     alias: {
       app: path.resolve(__dirname, 'src/')
@@ -49,9 +47,9 @@ module.exports = {
       {
         test: /\.(less|css)$/,
         use: [
-          { loader: "style-loader" },
-          { loader: "css-loader", options: { sourceMap: !isProduction } },
-          { loader: "less-loader", options: { sourceMap: !isProduction } }
+          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+          { loader: "css-loader" },
+          { loader: "less-loader" }
         ]
       },
       // static assets
@@ -65,69 +63,57 @@ module.exports = {
   },
   optimization: {
     splitChunks: {
-      name: true,
-      cacheGroups: {
-        commons: {
-          chunks: 'initial',
-          minChunks: 2
-        },
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          chunks: 'all',
-          filename: isProduction ? 'vendor.[contenthash].js' : 'vendor.[hash].js',
-          priority: -10
-        }
-      }
+      chunks: 'all'
     },
     runtimeChunk: true
   },
   plugins: [
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
+      NODE_ENV: 'development',
       DEBUG: false
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: '[hash].css',
-      disable: !isProduction
+      filename: isProduction ? '[name].[contenthash].css' : '[name].[fullhash].css'
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html',
       favicon: "./public/favicon.ico",
-      minify: {
-        minifyJS: true,
-        minifyCSS: true,
-        removeComments: true,
-        useShortDoctype: true,
-        collapseWhitespace: true,
-        collapseInlineTagWhitespace: true
-      },
-      append: {
-        head: `<script src="//cdn.polyfill.io/v3/polyfill.min.js"></script>`
-      },
+      minify: isProduction,
+      scriptLoading: 'blocking',
       meta: {
-        title: package.name,
-        description: package.description,
-        keywords: Array.isArray(package.keywords) ? package.keywords.join(',') : undefined
+        title: packageJson.name,
+        description: packageJson.description,
+        keywords: Array.isArray(packageJson.keywords) ? packageJson.keywords.join(',') : undefined
       }
     })
   ],
   devServer: {
-    contentBase: sourcePath,
-    hot: true,
-    inline: true,
-    historyApiFallback: {
-      disableDotRule: true
+    static: {
+      directory: path.join(sourcePath, 'public'),
     },
-    stats: 'minimal',
-    clientLogLevel: 'warning'
-  },
-  // https://webpack.js.org/configuration/devtool/
-  devtool: isProduction ? 'hidden-source-map' : 'cheap-module-eval-source-map',
-  node: {
-    // workaround for webpack-dev-server issue
-    // https://github.com/webpack/webpack-dev-server/issues/60#issuecomment-103411179
-    fs: 'empty',
-    net: 'empty'
-  }
+    client: {
+      overlay: {
+        errors: true,
+        warnings: false,
+      },
+    },
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:5000',
+        secure: false,
+        // changeOrigin: true,
+      }
+     // '/api': {
+     //    target: 'http://localhost:5000/api',
+     //    // pathRewrite: { '^/api': '' },
+     //    changeOrigin: true,
+     //    // router: () => 'http://localhost:5000',
+     //    secure: false,
+     //    logLevel: 'debug' /*optional*/
+     // }
+    }
+},
+  devtool: isProduction ? 'hidden-source-map' : 'cheap-module-source-map'
 };

@@ -119,7 +119,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
       ];
     }
 
-    const thumbnails = this.filterByQuickSearch(items, quickSearch)
+    const thumbnails = this.filterByQuickSearch(items.valueSeq(), quickSearch)
       .map(design => (
         <DraggableDesignThumbnail
           key={design.id}
@@ -129,8 +129,7 @@ export class DesignCatalogComponent extends React.Component<CombinedProps, Desig
           onClick={() => onSelect(design.id)}
           onDoubleClick={() => onEdit(design.id)}
         />
-      ))
-      .toArray();
+      )).toArray();
 
     return connectDropTarget(
       <div className={classList.join(" ")}>
